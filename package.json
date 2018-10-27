@@ -1,0 +1,37 @@
+{
+  "name": "iobroker.nello",
+  "version": "0.1.0",
+  "description": "ioBroker nello.io Adapter",
+  "author": {
+    "name": "zefau",
+    "email": "zefau@mailbox.org"
+  },
+  "contributors": [
+    {
+      "name": "zefau",
+      "email": "zefau@mailbox.org"
+    }
+  ],
+  "homepage": "https://github.com/Zefau/ioBroker.nello",
+  "license": "MIT",
+  "keywords": [
+    "ioBroker",
+    "nello",
+    "door"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Zefau/ioBroker.nello"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+  },
+  "main": "main.js",
+  "scripts": {
+  },
+  "bugs": {
+    "url": "https://github.com/Zefau/ioBroker.nello/issues"
+  },
+  "readmeFilename": "README.md"
+}

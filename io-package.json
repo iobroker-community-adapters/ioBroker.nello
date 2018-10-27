@@ -1,0 +1,41 @@
+{
+    "common": {
+        "name": "nello",
+        "version": "0.1.0",
+        "title": "nello.io adapter",
+        "desc": {
+            "en": "ioBroker nello.io Adapter",
+            "de": "ioBroker nello.io Adapter",
+            "ru": "ioBroker nello.io драйвер"
+        },
+        "news": {
+            "0.1.0": {
+                "en": "initial checkin",
+                "de": "Erste version",
+                "ru": "первая версия"
+            }
+        },
+        "platform": "Javascript/Node.js",
+        "mode": "daemon",
+        "icon": "nello.png",
+        "extIcon": "https://raw.githubusercontent.com/Zefau/ioBroker.nello/master/admin/nello.png",
+        "keywords": [
+            "nello",
+            "door"
+        ],
+        "readme": "https://github.com/Zefau/ioBroker.nello/blob/master/README.md",
+        "loglevel": "info",
+        "type": "hardware",
+        "authors": [
+            {
+                "name": "Zefau",
+                "email": "zefau@mailbox.org"
+            }
+        ]
+    },
+    "native": {
+    },
+    "objects": [],
+    "instanceObjects": [
+    ]
+}
