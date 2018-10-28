@@ -6,7 +6,7 @@
 ## Changelog
 
 #### 0.1.0 (2018-10-28)
-* (zefau) initial release
+* (zefau) initial release (list all your doors and open them)
 
 ## License
 The MIT License (MIT)
