@@ -5,12 +5,13 @@ var adapter = utils.Adapter('nello');
 /*
  * internal libraries
  */
-var library = require(__dirname + '/library.js');
+var Library = require(__dirname + '/library.js');
 var Nello = require(__dirname + '/nello.js');
 
 /*
  * variables initiation
  */
+var library;
 var nello;
 var settings = {
 	decode: {
@@ -50,7 +51,8 @@ adapter.on('ready', function()
 		return;
 	}
 	
-	nello = new Nello({'clientId': adapter.config.client_id, 'clientSecret': adapter.config.client_secret, 'tokenType': adapter.config.token_type, 'tokenAccess': adapter.config.access_token}, adapter);
+	library = new Library(adapter);
+	nello = new Nello({'clientId': adapter.config.client_id, 'clientSecret': adapter.config.client_secret, 'tokenType': adapter.config.token_type, 'tokenAccess': adapter.config.access_token});
 	
 	/*
 	 * Get locations
@@ -59,7 +61,7 @@ adapter.on('ready', function()
 	{
 		locations.forEach(function(location)
 		{
-			adapter.log.debug('Updating location: '+JSON.stringify(location));
+			adapter.log.debug('Updating location: ' + JSON.stringify(location));
 			
 			// extend address data
 			location.address.streetName = location.address.street.trim();
@@ -68,15 +70,15 @@ adapter.on('ready', function()
 			location.address.address = location.address.streetName + " " + location.address.streetNumber + ", " + location.address.zip + " " + location.address.city;
 			delete location.address.number;
 			
-			// create location as device
+			// create location as device in the ioBroker state tree
 			adapter.createDevice(location.location_id, {name: location.address.address}, {}, function()
 			{
-				// write address information to channel
-				adapter.createChannel(location.location_id, 'address', {}, {}, function()
+				// CHANNEL: address
+				adapter.createChannel(location.location_id, 'address', {name: 'Address data of the location'}, {}, function()
 				{
 					for (var key in location.address)
 					{
-						library.createNode(adapter, {
+						library.createNode({
 								node: location.location_id + '.address.' + key,
 								description: key
 							},
@@ -85,17 +87,68 @@ adapter.on('ready', function()
 					}
 				});
 				
+				// CHANNEL: time windows
+				adapter.getStatesOf(location.location_id, 'timeWindows', function(err, states)
+				{
+					for(var d = 0; d < states.length; d++)
+						adapter.delObject(states[d]._id);
+				});
+				
+				adapter.createChannel(location.location_id, 'timeWindows', {name: 'Time Windows of the location'}, {}, function()
+				{
+					nello.getTimeWindows(location.location_id, function(windows)
+					{
+						adapter.log.debug('Updating time windows of location ' + location.address.address + '.');
+						// no time windows
+						if (windows.length === 0)
+							library.createNode({node: location.location_id + '.timeWindows.noTimeWindows', description: 'No time windows set'}, {val: ''});
+						
+						// loop through time windows
+						windows.forEach(function(window)
+						{
+							// create channel for the time window
+							library.createNode({
+									node: location.location_id + '.timeWindows.' + window.id,
+									description: window.name
+								},
+								{val: ''}
+							);
+							
+							// add data
+							window.icalRaw = window.ical._raw;
+							delete window.ical._raw;
+							
+							window.icalObj = JSON.stringify(window.ical);
+							delete window.ical;
+							
+							for (var key in window)
+							{
+								library.createNode({
+										node: location.location_id + '.timeWindows.' + window.id + '.' + key,
+										description: key
+									},
+									{val: window[key]}
+								);
+							}
+						});
+					});
+				});
+				
 				// create node for the location id
-				library.createNode(adapter, {
+				library.createNode({
 						node: location.location_id + '.id',
 						description: 'ID of location ' + location.address.streetName
 					},
 					{val: location.location_id}
 				);
 				
+				// create node for last refresh
+				library.createNode({node: location.location_id + '.refreshedTimestamp', description: 'Last update (timestamp) of location ' + location.address.streetName}, {val: Math.round(Date.now()/1000)});
+				library.createNode({node: location.location_id + '.refreshedDateTime', description: 'Last update (date-time) of location ' + location.address.streetName}, {val: library.getDateTime(Date.now())});
+				
 				// create button to open the door
-				library.createNode(adapter, {
-						node: location.location_id + '.openDoor',
+				library.createNode({
+						node: location.location_id + '._openDoor',
 						description: 'Open door of location ' + location.address.streetName,
 						common: {locationId: location.location_id, role: 'button', type: 'boolean'}
 					},
@@ -117,7 +170,7 @@ adapter.on('stateChange', function(id, state)
 {
 	adapter.log.debug('State of ' + id + ' has changed ' + JSON.stringify(state) + '.');
 	
-	if (id.indexOf('openDoor') > -1)
+	if (id.indexOf('_openDoor') > -1)
 	{
 		var location = {};
 		adapter.getObject(id, function(err, obj)

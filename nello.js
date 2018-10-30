@@ -1,4 +1,5 @@
 var request = require('request');
+var ical = require('ical');
 
 /**
  * 
@@ -11,11 +12,9 @@ module.exports = class Nello
 	 *
 	 *
 	 */
-    constructor(connection, adapter)
+    constructor(connection)
 	{
 		// initialise variables
-		this.adapter = adapter;
-		
 		this.clientId = connection.clientId;
 		this.clientSecret = connection.clientSecret;
 		this.token = {
@@ -27,7 +26,7 @@ module.exports = class Nello
 	/**
 	 * Opens door of a location.
 	 *
-	 * @param	{string}		locationId		Location the door shall be opened
+	 * @param	{string}		locationId		ID of the location
 	 * @param	{function}		callback		(optional) Function to be invoked
 	 * @return	{boolean}						Status whether door has been opened or not
 	 *
@@ -45,17 +44,10 @@ module.exports = class Nello
 		function(err, res, body)
 		{
 			if (body !== undefined && body.result !== undefined && body.result.success === true)
-				return true;
+				callback(true);
 			
 			else
-			{
-				if (err !== null)
-					this.adapter.log.error(err);
-				else
-					this.adapter.log.error('Unknown error!');
-				
-				return false;
-			}
+				callback(false);
 		});
 	}
 	
@@ -69,7 +61,6 @@ module.exports = class Nello
 	getLocations(callback)
 	{
 		var that = this;
-		
 		request({
 			uri: "https://public-api.nello.io/v1/locations/",
 			method: "GET",
@@ -84,14 +75,73 @@ module.exports = class Nello
 				callback(body.data);
 			
 			else
-			{
-				if (err !== null)
-					that.adapter.log.error(err);
-				else
-					that.adapter.log.error('Unknown error!');
-				
 				callback(false);
-			}
 		});
     }
+	
+	/**
+	 * Gets all time windows.
+	 *
+	 * @param	{string}		locationId		ID of the location
+	 * @param	{function}		callback		Function to be invoked
+	 * @return	void
+	 *
+	 */
+	getTimeWindows(locationId, callback)
+	{
+		var that = this;
+		request({
+			uri: "https://public-api.nello.io/v1/locations/" + locationId + "/tw/",
+			method: "GET",
+			headers: {
+				"Authorization": this.token.type + " " + this.token.access
+			},
+			json: true
+		},
+		function(err, res, body)
+		{
+			if (body !== undefined && body.result !== undefined && body.result.success === true)
+			{
+				// convert ical-string to full data object
+				body.data.forEach(function(entry, i)
+				{
+					body.data[i].ical = Object.assign({_raw: entry.ical}, Object.values(ical.parseICS(entry.ical))[0]);
+				});
+				
+				callback(body.data);
+			}
+			
+			else
+				callback(false);
+		});
+	}
+	
+	/**
+	 * Deletes a time window.
+	 *
+	 * @param	{string}		locationId		ID of the location
+	 * @param	{string}		twId			ID of the time window
+	 * @return	void
+	 *
+	 */
+	deleteTimeWindow(locationId, twId, callback = function() {})
+	{
+		var that = this;
+		request({
+			uri: "https://public-api.nello.io/v1/locations/" + locationId + "/tw/" + twId + "/",
+			method: "DELETE",
+			headers: {
+				"Authorization": this.token.type + " " + this.token.access
+			},
+			json: true
+		},
+		function(err, res, body)
+		{
+			if (body !== undefined && body.result !== undefined && body.result.success === true)
+				callback(true);
+			
+			else
+				callback(false);
+		});
+	}
 }
