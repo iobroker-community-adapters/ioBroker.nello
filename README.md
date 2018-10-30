@@ -5,6 +5,9 @@ nello one connects your intercom with your smartphone and Wi-Fi. This adapter co
 
 ## Changelog
 
+#### 0.2.0 (2018-10-30)
+* (zefau) added support for time windows (only retrieving)
+
 #### 0.1.0 (2018-10-28)
 * (zefau) initial release (list all your doors and open them)
 
