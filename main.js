@@ -13,12 +13,6 @@ const Nello = require(__dirname + '/nello.js');
  */
 var library;
 var nello;
-var settings = {
-	decode: {
-		key: 'hZTFui87HVG45shg$', // used for encrypted password
-		fields: ['password']
-	}
-};
 
 
 /*
@@ -153,38 +147,33 @@ adapter.on('ready', function()
 				// CHANNEL: events
 				adapter.createChannel(location.location_id, 'events', {name: 'Events of the location'}, {}, function()
 				{
-					library.createNode({node: location.location_id + '.events.history', description: 'Event history'}, {val: []});
+					library.createNode({node: location.location_id + '.events.feed', description: 'Activity feed / Event history'}, {val: '[]'});
 					library.createNode({node: location.location_id + '.events.refreshedTimestamp', description: 'Timestamp of the last event'}, {val: 0});
 					library.createNode({node: location.location_id + '.events.refreshedDateTime', description: 'Date-Time of the last event'}, {val: ''});
 					
 					// listen to events
 					nello.listen(location.location_id, adapter.config.uri, function(res)
 					{
-						adapter.log.debug(JSON.stringify(res));
-						
 						// successfully attached listener
-						if (res.result === true && res.data === undefined)
+						if (res.result === true && res.body === undefined)
 							adapter.log.info('Listener attached to uri ' + res.uri.url + ':' + res.uri.port + '.');
 						
 						// received data
-						else if (res.result === true && res.data !== undefined)
+						else if (res.result === true && res.body !== undefined)
 						{
-							/*
-							if (res.data !== null)
+							if (res.body !== null)
 							{
-								adapter.log.debug('Received data from the webhook listener (action -' + res.data.action + '-).');
+								adapter.log.debug('Received data from the webhook listener (action -' + res.body.action + '-).');
 								
-								library.set(location.location_id + '.events.refreshedTimestamp', Math.round(Date.now()/1000));
-								library.set(location.location_id + '.events.refreshedTimestamp', library.getDateTime(Date.now()));
+								library.set(location.location_id + '.events.refreshedTimestamp', Math.round(res.body.data.timestamp));
+								library.set(location.location_id + '.events.refreshedDateTime', library.getDateTime(res.body.data.timestamp*1000));
 								
-								adapter.getState(location.location_id + '.events.history', function(err, state)
+								adapter.getState(location.location_id + '.events.feed', function(err, state)
 								{
-									var history = JSON.parse(state.val);
-									library.set(location.location_id + '.events.history', JSON.stringify(history.concat([res.data])));
-									
+									var feed = state.val != '' ? JSON.parse(state.val) : [];
+									library.set(location.location_id + '.events.feed', JSON.stringify(feed.concat([res.body])));
 								});
 							}
-							*/
 						}
 						
 						// error
@@ -238,7 +227,7 @@ adapter.on('stateChange', function(id, state)
 		var location = {};
 		adapter.getObject(id, function(err, obj)
 		{
-			location.location_id = obj.common.locationId
+			location.location_id = obj.common.locationId;
 			adapter.getState(location.location_id + '.address.address', function(err, state)
 			{
 				location.address = state.val;

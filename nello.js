@@ -273,21 +273,15 @@ module.exports = class Nello
 				{
 					this.server = _http.createServer((request, response) =>
 					{
-						var data = null;
+						var data = null, body = [];
 						request
 							.on('error', (err) => {callback({result: false, error: err})})
-							.on('data', (chunk) => {
-								/*
-								if (typeof chunk === 'object')
-									data = {
-										action: chunk.action,
-										data: Object.assign(chunk.data, {timestamp: Math.round(Date.now()/1000)})
-									}
-									*/
-								
-								data = chunk;
-							})
-							.on('end', () => {callback({result: true, data: data})});
+							.on('data', (chunk) => {body.push(chunk)})
+							.on('end', () => {
+								body = JSON.parse(Buffer.concat(body).toString());
+								body.data.timestamp = Math.round(Date.now()/1000);
+								callback({result: true, body: body})
+							});
 						
 					}).listen(u.port);
 					callback({result: true, uri: u});
