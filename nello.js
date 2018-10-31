@@ -23,6 +23,8 @@ module.exports = class Nello
 			type: connection.tokenType,
 			access: connection.tokenAccess,
 		};
+		
+		this.server = null;
     }
 	
 	/**
@@ -56,31 +58,18 @@ module.exports = class Nello
 	 * Converts an ical object to a string with the relevant data. See https://www.npmjs.com/package/jsical for more information.
 	 *
 	 * @see		{@link https://www.npmjs.com/package/jsical|jsical -Javascript parser for rfc5545-} for more information on the returned value
-	 * @param	{object|array}		ical			Ical object to be converted to string
+	 * @param	{object}		ical			Ical object to be converted to string
 	 * @param	{string}		ical.id			UID of the event
 	 * @param	{string}		ical.name		Name of the event
 	 * @param	{string}		ical.summary	Summary of the event
 	 * @param	{string}		ical.start		Start date of the event
 	 * @param	{string}		ical.end		End date or duration of the event
-	 * @return	{string}						Parsed ical as srting
+	 * @return	{string}						Parsed ical as string
 	 *
 	 */
 	_setIcal(data)
 	{
-		/*
-		var event = new icalendar.VEvent(data.id || _uuidv4());
-		event.setSummary(data.summary || data.name);
-		event.setDate(data.start, data.end);
-		event.setDate(data.rrule);
-		
-		until
-		bymonzh
-		by day
-		by monthday
-		freq
-		
-		return event.toString().replace(/ /gi, '\r\n');
-		*/
+		// to be implemented
 		
 		return '';
 	}
@@ -198,16 +187,6 @@ module.exports = class Nello
 	createTimeWindow(locationId, data, callback = function() {})
 	{
 		// convert ical to object
-		// 
-		// BEGIN:VCALENDAR\r\n
-		// BEGIN:VEVENT\r\n
-		// 	DTEND:20171208T165800Z\r\n
-		//	DTSTART:20171208T165600Z\r\n
-		//	SUMMARY:a description text\r\n
-		//	\r\n
-		// END:VEVENT\r\n
-		// END:VCALENDAR\r\n
-		//
 		if (data.ical !== 'string')
 			data.ical = this._setIcal(Object.assign(data.ical, {name: data.name}));
 		
@@ -251,6 +230,7 @@ module.exports = class Nello
 	 */
 	unlisten(locationId, callback = function() {})
 	{
+		this.server = null;
 		return this._req("https://public-api.nello.io/v1/locations/" + locationId + "/webhook/", "DELETE", {return: callback});
 	}
 	
@@ -266,8 +246,7 @@ module.exports = class Nello
 	 * @return	{object}							this
 	 *
 	 */
-	listen(locationId, uri, callback) {listen(locationId, uri, null, callback)}
-	listen(locationId, uri, actions, callback)
+	listen(locationId, uri, callback, actions = ['swipe', 'geo', 'tw', 'deny'])
 	{
 		// convert uri to object
 		if (typeof uri === 'string')
@@ -277,30 +256,46 @@ module.exports = class Nello
 			
 			else
 				var u = {
-					url: uri.substr(0, uri.indexOf(':')),
-					port: uri.substr(uri.indexOf(':')+1)
+					url: (uri.indexOf('http') === -1 ? 'http://' : '') + uri.substr(0, uri.indexOf(':')),
+					port: parseInt(uri.substr(uri.indexOf(':')+1))
 				};
 		}
 		else
-			var u = uri;
+			var u = {
+				url: (uri.url.indexOf('http') === -1 ? 'http://' : '') + uri.url,
+				port: url.port
+			};
 		
 		// request
 		return this._req("https://public-api.nello.io/v1/locations/" + locationId + "/webhook/", "PUT", {fct: function(err, res, body)
 			{
 				if (body !== undefined && body.result !== undefined && body.result.success === true)
 				{
-					_http.createServer(function(request, response)
+					this.server = _http.createServer((request, response) =>
 					{
-						var data = {};
+						var data = null;
 						request
-							.on('data', (chunk) => {data = chunk})
+							.on('error', (err) => {callback({result: false, error: err})})
+							.on('data', (chunk) => {
+								/*
+								if (typeof chunk === 'object')
+									data = {
+										action: chunk.action,
+										data: Object.assign(chunk.data, {timestamp: Math.round(Date.now()/1000)})
+									}
+									*/
+								
+								data = chunk;
+							})
 							.on('end', () => {callback({result: true, data: data})});
+						
 					}).listen(u.port);
+					callback({result: true, uri: u});
 				}
 				
 				else
 					callback({result: false, error: err});
 			}
-		}, {'url': u.url, 'actions': Array.isArray(actions) && actions.length > 0 ? actions : ['swipe', 'geo', 'tw', 'deny']});
+		}, {'url': u.url + ':' + u.port, 'actions': actions});
 	}
 }

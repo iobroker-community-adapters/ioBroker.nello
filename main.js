@@ -1,7 +1,6 @@
 'use strict';
 const utils = require(__dirname + '/lib/utils'); // Get common adapter utils
 const adapter = utils.Adapter('nello');
-const flatted = require('flatted');
 
 /*
  * internal libraries
@@ -71,7 +70,7 @@ adapter.on('ready', function()
 		// loop through locations
 		res.locations.forEach(function(location)
 		{
-			adapter.log.debug('Updating location: ' + JSON.stringify(location));
+			adapter.log.info('Updating location: ' + JSON.stringify(location));
 			
 			// extend address data
 			location.address.streetName = location.address.street.trim();
@@ -115,7 +114,7 @@ adapter.on('ready', function()
 							return false;
 						}
 						
-						adapter.log.debug('Updating time windows of location ' + location.address.address + '.');
+						adapter.log.info('Updating time windows of location ' + location.address.address + '.');
 						// no time windows
 						if (res.timeWindows.length === 0)
 							library.createNode({node: location.location_id + '.timeWindows.noTimeWindows', description: 'No time windows set'}, {val: ''});
@@ -151,6 +150,52 @@ adapter.on('ready', function()
 					});
 				});
 				
+				// CHANNEL: events
+				adapter.createChannel(location.location_id, 'events', {name: 'Events of the location'}, {}, function()
+				{
+					library.createNode({node: location.location_id + '.events.history', description: 'Event history'}, {val: []});
+					library.createNode({node: location.location_id + '.events.refreshedTimestamp', description: 'Timestamp of the last event'}, {val: 0});
+					library.createNode({node: location.location_id + '.events.refreshedDateTime', description: 'Date-Time of the last event'}, {val: ''});
+					
+					// listen to events
+					nello.listen(location.location_id, adapter.config.uri, function(res)
+					{
+						adapter.log.debug(JSON.stringify(res));
+						
+						// successfully attached listener
+						if (res.result === true && res.data === undefined)
+							adapter.log.info('Listener attached to uri ' + res.uri.url + ':' + res.uri.port + '.');
+						
+						// received data
+						else if (res.result === true && res.data !== undefined)
+						{
+							/*
+							if (res.data !== null)
+							{
+								adapter.log.debug('Received data from the webhook listener (action -' + res.data.action + '-).');
+								
+								library.set(location.location_id + '.events.refreshedTimestamp', Math.round(Date.now()/1000));
+								library.set(location.location_id + '.events.refreshedTimestamp', library.getDateTime(Date.now()));
+								
+								adapter.getState(location.location_id + '.events.history', function(err, state)
+								{
+									var history = JSON.parse(state.val);
+									library.set(location.location_id + '.events.history', JSON.stringify(history.concat([res.data])));
+									
+								});
+							}
+							*/
+						}
+						
+						// error
+						else
+						{
+							adapter.log.warn('Something went wrong listening to events!');
+							adapter.log.debug(JSON.stringify(res));
+						}
+					});
+				});
+				
 				// create node for the location id
 				library.createNode({
 						node: location.location_id + '.id',
@@ -174,13 +219,6 @@ adapter.on('ready', function()
 				
 				// attach listener
 				adapter.subscribeStates(location.location_id + '._openDoor');
-			});
-			
-			// listen to events
-			nello.listen(location.location_id, adapter.config.uri, function(action, data)
-			{
-				adapter.log.debug(flatted.stringify(action));
-				adapter.log.debug(flatted.stringify(data));
 			});
 		});
 	});
