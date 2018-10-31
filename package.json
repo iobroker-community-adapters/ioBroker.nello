@@ -25,8 +25,7 @@
   },
   "dependencies": {
     "request": "^2.88.0",
-    "ical": "^0.5.0",
-    "icalendar": "^0.7.1",
+    "ical.js": "^1.2.2",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
