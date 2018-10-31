@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "nello",
-        "version": "0.1.0",
+        "version": "0.3.0",
         "title": "nello.io adapter",
         "desc": {
             "en": "ioBroker nello.io Adapter",
@@ -9,6 +9,14 @@
             "ru": "ioBroker nello.io драйвер"
         },
         "news": {
+            "0.3.0": {
+                "en": "added support for webhooks (receiving events / notifications)",
+                "de": "added support for webhooks (receiving events / notifications)"
+            },
+            "0.2.0": {
+                "en": "added support for time windows (only retrieving)",
+                "de": "added support for time windows (only retrieving)"
+            },
             "0.1.0": {
                 "en": "initial checkin",
                 "de": "Erste version",
