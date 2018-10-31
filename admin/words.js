@@ -43,8 +43,8 @@ systemDictionary = {
 		"de": "Events abonnieren (Konfiguration des Webhooks)"
 	},
 	"events_info": {
-		"en": "Please configure the external DNS-URL and the port to listen to events sent by nello. Possible events are swipe, geo, tw and deny (documented here <a href='https://nellopublicapi.docs.apiary.io/#reference'>https://nellopublicapi.docs.apiary.io/#reference</a>).",
-		"de": "Zum Abonnieren von Events bitte die externe DNS-URL sowie den Port angeben, zu dem nello die Benachrichtungen schickt. Mögliche Events sind swipe, geo, tw und deny (im Detail unter <a href='https://nellopublicapi.docs.apiary.io/#reference'>https://nellopublicapi.docs.apiary.io/#reference</a> dokumentiert)."
+		"en": "Please configure the external DNS-URL and the port to listen to events sent by nello. Possible events are swipe, geo, tw and deny (documented here <a href='https://nellopublicapi.docs.apiary.io/#reference'>https://nellopublicapi.docs.apiary.io/#reference</a>). Furthermore, remember to open the port on your router.",
+		"de": "Zum Abonnieren von Events bitte die externe DNS-URL sowie den Port angeben, zu dem nello die Benachrichtungen schickt. Mögliche Events sind swipe, geo, tw und deny (im Detail unter <a href='https://nellopublicapi.docs.apiary.io/#reference'>https://nellopublicapi.docs.apiary.io/#reference</a> dokumentiert). Außerdem muss der Port auf dem Router weitergeleitet werden."
 	},
 	"uri": {
 		"en": "URL (format www.domain.com:port)",
