@@ -173,7 +173,7 @@ adapter.on('ready', function()
 				);
 				
 				// attach listener
-				adapter.subscribeStates(location.location_id + '.openDoor');
+				adapter.subscribeStates(location.location_id + '._openDoor');
 			});
 			
 			// listen to events
