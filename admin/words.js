@@ -37,5 +37,17 @@ systemDictionary = {
 	"button_token": {
 		"en": "Get token",
 		"de": "Token generieren"
+	},
+	"events": {
+		"en": "Subscribe / listen to events (Configuration of the webhook)",
+		"de": "Events abonnieren (Konfiguration des Webhooks)"
+	},
+	"events_info": {
+		"en": "Please configure the external DNS-URL and the port to listen to events sent by nello. Possible events are swipe, geo, tw and deny (documented here <a href='https://nellopublicapi.docs.apiary.io/#reference'>https://nellopublicapi.docs.apiary.io/#reference</a>).",
+		"de": "Zum Abonnieren von Events bitte die externe DNS-URL sowie den Port angeben, zu dem nello die Benachrichtungen schickt. Mögliche Events sind swipe, geo, tw und deny (im Detail unter <a href='https://nellopublicapi.docs.apiary.io/#reference'>https://nellopublicapi.docs.apiary.io/#reference</a> dokumentiert)."
+	},
+	"uri": {
+		"en": "URL (format www.domain.com:port)",
+		"de": "URL (Format www.domain.com:port)"
 	}
 };

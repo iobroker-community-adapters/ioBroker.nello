@@ -1,12 +1,13 @@
 'use strict';
-var utils = require(__dirname + '/lib/utils'); // Get common adapter utils
-var adapter = utils.Adapter('nello');
+const utils = require(__dirname + '/lib/utils'); // Get common adapter utils
+const adapter = utils.Adapter('nello');
+const flatted = require('flatted');
 
 /*
  * internal libraries
  */
-var Library = require(__dirname + '/library.js');
-var Nello = require(__dirname + '/nello.js');
+const Library = require(__dirname + '/library.js');
+const Nello = require(__dirname + '/nello.js');
 
 /*
  * variables initiation
@@ -54,12 +55,21 @@ adapter.on('ready', function()
 	library = new Library(adapter);
 	nello = new Nello({'clientId': adapter.config.client_id, 'clientSecret': adapter.config.client_secret, 'tokenType': adapter.config.token_type, 'tokenAccess': adapter.config.access_token});
 	
+	
 	/*
 	 * Get locations
 	 */
-	nello.getLocations(function(locations)
+	nello.getLocations(function(res)
 	{
-		locations.forEach(function(location)
+		// catch error
+		if (res.result === false)
+		{
+			adapter.log.error(res.error);
+			return false;
+		}
+		
+		// loop through locations
+		res.locations.forEach(function(location)
 		{
 			adapter.log.debug('Updating location: ' + JSON.stringify(location));
 			
@@ -96,15 +106,22 @@ adapter.on('ready', function()
 				
 				adapter.createChannel(location.location_id, 'timeWindows', {name: 'Time Windows of the location'}, {}, function()
 				{
-					nello.getTimeWindows(location.location_id, function(windows)
+					nello.getTimeWindows(location.location_id, function(res)
 					{
+						// catch error
+						if (res.result === false)
+						{
+							adapter.log.error(res.error);
+							return false;
+						}
+						
 						adapter.log.debug('Updating time windows of location ' + location.address.address + '.');
 						// no time windows
-						if (windows.length === 0)
+						if (res.timeWindows.length === 0)
 							library.createNode({node: location.location_id + '.timeWindows.noTimeWindows', description: 'No time windows set'}, {val: ''});
 						
 						// loop through time windows
-						windows.forEach(function(window)
+						res.timeWindows.forEach(function(window)
 						{
 							// create channel for the time window
 							library.createNode({
@@ -158,8 +175,16 @@ adapter.on('ready', function()
 				// attach listener
 				adapter.subscribeStates(location.location_id + '.openDoor');
 			});
+			
+			// listen to events
+			nello.listen(location.location_id, adapter.config.uri, function(action, data)
+			{
+				adapter.log.debug(flatted.stringify(action));
+				adapter.log.debug(flatted.stringify(data));
+			});
 		});
 	});
+	
 });
 
 /*
