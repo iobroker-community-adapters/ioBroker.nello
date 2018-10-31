@@ -48,7 +48,7 @@ module.exports = class Nello
 			data[key.toLowerCase()] = vevent.getFirstPropertyValue(key.toLowerCase()) || null;
 		});
 		
-		data.recurrence = new _ical.Recur(vevent.getFirstPropertyValue('rrule'));
+		data.rrule = new _ical.Recur(vevent.getFirstPropertyValue('rrule'));
 		return data;
 	}
 	
