@@ -14,6 +14,9 @@ To use this service, client credentials must be obtained from the nello auth adm
 
 ## Changelog
 
+### 0.3.0 (2018-10-31)
+* (zefau) added support for webhooks (receiving events / notifications)
+
 ### 0.2.0 (2018-10-30)
 * (zefau) added support for time windows (only retrieving)
 
