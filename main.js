@@ -108,12 +108,10 @@ adapter.on('ready', function()
 							return false;
 						}
 						
-						adapter.log.info('Updating time windows of location ' + location.address.address + '.');
-						// no time windows
-						if (res.timeWindows.length === 0)
-							library.createNode({node: location.location_id + '.timeWindows.noTimeWindows', description: 'No time windows set'}, {val: ''});
-						
 						// loop through time windows
+						adapter.log.info('Updating time windows of location ' + location.address.address + '.');
+						
+						var index = "";
 						res.timeWindows.forEach(function(window)
 						{
 							// create channel for the time window
@@ -123,6 +121,9 @@ adapter.on('ready', function()
 								},
 								{val: ''}
 							);
+							
+							// add to index
+							index = index + window.id + ',';
 							
 							// add data
 							window.icalRaw = window.ical._raw;
@@ -141,49 +142,58 @@ adapter.on('ready', function()
 								);
 							}
 						});
+						
+						// create index with time window IDs
+						library.createNode({node: location.location_id + '.timeWindows.indexedTimeWindows', description: 'Index of all time windows'}, {val: index});
 					});
 				});
 				
 				// CHANNEL: events
-				adapter.createChannel(location.location_id, 'events', {name: 'Events of the location'}, {}, function()
+				if (!adapter.config.uri || adapter.config.uri.indexOf(':') === -1)
+					adapter.log.warn('Can not attach event listener! Please specify external URL including Port in adapter settings!');
+				
+				else
 				{
-					library.createNode({node: location.location_id + '.events.feed', description: 'Activity feed / Event history'}, {val: '[]'});
-					library.createNode({node: location.location_id + '.events.refreshedTimestamp', description: 'Timestamp of the last event'}, {val: 0});
-					library.createNode({node: location.location_id + '.events.refreshedDateTime', description: 'Date-Time of the last event'}, {val: ''});
-					
-					// listen to events
-					nello.listen(location.location_id, adapter.config.uri, function(res)
+					adapter.createChannel(location.location_id, 'events', {name: 'Events of the location'}, {}, function()
 					{
-						// successfully attached listener
-						if (res.result === true && res.body === undefined)
-							adapter.log.info('Listener attached to uri ' + res.uri.url + ':' + res.uri.port + '.');
+						library.createNode({node: location.location_id + '.events.feed', description: 'Activity feed / Event history'}, {val: '[]'});
+						library.createNode({node: location.location_id + '.events.refreshedTimestamp', description: 'Timestamp of the last event'}, {val: 0});
+						library.createNode({node: location.location_id + '.events.refreshedDateTime', description: 'Date-Time of the last event'}, {val: ''});
 						
-						// received data
-						else if (res.result === true && res.body !== undefined)
+						// listen to events
+						nello.listen(location.location_id, adapter.config.uri, function(res)
 						{
-							if (res.body !== null)
+							// successfully attached listener
+							if (res.result === true && res.body === undefined)
+								adapter.log.info('Listener attached to uri ' + res.uri.url + ':' + res.uri.port + '.');
+							
+							// received data
+							else if (res.result === true && res.body !== undefined)
 							{
-								adapter.log.debug('Received data from the webhook listener (action -' + res.body.action + '-).');
-								
-								library.set(location.location_id + '.events.refreshedTimestamp', Math.round(res.body.data.timestamp));
-								library.set(location.location_id + '.events.refreshedDateTime', library.getDateTime(res.body.data.timestamp*1000));
-								
-								adapter.getState(location.location_id + '.events.feed', function(err, state)
+								if (res.body !== null)
 								{
-									var feed = state.val != '' ? JSON.parse(state.val) : [];
-									library.set(location.location_id + '.events.feed', JSON.stringify(feed.concat([res.body])));
-								});
+									adapter.log.debug('Received data from the webhook listener (action -' + res.body.action + '-).');
+									
+									library.set(location.location_id + '.events.refreshedTimestamp', Math.round(res.body.data.timestamp));
+									library.set(location.location_id + '.events.refreshedDateTime', library.getDateTime(res.body.data.timestamp*1000));
+									
+									adapter.getState(location.location_id + '.events.feed', function(err, state)
+									{
+										var feed = state.val != '' ? JSON.parse(state.val) : [];
+										library.set(location.location_id + '.events.feed', JSON.stringify(feed.concat([res.body])));
+									});
+								}
 							}
-						}
-						
-						// error
-						else
-						{
-							adapter.log.warn('Something went wrong listening to events!');
-							adapter.log.debug(JSON.stringify(res));
-						}
+							
+							// error
+							else
+							{
+								adapter.log.warn('Something went wrong listening to events!');
+								adapter.log.debug(JSON.stringify(res));
+							}
+						});
 					});
-				});
+				}
 				
 				// create node for the location id
 				library.createNode({
