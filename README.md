@@ -4,6 +4,7 @@ nello one connects your intercom with your smartphone and Wi-Fi. This adapter co
 
 
 ## Setup instructions (English)
+### Quick Setup
 The nello auth API is responsible for authentication of all nello client apps. This service follows OAuth2 as an authentication scheme to authenticate an app/user. For further information about the OAuth2 standard, please check here: https://oauth.net/2/.
 To use this service, client credentials must be obtained from the nello auth admin UI located at: https://auth.nello.io/admin. Please not that for the time being you can only get one pair of client_id and client_secret. They consist of a client_id and a client_secret.
 
@@ -11,6 +12,18 @@ To use this service, client credentials must be obtained from the nello auth adm
 2. In the ioBroker.nello adapter settings, fill in both Client ID / Client Secret
 3. Press the button "Get Token" to generate a token
 4. Save and enjoy the adapter
+
+This quick setup will retrieve your locations (all available doors) from the nello API including the respective address. Furthermore, the assigned time windows of the locations will be retrieved. Additionally, you may open the door with this basic setup.
+To receive events (door bell rings), you have to follow the advanced setup.
+
+### Advanced Setup
+To received events (door bell rings) you have to provide an external URL (with port) in the ioBroker.nello adapter settings.
+This URL (incl. port) is sent to the nello API and registered. In case a door bell ring is registered by the API, the API will push this information to the provided URL. Please refer to https://en.wikipedia.org/wiki/Webhook for more information.
+If you no DynDNS address and no idea what the shit I'm talking about, please refer to https://www.howtogeek.com/66438/how-to-easily-access-your-home-network-from-anywhere-with-ddns/.
+
+1. Place the external DynDNS address including a port of your choice in the ioBroker.nello adapter settings
+2. Open the port of your choice in your router and route it to the ioBroker
+3. Done. You will now have additional states in your nello tree within the channel "events" and all events are written to a state named "feed".
 
 
 ## Installation (German)
