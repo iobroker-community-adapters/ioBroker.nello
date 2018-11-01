@@ -2,7 +2,8 @@
 # ioBroker.nello
 nello one connects your intercom with your smartphone and Wi-Fi. This adapter connects your nello one to ioBroker using the official API (https://nellopublicapi.docs.apiary.io/).
 
-## Setup instructions
+
+## Setup instructions (English)
 The nello auth API is responsible for authentication of all nello client apps. This service follows OAuth2 as an authentication scheme to authenticate an app/user. For further information about the OAuth2 standard, please check here: https://oauth.net/2/.
 To use this service, client credentials must be obtained from the nello auth admin UI located at: https://auth.nello.io/admin. Please not that for the time being you can only get one pair of client_id and client_secret. They consist of a client_id and a client_secret.
 
@@ -10,6 +11,13 @@ To use this service, client credentials must be obtained from the nello auth adm
 2. In the ioBroker.nello adapter settings, fill in both Client ID / Client Secret
 3. Press the button "Get Token" to generate a token
 4. Save and enjoy the adapter
+
+
+## Installation (German)
+1. Generiere eine Client ID und ein Client Secret über die Website https://auth.nello.io/admin
+2. In den ioBroker.nello adapter Einstellungen die Client ID und das Client Secret eintragen
+3. Den Button "Get Token" nutzen, um einen Token zu generieren
+4. Speichern und den Adapter genießen
 
 
 ## Changelog
