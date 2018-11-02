@@ -35,6 +35,9 @@ If you no DynDNS address and no idea what the shit I'm talking about, please ref
 
 ## Changelog
 
+### 0.3.1 (2018-11-02)
+- (zefau) fixed https://github.com/Zefau/ioBroker.nello/issues/2
+
 ### 0.3.0 (2018-10-31)
 * (zefau) added support for webhooks (receiving events / notifications)
 
