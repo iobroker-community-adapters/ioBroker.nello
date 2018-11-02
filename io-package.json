@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "nello",
-        "version": "0.3.0",
+        "version": "0.3.1",
         "title": "nello.io adapter",
         "desc": {
             "en": "ioBroker nello.io Adapter",
@@ -9,6 +9,10 @@
             "ru": "ioBroker nello.io драйвер"
         },
         "news": {
+            "0.3.1": {
+                "en": "fixed https://github.com/Zefau/ioBroker.nello/issues/2",
+                "de": "fixed https://github.com/Zefau/ioBroker.nello/issues/2"
+            },
             "0.3.0": {
                 "en": "added support for webhooks (receiving events / notifications)",
                 "de": "added support for webhooks (receiving events / notifications)"
