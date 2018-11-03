@@ -2,6 +2,8 @@
 # ioBroker.nello
 nello one connects your intercom with your smartphone and Wi-Fi. This adapter connects your nello one to ioBroker using the official API (https://nellopublicapi.docs.apiary.io/).
 
+Developers may find the javascript implementation of the nello.io API via https://github.com/Zefau/nello.io.
+
 
 ## Setup instructions (English)
 ### Quick Setup
@@ -46,6 +48,7 @@ If you no DynDNS address and no idea what the shit I'm talking about, please ref
 
 ### 0.1.0 (2018-10-28)
 * (zefau) initial release (list all your doors and open them)
+
 
 ## License
 The MIT License (MIT)
