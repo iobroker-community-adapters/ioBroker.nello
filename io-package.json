@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "nello",
-        "version": "0.3.1",
+        "version": "0.3.2",
         "title": "nello.io adapter",
         "desc": {
             "en": "ioBroker nello.io Adapter",
@@ -9,6 +9,10 @@
             "ru": "ioBroker nello.io драйвер"
         },
         "news": {
+            "0.3.2": {
+                "en": "created dedicated Github / npm repository for the javascript implementation of the nello.io API (https://github.com/Zefau/nello.io)",
+                "de": "eigenständiges Github / npm repository für die Javascript Implementierung der nello.io API erstellt (https://github.com/Zefau/nello.io)"
+            },
             "0.3.1": {
                 "en": "fixed https://github.com/Zefau/ioBroker.nello/issues/2",
                 "de": "fixed https://github.com/Zefau/ioBroker.nello/issues/2"
