@@ -6,7 +6,7 @@ const adapter = utils.Adapter('nello');
  * internal libraries
  */
 const Library = require(__dirname + '/library.js');
-const Nello = require(__dirname + '/nello.js');
+const Nello = require('nello');
 
 /*
  * variables initiation
