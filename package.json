@@ -1,6 +1,6 @@
 {
   "name": "iobroker.nello",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "ioBroker nello.io Adapter",
   "author": {
     "name": "zefau",
@@ -24,7 +24,7 @@
     "url": "https://github.com/Zefau/ioBroker.nello"
   },
   "dependencies": {
-    "nello": "^0.4.3"
+    "nello": "^0.4.4"
   },
   "devDependencies": {
   },
