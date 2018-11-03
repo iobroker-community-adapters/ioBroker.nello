@@ -24,9 +24,7 @@
     "url": "https://github.com/Zefau/ioBroker.nello"
   },
   "dependencies": {
-    "request": "^2.88.0",
-    "ical.js": "^1.2.2",
-    "uuid": "^3.3.2"
+    "nello": "^0.4.3"
   },
   "devDependencies": {
   },
