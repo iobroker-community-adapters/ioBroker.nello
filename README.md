@@ -37,6 +37,9 @@ If you no DynDNS address and no idea what the shit I'm talking about, please ref
 
 ## Changelog
 
+### 0.3.2 (2018-11-03)
+- (zefau) created dedicated Github / npm repository for the javascript implementation of the nello.io API (https://github.com/Zefau/nello.io) and thus changed dependency packages
+
 ### 0.3.1 (2018-11-02)
 - (zefau) fixed https://github.com/Zefau/ioBroker.nello/issues/2
 
