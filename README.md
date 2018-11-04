@@ -39,7 +39,9 @@ If you no DynDNS address and no idea what the shit I'm talking about, please ref
 Some examples of a possible integration within your smart home.
 
 ### Open door using Alexa
-Save the following function within the "global" folder in the "Scripts" tab of ioBroker:
+This requires the ioBroker adapter ioBroker.cloud (https://github.com/ioBroker/ioBroker.cloud).
+
+Save the following function within a script in the "global" folder in the "Scripts" tab of ioBroker:
 
 ```
 /**
@@ -72,6 +74,27 @@ Replace **[YOUR DOOR ID]** with the ID of the door you want to open. You find th
 Eventually, search / discover new devices in your Alexa app and create a routine in the Alexa app (e.g. "Alexa, open door") and assign the newly discovered state to it. Finished! Now you may tell Alexa to open your door for you.
 
 ### Let Alexa inform you about door ring
+This requires the ioBroker adapter ioBroker.alexa2 (https://github.com/Apollon77/ioBroker.alexa2).
+
+In order to use the voice output of Alexa we define a function ```say```. Place the following function in a script in the "global" folder of ioBroker.javascript (you may place it in the same one as above). **IMPORTANT**: Replace [YOUR ALEXA ID] with your Alexa ID. You may find the Alexa ID in the Objects tree of ioBroker ```alexa2.0.Echo-Devices```.
+
+```
+/**
+ * Say something with Alexa.
+ * 
+ * @param       {string}        message         Message to say
+ * @param       {string}        alexa           Alexa Device to say the voice message
+ * @return      void
+ * 
+ */
+function say(message, alexa = '[YOUR ALEXA ID]')
+{
+    setState('alexa2.0.Echo-Devices.'+alexa+'.Commands.speak', message);
+}
+```
+
+You can use this function within ioBroker.javascript to say a phrase using Alexa  ```say('Hello World')```.
+
 Create a script in the "common" folder of ioBroker.javascript (or use the one you created above) and add the following listener to it:
 ```
 var L = {
