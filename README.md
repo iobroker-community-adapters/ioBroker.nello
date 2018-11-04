@@ -37,6 +37,9 @@ If you no DynDNS address and no idea what the shit I'm talking about, please ref
 
 ## Changelog
 
+### 0.3.3 (2018-11-04)
+- (zefau) added HTTPs support for webhooks (which however does not seem to be supported by the Nello API)
+
 ### 0.3.2 (2018-11-03)
 - (zefau) created dedicated Github / npm repository for the javascript implementation of the nello.io API (https://github.com/Zefau/nello.io) and thus changed dependency packages
 
