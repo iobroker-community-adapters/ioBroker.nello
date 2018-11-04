@@ -46,7 +46,19 @@ adapter.on('ready', function()
 	}
 	
 	library = new Library(adapter);
-	nello = new Nello({'clientId': adapter.config.client_id, 'clientSecret': adapter.config.client_secret, 'tokenType': adapter.config.token_type, 'tokenAccess': adapter.config.access_token});
+	nello = new Nello({
+		'clientId': adapter.config.client_id,
+		'clientSecret': adapter.config.client_secret,
+		'tokenType': adapter.config.token_type,
+		'tokenAccess': adapter.config.access_token,
+		
+		// PLEASE NOTE: The nello API v1 does not seem to support SSL / HTTPS
+		//
+		/*'ssl': {
+			'key': adapter.config.certPrivate,
+			'cert': adapter.config.certPublic
+		}*/
+	});
 	
 	
 	/*
@@ -163,6 +175,8 @@ adapter.on('ready', function()
 						// listen to events
 						nello.listen(location.location_id, adapter.config.uri, function(res)
 						{
+							adapter.log.debug('LISTENER: ' + JSON.stringify(res) + '...');
+							
 							// successfully attached listener
 							if (res.result === true && res.body === undefined)
 								adapter.log.info('Listener attached to uri ' + res.uri.url + ':' + res.uri.port + '.');
@@ -172,7 +186,7 @@ adapter.on('ready', function()
 							{
 								if (res.body !== null)
 								{
-									adapter.log.debug('Received data from the webhook listener (action -' + res.body.action + '-).');
+									adapter.log.info('Received data from the webhook listener (action -' + res.body.action + '-).');
 									
 									library.set(location.location_id + '.events.refreshedTimestamp', Math.round(res.body.data.timestamp));
 									library.set(location.location_id + '.events.refreshedDateTime', library.getDateTime(res.body.data.timestamp*1000));
