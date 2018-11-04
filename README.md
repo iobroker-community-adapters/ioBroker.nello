@@ -124,6 +124,9 @@ Based on the action of the event, Alexa will inform you about the door being ope
 
 ## Changelog
 
+### 0.3.4 (2018-11-04)
+- (zefau) Code improvements
+
 ### 0.3.3 (2018-11-04)
 - (zefau) added HTTPs support for webhooks (which however does not seem to be supported by the Nello API)
 
