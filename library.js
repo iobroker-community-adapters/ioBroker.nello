@@ -1,10 +1,20 @@
 /**
  * Library
  *
+ * @description Library of general functions as well as helping functions handling ioBroker
+ * @author Zefau <https://github.com/Zefau/>
+ * @license MIT License
+ * @version 0.2
  *
  */
 class Library
 {
+	/**
+	 * Constructor.
+	 *
+	 * @param	{object}	adapter		ioBroker adpater object
+	 *
+	 */
     constructor(adapter)
 	{
 		this._adapter = adapter;
