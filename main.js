@@ -93,11 +93,11 @@ adapter.on('ready', function()
 				{
 					for (var key in location.address)
 					{
-						library.createNode({
+						library.set({
 								node: location.location_id + '.address.' + key,
 								description: key
 							},
-							{val: location.address[key]}
+							location.address[key]
 						);
 					}
 				});
@@ -127,11 +127,11 @@ adapter.on('ready', function()
 						res.timeWindows.forEach(function(window)
 						{
 							// create channel for the time window
-							library.createNode({
+							library.set({
 									node: location.location_id + '.timeWindows.' + window.id,
 									description: window.name
 								},
-								{val: ''}
+								''
 							);
 							
 							// add to index
@@ -146,17 +146,17 @@ adapter.on('ready', function()
 							
 							for (var key in window)
 							{
-								library.createNode({
+								library.set({
 										node: location.location_id + '.timeWindows.' + window.id + '.' + key,
 										description: key
 									},
-									{val: window[key]}
+									window[key]
 								);
 							}
 						});
 						
 						// create index with time window IDs
-						library.createNode({node: location.location_id + '.timeWindows.indexedTimeWindows', description: 'Index of all time windows'}, {val: index});
+						library.set({node: location.location_id + '.timeWindows.indexedTimeWindows', description: 'Index of all time windows'}, index);
 					});
 				});
 				
@@ -168,10 +168,6 @@ adapter.on('ready', function()
 				{
 					adapter.createChannel(location.location_id, 'events', {name: 'Events of the location'}, {}, function()
 					{
-						library.createNode({node: location.location_id + '.events.feed', description: 'Activity feed / Event history'}, {val: '[]'});
-						library.createNode({node: location.location_id + '.events.refreshedTimestamp', description: 'Timestamp of the last event'}, {val: 0});
-						library.createNode({node: location.location_id + '.events.refreshedDateTime', description: 'Date-Time of the last event'}, {val: ''});
-						
 						// listen to events
 						nello.listen(location.location_id, adapter.config.uri, function(res)
 						{
@@ -188,13 +184,13 @@ adapter.on('ready', function()
 								{
 									adapter.log.info('Received data from the webhook listener (action -' + res.body.action + '-).');
 									
-									library.set(location.location_id + '.events.refreshedTimestamp', Math.round(res.body.data.timestamp));
-									library.set(location.location_id + '.events.refreshedDateTime', library.getDateTime(res.body.data.timestamp*1000));
+									library.set({node: location.location_id + '.events.refreshedTimestamp', description: 'Timestamp of the last event'}, Math.round(res.body.data.timestamp));
+									library.set({node: location.location_id + '.events.refreshedDateTime', description: 'Timestamp of the last event'}, library.getDateTime(res.body.data.timestamp*1000));
 									
 									adapter.getState(location.location_id + '.events.feed', function(err, state)
 									{
-										var feed = state.val != '' ? JSON.parse(state.val) : [];
-										library.set(location.location_id + '.events.feed', JSON.stringify(feed.concat([res.body])));
+										var feed = state !== undefined && state.val !== '' ? JSON.parse(state.val) : [];
+										library.set({node: location.location_id + '.events.feed', description: 'Activity feed / Event history'}, JSON.stringify(feed.concat([res.body])));
 									});
 								}
 							}
@@ -210,24 +206,24 @@ adapter.on('ready', function()
 				}
 				
 				// create node for the location id
-				library.createNode({
+				library.set({
 						node: location.location_id + '.id',
 						description: 'ID of location ' + location.address.streetName
 					},
-					{val: location.location_id}
+					location.location_id
 				);
 				
 				// create node for last refresh
-				library.createNode({node: location.location_id + '.refreshedTimestamp', description: 'Last update (timestamp) of location ' + location.address.streetName}, {val: Math.round(Date.now()/1000)});
-				library.createNode({node: location.location_id + '.refreshedDateTime', description: 'Last update (date-time) of location ' + location.address.streetName}, {val: library.getDateTime(Date.now())});
+				library.set({node: location.location_id + '.refreshedTimestamp', description: 'Last update (timestamp) of location ' + location.address.streetName}, Math.round(Date.now()/1000));
+				library.set({node: location.location_id + '.refreshedDateTime', description: 'Last update (date-time) of location ' + location.address.streetName}, library.getDateTime(Date.now()));
 				
 				// create button to open the door
-				library.createNode({
+				library.set({
 						node: location.location_id + '._openDoor',
 						description: 'Open door of location ' + location.address.streetName,
 						common: {locationId: location.location_id, role: 'button', type: 'boolean'}
 					},
-					{val: false}
+					false
 				);
 				
 				// attach listener
@@ -246,7 +242,7 @@ adapter.on('stateChange', function(id, state)
 {
 	adapter.log.debug('State of ' + id + ' has changed ' + JSON.stringify(state) + '.');
 	
-	if (id.indexOf('_openDoor') > -1)
+	if (id.indexOf('_openDoor') > -1 && state.ack !== true)
 	{
 		var location = {};
 		adapter.getObject(id, function(err, obj)

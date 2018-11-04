@@ -3,11 +3,11 @@
  *
  *
  */
-module.exports = class Library
+class Library
 {
     constructor(adapter)
 	{
-		this.adapter = adapter;
+		this._adapter = adapter;
     }
 	
 	/**
@@ -67,49 +67,85 @@ module.exports = class Library
 	}
 
 	/**
-	 * Creates an object (channel or state) and sets its values.
+	 * Set a value and create the necessary state for it in case it is missing.
 	 *
 	 * @param	{object}	node					
-	 * @param	{string}	node.node				
-	 * @param	{string}	node.description		
-	 * @param	{object}	node.common				
-	 * @param	{string}	node.common.role		
-	 * @param	{string}	node.common.type		
-	 * @param	{object}	node.native				
-	 * @param	{object}	state					
-	 * @param	{string}	state.name				
-	 * @param	{string}	state.val				
+	 * @param	{string}	node.node				Node (= state) to set the value (and create in case it does not exist)
+	 * @param	{string}	node.description		Description of the node (in case it will be created)
+	 * @param	{object}	node.common				Common Details of the node (in case it will be created)
+	 * @param	{string}	node.common.role		Role of the node (in case it will be created)
+	 * @param	{string}	node.common.type		Type of the node (in case it will be created)
+	 * @param	{object}	node.native				Native Details of the node (in case it will be created)
+	 * @param	{string}	value					Value to set (in any case)
 	 * @return	void
 	 *
 	 */
-	createNode(node, state)
+	set(node, value)
 	{
-		this.adapter.setObject(
+		var that = this;
+		this._adapter.getObject(node.node, function(err, obj)
+		{
+			// catch error
+			if (err)
+				that._adapter.log.error(err);
+			
+			// create node if non-existent
+			if (err || !obj) {
+				that._adapter.log.debug('Creating node ' + node.node);
+				that._createNode(node, that._setValue(node.node, value));
+			}
+			
+			// set value
+			else
+				that._setValue(node.node, value);
+		});
+	}
+	
+	/**
+	 * Creates an object (channel or state).
+	 *
+	 * @param	{object}	node					
+	 * @param	{string}	node.node				Node (= state) to set the value (and create in case it does not exist)
+	 * @param	{string}	node.description		Description of the node (in case it will be created)
+	 * @param	{object}	node.common				Common Details of the node (in case it will be created)
+	 * @param	{string}	node.common.role		Role of the node (in case it will be created)
+	 * @param	{string}	node.common.type		Type of the node (in case it will be created)
+	 * @param	{object}	node.native				Native Details of the node (in case it will be created)
+	 * @param	{function}	callback				Callback function to be invoked
+	 * @return	void
+	 *
+	 */
+	_createNode(node, callback)
+	{
+		this._adapter.setObject(
 			node.node,
 			{
 				common: Object.assign(node.common || {}, {
-					name: node.description.replace(/%name%/gi, state.name) || '',
+					name: node.description || '',
 					role: node.common !== undefined && node.common.role ? node.common.role : 'state',
 					type: node.common !== undefined && node.common.type ? node.common.type : 'string'
 				}),
 				type: 'state',
 				native: node.native || {}
 			},
-			this.set(node.node, state.val)
+			callback
 		);
 	}
 
 	/**
 	 * Sets a value of a state.
 	 *
-	 * @param	{string}	node		State the value shall be set
+	 * @param	{string}	state		State the value shall be set
 	 * @param	{string}	value		Value to be set
 	 * @return	void
 	 *
 	 */
-	set(node, value)
+	_setValue(state, value)
 	{
+		var that = this;
 		if (value !== undefined)
-			this.adapter.setState(node, {val: value, ts: Date.now(), ack: true}, function(err) {if (err) this.adapter.log.error(err);})
+			this._adapter.setState(state, {val: value, ts: Date.now(), ack: true}, function(err) {if (err) that._adapter.log.error(err);})
 	}
 }
+
+module.exports = Library;
