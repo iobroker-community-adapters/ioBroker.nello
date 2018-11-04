@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "nello",
-        "version": "0.3.3",
+        "version": "0.3.4",
         "title": "nello.io adapter",
         "desc": {
             "en": "ioBroker nello.io Adapter",
@@ -9,6 +9,10 @@
             "ru": "ioBroker nello.io драйвер"
         },
         "news": {
+            "0.3.4": {
+                "en": "Code improvements",
+                "de": "Quellcode Verbesserungen"
+            },
             "0.3.3": {
                 "en": "added HTTPs support for webhooks (which however does not seem to be supported by the Nello API)",
                 "de": "Unterstützung für HTTPs für Webhooks hinzugefügt (wird allerdings durch die nello API nicht unterstützt)"
