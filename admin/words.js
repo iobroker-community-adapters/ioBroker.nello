@@ -49,5 +49,21 @@ systemDictionary = {
 	"uri": {
 		"en": "URL (format www.domain.com:port)",
 		"de": "URL (Format www.domain.com:port)"
+	},
+	"ssl": {
+		"en": "Secure Connection (HTTPS)",
+		"de": "Sichere Verbindung (HTTPS)"
+	},
+	"public": {
+		"en": "Public Certificate",
+		"de": "Öffentliches Zertifikat"
+	},
+	"private": {
+		"en": "Private Key / Certificate",
+		"de": "Privater Schlüssel / Zertifikat"
+	},
+	"chained": {
+		"en": "Chained / Intermediate Certificate",
+		"de": "Chained / Intermediate Zertifikat"
 	}
 };

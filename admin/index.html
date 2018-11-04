@@ -13,7 +13,6 @@
 	<script type="text/javascript" src="../../js/adapter-settings.js"></script>
 	
 	<script type="text/javascript" src="words.js"></script>
-	<script type="text/javascript" src="admin.js"></script>
 	<script type="text/javascript">
     var onChange;
 	var settings = {
@@ -24,15 +23,22 @@
 	}
 	
 	/*
-	 * Disabled / enable token button
+	 * PAGE LOADED
 	 */
-	$(window).on("load", function()
+	$(window).on('load', function()
 	{
 		var cid = $('#client_id');
 		var csecret = $('#client_secret');
 		var tbutton = $('#button_token');
 		var ttype = $('#token_type');
 		var taccess = $('#access_token');
+		var secure = $('#secure');
+		
+		/*
+		 * Checkbox
+		 */
+		function showHideSettings(state) {$('.hideCol').toggleClass('hidden', state)}
+		secure.on('change', function() {showHideSettings(!$(this).prop('checked'))});
 		
 		/*
 		 * Generate token
@@ -72,10 +78,10 @@
 		});
 	});
 	</script>
+	<script type="text/javascript" src="admin.js"></script>
 	<style>
-		.m .select-wrapper+label {
-			top: 100%;
-		}
+		.m select {display: block !important}
+		.hidden {display: none}
 	</style>
 </head>
 <body>
@@ -101,11 +107,11 @@
 			</div>
 			<div class="row">
 				<div class="input-field col s6 m6">
-					<input class="value" data-crypt="1" id="client_id" type="text"/>
+					<input class="value" id="client_id" type="text"/>
 					<label for="client_id" class="translate">client_id</label>
 				</div>
 				<div class="input-field col s6 m6">
-					<input class="value" data-crypt="1" id="client_secret" type="text" />
+					<input class="value" id="client_secret" type="text" />
 					<label for="client_secret" class="translate">client_secret</label>
 				</div>
 			</div>
@@ -120,11 +126,11 @@
 					<a class="btn translate" id="button_token">button_token</a>
 				</div>
 				<div class="input-field col s5 m5">
-					<input class="value" data-crypt="1" id="token_type" type="text" readonly />
+					<input class="value" id="token_type" type="text" readonly />
 					<label for="token_type" class="translate">token_type</label>
 				</div>
 				<div class="input-field col s5 m5">
-					<input class="value" data-crypt="1" id="access_token" type="text" readonly />
+					<input class="value" id="access_token" type="text" readonly />
 					<label for="access_token" class="translate">access_token</label>
 				</div>
 			</div>
@@ -135,10 +141,33 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col s12 m12">
-					<input class="value" data-crypt="1" id="uri" type="text" placeholder="www.domain.com:1234" />
+				<div class="input-field col s4 m4">
+					<input class="value" id="uri" type="text" placeholder="www.domain.com:1234" />
 					<label for="uri" class="translate">uri</label>
 				</div>
+				
+				<!--
+// PLEASE NOTE: The nello API v1 does not seem to support SSL / HTTPS
+//
+                <div class="input-field col s2 m2">
+                    <label for="secure">
+						<input class="value" id="secure" type="checkbox" />
+						<span class="translate">ssl</span>
+                    </label>
+                </div>
+                <div class="col s2 m2 hideCol">
+                    <label class="translate" for="certPublic">public</label>
+                    <select id="certPublic" class="value" data-select="certificate" data-type="public"></select>
+                </div>
+                <div class="col s2 m2 hideCol">
+                    <label class="translate" for="certPrivate">private</label>
+                    <select id="certPrivate" class="value" data-select="certificate" data-type="private"></select>
+                </div>
+                <div class="col s2 m2 hideCol">
+                    <label class="translate" for="certChained">chained</label>
+                    <select id="certChained" class="value" data-select="certificate" data-type="chained"></select>
+				</div>
+				-->
 			</div>
 		</div>
 		

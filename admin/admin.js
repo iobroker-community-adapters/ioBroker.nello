@@ -44,14 +44,18 @@ function load(settings, onChange)
 	if (!settings)
 		return;
 	
-	$('.value').each(function ()
+	$('.value').each(function()
 	{            
 		var $key = $(this);
 		var id = $key.attr('id');
 		if ($key.attr('type') === 'checkbox')
-			$key.prop('checked', settings[id]).on('change', function() {onChange();});
+			$key.prop('checked', settings[id]).trigger('change').on('change', function() {onChange()});
+		
+		else if ($key.attr('data-select') === "certificate")
+			fillSelectCertificates('#'+id,  $key.attr('data-type') || '',  settings[id]);
+		
 		else
-			$key.val(settings[id]).on('change', function() {onChange();}).on('keyup', function() {onChange();});
+			$key.val(settings[id]).on('change', function() {onChange()}).on('keyup', function() {onChange()});
 	});
 	
 	onChange(false);
@@ -73,6 +77,15 @@ function save(callback)
 		
 		if ($this.attr('type') === 'checkbox')
 			obj[key] = $this.prop('checked');
+		
+		else if ($this.attr('data-select') === "certificate")
+		{
+			socket.emit('getObject', 'system.certificates', function (err, res) {
+				if (res.native.certificates !== undefined)
+					obj[key] = res.native.certificates[$this.val()];
+			});
+		}
+		
 		else
 			obj[key] = settings.decode.fields.indexOf(key) > -1 ? decode(settings.decode.key, $this.val()) : $this.val();
 	});
