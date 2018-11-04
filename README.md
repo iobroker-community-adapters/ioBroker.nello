@@ -35,7 +35,7 @@ If you no DynDNS address and no idea what the shit I'm talking about, please ref
 4. Speichern und den Adapter genießen
 
 
-## Smart Home Integration using ioBroker.javascript
+## Smart Home / Alexa integration using ioBroker.javascript
 Some examples of a possible integration within your smart home.
 
 ### Open door using Alexa
@@ -70,6 +70,33 @@ cloud('nello.0.[YOUR DOOR ID]._openDoor', 'Tür öffnen');
 Replace **[YOUR DOOR ID]** with the ID of the door you want to open. You find the ID in the ioBroker.nello state tree ("Objects" tab of ioBroker).
 
 Eventually, search / discover new devices in your Alexa app and create a routine in the Alexa app (e.g. "Alexa, open door") and assign the newly discovered state to it. Finished! Now you may tell Alexa to open your door for you.
+
+### Let Alexa inform you about door ring
+Create a script in the "common" folder of ioBroker.javascript (or use the one you created above) and add the following listener to it:
+```
+var L = {
+    'actionRingUnknown': 'Es hat an der Tür geklingelt!',
+    'actionOpenName': '%name% hat die Tür geöffnet.',
+    'actionOpen': 'Die Haustür wurde geöffnet.'
+};
+
+on({id: 'nello.0.[YOUR DOOR ID].events.feed', change: 'any'}, function(obj)
+{
+    var events = JSON.parse(obj.state.val);
+    if (events.length === 0) return;
+    
+    var event = events[events.length-1];
+    if (event.action == 'deny')
+        say(L.actionRingUnknown);
+    
+    else if (event.action == 'swipe' || event.action == 'geo')
+        say(L.actionOpenName.replace(/%name%/gi, event.data.name));
+        
+    else
+        say(L.actionOpen);
+});
+```
+Based on the action of the event, Alexa will inform you about the door being opened or the door bell being recognized.
 
 
 ## Changelog
