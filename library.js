@@ -4,7 +4,7 @@
  * @description Library of general functions as well as helping functions handling ioBroker
  * @author Zefau <https://github.com/Zefau/>
  * @license MIT License
- * @version 0.2
+ * @version 0.3
  *
  */
 class Library
@@ -127,19 +127,12 @@ class Library
 	 */
 	_createNode(node, callback)
 	{
-		this._adapter.setObject(
-			node.node,
-			{
-				common: Object.assign(node.common || {}, {
-					name: node.description || '',
-					role: node.common !== undefined && node.common.role ? node.common.role : 'state',
-					type: node.common !== undefined && node.common.type ? node.common.type : 'string'
-				}),
-				type: 'state',
-				native: node.native || {}
-			},
-			callback
-		);
+		var common = {};
+		if (node.description !== undefined) common.name = node.description;
+		if (node.role !== undefined) common.role = node.role;
+		if (node.type !== undefined) common.type = node.type;
+		
+		this._adapter.setObject(node.node, {common: Object.assign({role: 'state', type: 'string'}, node.common || {}, common), type: 'state', native: node.native || {}}, callback);
 	}
 
 	/**

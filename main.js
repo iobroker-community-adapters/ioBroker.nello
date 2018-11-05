@@ -13,7 +13,27 @@ const Nello = require('nello');
  */
 var library;
 var nello;
-
+var nodes = {
+	
+	// address
+	'address.address': {role: 'text', description: 'Full address of the location'},
+	'address.city': {role: 'text', description: 'City of the location'},
+	'address.country': {role: 'text', description: 'Country of the location'},
+	'address.state': {role: 'text', description: 'State  of the location'},
+	'address.street': {role: 'text', description: 'Street with number of the location'},
+	'address.streetName': {role: 'text', description: 'Street name of the location'},
+	'address.streetNumber': {role: 'text', description: 'Street number of the location'},
+	'address.zip': {role: 'text', description: 'ZIP code of the location'},
+	
+	// timeWindows
+	'timeWindows.enabled': {role: 'indicator', description: 'State whether time window is enabled'},
+	'timeWindows.icalObj': {role: 'json', description: 'Object of the calendar data'},
+	'timeWindows.icalRaw': {role: 'text', description: 'Text of the calendar data in iCal format'},
+	'timeWindows.id': {role: 'id', description: 'ID of the time window'},
+	'timeWindows.image': {role: 'disabled', description: '(not in used)'},
+	'timeWindows.name': {role: 'text', description: 'Name of the time window'},
+	'timeWindows.state': {role: 'indicator', description: 'State'}
+};
 
 /*
  * ADAPTER UNLOAD
@@ -92,14 +112,7 @@ adapter.on('ready', function()
 				adapter.createChannel(location.location_id, 'address', {name: 'Address data of the location'}, {}, function()
 				{
 					for (var key in location.address)
-					{
-						library.set({
-								node: location.location_id + '.address.' + key,
-								description: key
-							},
-							location.address[key]
-						);
-					}
+						library.set(Object.assign({node: location.location_id + '.address.' + key}, nodes['address.' + key] || {}), location.address[key]);
 				});
 				
 				// CHANNEL: time windows
@@ -126,13 +139,8 @@ adapter.on('ready', function()
 						var index = "";
 						res.timeWindows.forEach(function(window)
 						{
-							// create channel for the time window
-							library.set({
-									node: location.location_id + '.timeWindows.' + window.id,
-									description: window.name
-								},
-								''
-							);
+							// create states
+							library.set({node: location.location_id + '.timeWindows.' + window.id, description: 'Time Window: ' + window.name}, '');
 							
 							// add to index
 							index = index + window.id + ',';
@@ -146,17 +154,12 @@ adapter.on('ready', function()
 							
 							for (var key in window)
 							{
-								library.set({
-										node: location.location_id + '.timeWindows.' + window.id + '.' + key,
-										description: key
-									},
-									window[key]
-								);
+								library.set(Object.assign({node: location.location_id + '.timeWindows.' + window.id + '.' + key}, nodes['timeWindows.' + key] || {}), window[key]);
 							}
 						});
 						
 						// create index with time window IDs
-						library.set({node: location.location_id + '.timeWindows.indexedTimeWindows', description: 'Index of all time windows'}, index);
+						library.set({node: location.location_id + '.timeWindows.indexedTimeWindows', description: 'Index of all time windows', role: 'text'}, index);
 					});
 				});
 				
@@ -184,13 +187,13 @@ adapter.on('ready', function()
 								{
 									adapter.log.info('Received data from the webhook listener (action -' + res.body.action + '-).');
 									
-									library.set({node: location.location_id + '.events.refreshedTimestamp', description: 'Timestamp of the last event'}, Math.round(res.body.data.timestamp));
-									library.set({node: location.location_id + '.events.refreshedDateTime', description: 'Timestamp of the last event'}, library.getDateTime(res.body.data.timestamp*1000));
+									library.set({node: location.location_id + '.events.refreshedTimestamp', description: 'Timestamp of the last event', role: 'value'}, Math.round(res.body.data.timestamp));
+									library.set({node: location.location_id + '.events.refreshedDateTime', description: 'DateTime of the last event', role: 'text'}, library.getDateTime(res.body.data.timestamp*1000));
 									
 									adapter.getState(location.location_id + '.events.feed', function(err, state)
 									{
-										var feed = state !== undefined && state.val !== '' ? JSON.parse(state.val) : [];
-										library.set({node: location.location_id + '.events.feed', description: 'Activity feed / Event history'}, JSON.stringify(feed.concat([res.body])));
+										var feed = state !== undefined && state !== null && state.val !== '' ? JSON.parse(state.val) : [];
+										library.set({node: location.location_id + '.events.feed', description: 'Activity feed / Event history', role: 'json'}, JSON.stringify(feed.concat([res.body])));
 									});
 								}
 							}
@@ -206,22 +209,17 @@ adapter.on('ready', function()
 				}
 				
 				// create node for the location id
-				library.set({
-						node: location.location_id + '.id',
-						description: 'ID of location ' + location.address.streetName
-					},
-					location.location_id
-				);
+				library.set({node: location.location_id + '.id', description: 'ID of location ' + location.address.streetName, role: 'id'}, location.location_id);
 				
 				// create node for last refresh
-				library.set({node: location.location_id + '.refreshedTimestamp', description: 'Last update (timestamp) of location ' + location.address.streetName}, Math.round(Date.now()/1000));
-				library.set({node: location.location_id + '.refreshedDateTime', description: 'Last update (date-time) of location ' + location.address.streetName}, library.getDateTime(Date.now()));
+				library.set({node: location.location_id + '.refreshedTimestamp', description: 'Last update (Timestamp) of location ' + location.address.streetName, role: 'value'}, Math.round(Date.now()/1000));
+				library.set({node: location.location_id + '.refreshedDateTime', description: 'Last update (DateTime) of location ' + location.address.streetName, role: 'text'}, library.getDateTime(Date.now()));
 				
 				// create button to open the door
 				library.set({
 						node: location.location_id + '._openDoor',
 						description: 'Open door of location ' + location.address.streetName,
-						common: {locationId: location.location_id, role: 'button', type: 'boolean'}
+						common: {locationId: location.location_id, role: 'button.open.door', type: 'boolean'}
 					},
 					false
 				);
