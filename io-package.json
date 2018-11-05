@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "nello",
-        "version": "0.3.4",
+        "version": "0.3.5",
         "title": "nello.io adapter",
         "desc": {
             "en": "ioBroker nello.io Adapter",
@@ -9,6 +9,10 @@
             "ru": "ioBroker nello.io драйвер"
         },
         "news": {
+            "0.3.5": {
+                "en": "added description and roles for states",
+                "de": "Beschreibung und Rollen der states hinzugefügt"
+            },
             "0.3.4": {
                 "en": "Code improvements",
                 "de": "Quellcode Verbesserungen"
