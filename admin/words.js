@@ -6,10 +6,6 @@ systemDictionary = {
 		"en": "Authentication Credentials",
 		"de": "Authentifizierung"
 	},
-	"auth_info": {
-		"en": "The nello auth API is responsible for authentication of all nello client apps. This service follows OAuth2 as an authentication scheme to authenticate an app/user. For further information about the OAuth2 standard, please check here: <a href='https://oauth.net/2/'>https://oauth.net/2/</a><br /> To use this service, client credentials must be obtained from the nello auth admin UI located at: <a href='https://auth.nello.io/admin'>https://auth.nello.io/admin</a>. Please not that for the time being you can only get one pair of client_id and client_secret. They consist of a client_id and a client_secret.",
-		"de": ""
-	},
     "main": {
 		"en": "Main Settings",
 		"de": "Einstellungen"
@@ -23,20 +19,32 @@ systemDictionary = {
 		"de": "Client Secret"
 	},
     "token_type": {
-		"en": "Token Type (Readonly)",
-		"de": "Token Typ (nur lesend)"
+		"en": "Token Type",
+		"de": "Token Typ"
 	},
     "access_token": {
-		"en": "Access Token (Readonly)",
-		"de": "Access Token (nur lesend)"
+		"en": "Access Token",
+		"de": "Access Token"
 	},
-	"token_info": {
-		"en": "Fill in both Client ID / Client Secret in order to generate token.",
-		"de": "Trage Client ID / Client Secret ein, um einen neuen Token zu generieren."
+	"token_fillin": {
+		"en": "Fill in an existing token that has been generated elsewhere or select button &quot;Get new token&quot;.",
+		"de": "Trage einen bereits vorhandenen Token ein, der woanders generiert wurde oder wähle den Button &quot;Neuen Token generieren&quot;."
 	},
-	"button_token": {
-		"en": "Get token",
-		"de": "Token generieren"
+	"token_APIinfo": {
+		"en": "To use the nello API service and generate a token, client credentials must be obtained from the nello auth admin UI located at: <a href='https://auth.nello.io/admin'>https://auth.nello.io/admin</a>. Please not that for the time being you can only get one pair of client_id and client_secret. They consist of a client_id and a client_secret.",
+		"de": "Um die nello API nutzen und einen Token generieren zu können, muss vorher eine Client ID und ein Client Secret über <a href='https://auth.nello.io/admin'>https://auth.nello.io/admin</a> (manuell) generiert werden."
+	},
+	"token_fillInClientId": {
+		"en": "Fill in both Client ID / Client Secret and press &quot;Get new token&quot; in order to generate a new token.",
+		"de": "Trage Client ID / Client Secret und wähle &quot;Neuen Token generieren&quot;, um einen neuen Token zu erhalten."
+	},
+	"button_closeModal": {
+		"en": "Cancel",
+		"de": "Abbrechen"
+	},
+	"button_getToken": {
+		"en": "Get new token",
+		"de": "Neuen Token generieren"
 	},
 	"events": {
 		"en": "Subscribe / listen to events (Configuration of the webhook)",
@@ -53,6 +61,10 @@ systemDictionary = {
 	"ssl": {
 		"en": "Secure Connection (HTTPS)",
 		"de": "Sichere Verbindung (HTTPS)"
+	},
+	"selfSigned": {
+		"en": "Self Signed Certificate",
+		"de": "Selbst signiertes Zertifikat"
 	},
 	"public": {
 		"en": "Public Certificate",

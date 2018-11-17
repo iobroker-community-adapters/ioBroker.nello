@@ -11,7 +11,7 @@ const Nello = require('nello');
 /*
  * variables initiation
  */
-var library;
+var library = new Library(adapter);
 var nello;
 var nodes = {
 	
@@ -59,25 +59,20 @@ adapter.on('unload', function(callback)
 adapter.on('ready', function()
 {
 	// check if settings are set
-	if (!adapter.config.client_id || !adapter.config.client_secret || !adapter.config.token_type || !adapter.config.access_token)
+	if (!adapter.config.token_type || !adapter.config.access_token)
 	{
-		adapter.log.error('Client ID, client secret and / or token missing! Please go to settings and fill these in.');
+		adapter.log.error('Token is missing! Please go to settings and generate a token first!');
 		return;
 	}
 	
-	library = new Library(adapter);
 	nello = new Nello({
-		'clientId': adapter.config.client_id,
-		'clientSecret': adapter.config.client_secret,
-		'tokenType': adapter.config.token_type,
-		'tokenAccess': adapter.config.access_token,
-		
-		// PLEASE NOTE: The nello API v1 does not seem to support SSL / HTTPS
-		//
-		/*'ssl': {
-			'key': adapter.config.certPrivate,
-			'cert': adapter.config.certPublic
-		}*/
+		'type': adapter.config.token_type,
+		'access': adapter.config.access_token,
+	}, {
+		'cert': adapter.config.certPublicVal || null,
+		'key': adapter.config.certPrivateVal || null,
+		'ca': adapter.config.certChainedVal || null,
+		'selfSigned': adapter.config.selfSigned || true
 	});
 	
 	
@@ -86,10 +81,12 @@ adapter.on('ready', function()
 	 */
 	nello.getLocations(function(res)
 	{
+		adapter.log.debug(JSON.stringify(res));
+		
 		// catch error
 		if (res.result === false)
 		{
-			adapter.log.error(res.error);
+			adapter.log.error(JSON.stringify(res.error));
 			return false;
 		}
 		
@@ -253,5 +250,25 @@ adapter.on('stateChange', function(id, state)
 				nello.openDoor(location.location_id);
 			});
 		});
+	}
+});
+
+/*
+ * HANDLE MESSAGES
+ *
+ */
+adapter.on('message', async function(msg)
+{
+	adapter.log.debug('Message: ' + JSON.stringify(msg));
+	
+	switch(msg.command)
+	{
+		case 'getToken':
+			nello = new Nello();
+			var token = await nello.getToken(msg.message.clientId, msg.message.clientSecret);
+			adapter.log.debug('Generated token using Client ID and Client Secret: ' + JSON.stringify(token));
+			
+			library.msg(msg.from, msg.command, token, msg.callback);
+			break;
 	}
 });

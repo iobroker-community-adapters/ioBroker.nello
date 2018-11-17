@@ -6,7 +6,7 @@
  * @description Library of general functions as well as helping functions handling ioBroker
  * @author Zefau <https://github.com/Zefau/>
  * @license MIT License
- * @version 0.3
+ * @version 0.4
  *
  */
 class Library
@@ -54,6 +54,26 @@ class Library
 			result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ string.charCodeAt(i));
 		
 		return result;
+	}
+
+	/**
+	 * Sends a message to another adapter.
+	 *
+	 * @param	{string}	receiver	
+	 * @param	{string}	command		
+	 * @param	{*}			message		Message to send to receiver, shall be an object and will be converted to such if another is given
+	 * @param	{function}	(optional)	Callback
+	 * @return	void
+	 *
+	 */
+	msg(receiver, command, message, callback = function() {})
+	{
+		this._adapter.sendTo(
+			receiver,
+			command,
+			typeof message !== 'object' ? {message: message} : message,
+			callback
+		);
 	}
 
 	/**

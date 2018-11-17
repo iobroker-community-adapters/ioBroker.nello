@@ -27,13 +27,20 @@
 	 */
 	$(window).on('load', function()
 	{
-		M.Modal.init($('#modal'));
-		
+		M.Tabs.init($('.tabs'));
+
 		var cid = $('#client_id');
 		var csecret = $('#client_secret');
-		var getToken = $('#button_getToken');
-		var generateToken = $('#button_generateToken');
+		var tbutton = $('#button_gettoken');
 		var secure = $('#secure');
+		
+		/*
+		 * bind inputs together
+		 */
+		$('#token_type-existing, #access_token-existing').on('keyup', function()
+		{
+			$('#'+$(this).attr('id').replace('-existing', '')).trigger('keyup').val($(this).val());
+		})
 		
 		/*
 		 * Checkbox
@@ -42,19 +49,9 @@
 		secure.on('change', function() {showHideSettings(!$(this).prop('checked'))});
 		
 		/*
-		 * Get token
-		 */
-		getToken.on('click', function()
-		{
-			$('.errorMessage').text('');
-			var modal = M.Modal.getInstance($('#modal'));
-			modal.open();
-		});
-		
-		/*
 		 * Generate token
 		 */
-		generateToken.on('click', function()
+		tbutton.on('click', function()
 		{
 			// client id and secret given, but token missing
 			if (cid.val() && csecret.val())
@@ -68,16 +65,13 @@
 						$('#token_type, #token_type-existing').val(res.type).focus();
 						$('#access_token, #access_token-existing').val(res.access).focus();
 						$('#access_token').trigger('change');
-						
-						var modal = M.Modal.getInstance($('#modal'));
-						modal.close();
 					}
 					else
-						$('.errorMessage').text('ERROR: Could not fetch token.');
+						alert('ERROR: Could not fetch token.');
 				});
 			}
 			else
-				$('.errorMessage').text('Fill in Client ID and Client Secret to generate token!');
+				alert('Fill in Client ID and Client Secret to generate token!');
 		});
 	});
 	</script>
@@ -86,16 +80,8 @@
 		.m select {display: block !important}
 		.hidden {display: none}
 		.box {
-			padding-top: 5px !important;
-			margin: 0 !important;
+			margin: 0 .75rem !important;
 			background-color: #fff; /*#acd8fa*/
-		}
-		
-		p.title {margin-bottom: 0}
-		p.subtitle {padding: 0 .75rem}
-		p.errorMessage {
-			padding: 5px;
-			color: #c00;
 		}
 	</style>
 </head>
@@ -103,75 +89,90 @@
 
 
 <div class="m adapter-container" id="settings">
-	
-	<!-- Modal Structure -->
-	<div id="modal" class="modal">
-		<div class="modal-content">
-			<strong class="translate">button_getToken</strong><br />
-			<p class="translate">token_APIinfo</p>
-			<p class="translate">token_fillInClientId</p>
-			
-			<div class="row">
-				<div class="input-field col s6 m6">
-					<input id="client_id" type="text"/>
-					<label for="client_id" class="translate">client_id</label>
-				</div>
-				<div class="input-field col s6 m6">
-					<input id="client_secret" type="text" />
-					<label for="client_secret" class="translate">client_secret</label>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col s12 m12">
-					<p class="errorMessage"></p>
-				</div>
-			</div>
-			
+
+	<div class="row">
+		<div class="col s12 m12">
+			<p class="translate title">auth</p>
+			<p class="translate">auth_info</p>
 		</div>
-		<div class="modal-footer">
-			<a href="#!" class="modal-close waves-effect waves-green btn-flat translate">button_closeModal</a>
-			<a href="#!" class="btn green translate" id="button_generateToken">button_getToken</a>
+	</div>
+	<div class="row" style="margin-bottom: 0">
+		<div class="col s12">
+			<ul class="tabs">
+				<li class="tab col s2"><a href="#gettoken" class="translate active">button_gettoken</a></li>
+				<li class="tab col s2"><a href="#providetoken" class="translate">button_providetoken</a></li>
+			</ul>
 		</div>
 	</div>
 	
-	<!-- Token -->
-	<div class="row">
+	<!-- Client ID & Secret -->
+	<div id="gettoken" class="row box">
 		<div class="col s12 m12 page">
-			<div class="row" style="margin-bottom: 0">
+			<div class="row">
 				<div class="col s12 m12">
-					<p class="translate title">auth</p>
+					<p class="translate">token_getinfo</p>
 				</div>
 			</div>
-			<div class="row box">
-				<p class="subtitle translate">token_fillin</p>
-				
-				<div class="input-field col s5 m5">
-					<input class="value" id="token_type" type="text" />
-					<label for="token_type" class="translate">token_type</label>
+			<div class="row">
+				<div class="input-field col s6 m6">
+					<input class="value" id="client_id" type="text"/>
+					<label for="client_id" class="translate">client_id</label>
 				</div>
-				<div class="input-field col s5 m5">
-					<input class="value" id="access_token" type="text" />
-					<label for="access_token" class="translate">access_token</label>
-				</div>
-				<div class="input-field col s2 m2 center">
-					<a class="btn red translate" id="button_getToken">button_getToken</a>
+				<div class="input-field col s6 m6">
+					<input class="value" id="client_secret" type="text" />
+					<label for="client_secret" class="translate">client_secret</label>
 				</div>
 			</div>
 			
+			<!-- Get Token -->
+			<div class="row">
+				<div class="input-field col s2 m2 center">
+					<a class="btn red translate" id="button_gettoken">button_gettoken</a>
+				</div>
+				<div class="input-field col s5 m5">
+					<input class="value" id="token_type" type="text" readonly />
+					<label for="token_type" class="translate">token_type-readonly</label>
+				</div>
+				<div class="input-field col s5 m5">
+					<input class="value" id="access_token" type="text" readonly />
+					<label for="access_token" class="translate">access_token-readonly</label>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+	
+	<!-- Provide Token -->
+	<div id="providetoken" class="row box">
+		<div class="col s12 m12 page">
+			<div class="row">
+				<div class="col s12 m12">
+					<p class="translate">token_provideinfo</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s6 m6">
+					<input class="value" id="token_type-existing" type="text" />
+					<label for="token_type-existing" class="translate">token_type</label>
+				</div>
+				<div class="input-field col s6 m6">
+					<input class="value" id="access_token-existing" type="text" />
+					<label for="access_token-existing" class="translate">access_token</label>
+				</div>
+			</div>
 		</div>
 	</div>
 	
 	<!-- Events -->
 	<div class="row">
 		<div class="col s12 m12 page">
-			<div class="row" style="margin-bottom: 0">
+			<div class="row">
 				<div class="col s12 m12">
 					<p class="translate title">events</p>
+					<p class="translate">events_info</p>
 				</div>
 			</div>
-			<div class="row box">
-				<p class="subtitle translate">events_info</p>
-				
+			<div class="row">
 				<div class="input-field col s4 m4">
 					<input class="value" id="uri" type="text" placeholder="www.domain.com:1234" />
 					<label for="uri" class="translate">uri</label>
@@ -187,7 +188,7 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col hideCol">
+						<div class="col">
 							<label for="selfSigned">
 								<input class="value" id="selfSigned" type="checkbox" />
 								<span class="translate">selfSigned</span>

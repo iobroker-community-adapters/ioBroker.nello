@@ -48,11 +48,14 @@ function load(settings, onChange)
 	{            
 		var $key = $(this);
 		var id = $key.attr('id');
+		
+		// load certificates
+		if ($key.attr('data-select') === "certificate")
+			fillSelectCertificates('#'+id,  $key.attr('data-type') || '', settings[id]);
+		
+		// load settings
 		if ($key.attr('type') === 'checkbox')
 			$key.prop('checked', settings[id]).trigger('change').on('change', function() {onChange()});
-		
-		else if ($key.attr('data-select') === "certificate")
-			fillSelectCertificates('#'+id,  $key.attr('data-type') || '',  settings[id]);
 		
 		else
 			$key.val(settings[id]).on('change', function() {onChange()}).on('keyup', function() {onChange()});
@@ -70,7 +73,7 @@ function load(settings, onChange)
 function save(callback)
 {
 	var obj = {};
-	$('.value').each(function ()
+	$('.value').each(function()
 	{
 		var $this = $(this);
 		var key = $this.attr('id');
@@ -82,7 +85,10 @@ function save(callback)
 		{
 			socket.emit('getObject', 'system.certificates', function (err, res) {
 				if (res.native.certificates !== undefined)
-					obj[key] = res.native.certificates[$this.val()];
+				{
+					obj[key] = $this.val();
+					obj[key + 'Val'] = res.native.certificates[$this.val()];
+				}
 			});
 		}
 		

@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "nello",
-        "version": "0.3.5",
+        "version": "0.4.0",
         "title": "nello.io adapter",
         "desc": {
             "en": "ioBroker nello.io Adapter",
@@ -9,6 +9,10 @@
             "ru": "ioBroker nello.io драйвер"
         },
         "news": {
+            "0.4.0": {
+                "en": "support for HTTPs is now working; Redesign of the admin interface",
+                "de": "Unterstützung für HTTPs funktioniert nun; Re-Design des Admin-Panels"
+            },
             "0.3.5": {
                 "en": "added description and roles for states",
                 "de": "Beschreibung und Rollen der states hinzugefügt"
@@ -53,6 +57,8 @@
         ],
         "readme": "https://github.com/Zefau/ioBroker.nello/blob/master/README.md",
         "loglevel": "info",
+        "messagebox": true,
+		"subscribe": "messagebox",
         "type": "hardware",
         "authors": [
             {
