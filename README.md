@@ -132,6 +132,10 @@ Based on the action of the event, Alexa will inform you about the door being ope
 
 ## Changelog
 
+### 0.4.0 (2018-11-17)
+- (zefau) support for HTTPs is now working
+- (zefau) Redesign of the admin interface
+
 ### 0.3.5 (2018-11-05)
 - (zefau) added description and roles for states
 
