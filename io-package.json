@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "nello",
-        "version": "0.4.1",
+        "version": "0.4.2",
         "title": "nello.io adapter",
         "desc": {
             "en": "ioBroker nello.io Adapter",
@@ -9,6 +9,10 @@
             "ru": "ioBroker nello.io драйвер"
         },
         "news": {
+            "0.4.2": {
+                "en": "Bug fixes",
+                "de": "Problembeseitigung"
+            },
             "0.4.1": {
                 "en": "replaced Promises (async/await) with callback to be backward compatibility with Node.js v6 (and v4)",
                 "de": "Funktionalität der Promises (async/await) zur Kompatibilität mit Node.js v6 (and v4) ersetzt"
