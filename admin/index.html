@@ -27,6 +27,7 @@
 	 */
 	$(window).on('load', function()
 	{
+		M.Tabs.init($('.tabs'));
 		M.Modal.init($('#modal'));
 		
 		var cid = $('#client_id');
@@ -93,6 +94,8 @@
 			background-color: #fff; /*#acd8fa*/
 		}
 		
+		img {margin: 5px}
+		a.active {font-weight: bold}
 		p.title {margin-bottom: 0}
 		p.subtitle {padding: 0 .75rem}
 		p.errorMessage {
@@ -136,78 +139,122 @@
 		</div>
 	</div>
 	
-	<!-- Token -->
 	<div class="row">
-		<div class="col s12 m12 page">
-			<div class="row" style="margin-bottom: 0">
-				<div class="col s12 m12">
-					<p class="translate title">auth</p>
+		
+		<!-- TABS -->
+		<div class="col s12">
+			<ul class="tabs">
+				<li class="tab col s3"><a class="active" href="#config">Configuration</a></li>
+				<li class="tab col s3"><a href="#info">Information</a></li>
+			</ul>
+		</div>
+		
+		<!-- CONFIG -->
+		<div id="config" class="col s12">
+			
+			<!-- Token -->
+			<div class="row">
+				<div class="col s12 m12 page">
+					<div class="row" style="margin-bottom: 0">
+						<div class="col s12 m12">
+							<p class="translate title">auth</p>
+						</div>
+					</div>
+					<div class="row box">
+						<p class="subtitle translate">token_fillin</p>
+						
+						<div class="input-field col s5 m5">
+							<input class="value" id="token_type" type="text" />
+							<label for="token_type" class="translate">token_type</label>
+						</div>
+						<div class="input-field col s5 m5">
+							<input class="value" id="access_token" type="text" />
+							<label for="access_token" class="translate">access_token</label>
+						</div>
+						<div class="input-field col s2 m2 center">
+							<a class="btn red translate" id="button_getToken">button_getToken</a>
+						</div>
+					</div>
+					
 				</div>
 			</div>
-			<div class="row box">
-				<p class="subtitle translate">token_fillin</p>
-				
-				<div class="input-field col s5 m5">
-					<input class="value" id="token_type" type="text" />
-					<label for="token_type" class="translate">token_type</label>
-				</div>
-				<div class="input-field col s5 m5">
-					<input class="value" id="access_token" type="text" />
-					<label for="access_token" class="translate">access_token</label>
-				</div>
-				<div class="input-field col s2 m2 center">
-					<a class="btn red translate" id="button_getToken">button_getToken</a>
+			
+			<!-- Events -->
+			<div class="row">
+				<div class="col s12 m12 page">
+					<div class="row" style="margin-bottom: 0">
+						<div class="col s12 m12">
+							<p class="translate title">events</p>
+						</div>
+					</div>
+					<div class="row box">
+						<p class="subtitle translate">events_info</p>
+						
+						<div class="input-field col s4 m4">
+							<input class="value" id="uri" type="text" placeholder="www.domain.com:1234" />
+							<label for="uri" class="translate">uri</label>
+						</div>
+						
+						<div class="input-field col s2 m2">
+							<div class="row">
+								<div class="col">
+									<label for="secure">
+										<input class="value" id="secure" type="checkbox" />
+										<span class="translate">ssl</span>
+									</label>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col hideCol">
+									<label for="selfSigned">
+										<input class="value" id="selfSigned" type="checkbox" />
+										<span class="translate">selfSigned</span>
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="col s2 m2 hideCol">
+							<label class="translate" for="certPublic">public</label>
+							<select id="certPublic" class="value" data-select="certificate" data-type="public"></select>
+						</div>
+						<div class="col s2 m2 hideCol">
+							<label class="translate" for="certPrivate">private</label>
+							<select id="certPrivate" class="value" data-select="certificate" data-type="private"></select>
+						</div>
+						<div class="col s2 m2 hideCol">
+							<label class="translate" for="certChained">chained</label>
+							<select id="certChained" class="value" data-select="certificate" data-type="chained"></select>
+						</div>
+					</div>
 				</div>
 			</div>
 			
 		</div>
-	</div>
-	
-	<!-- Events -->
-	<div class="row">
-		<div class="col s12 m12 page">
-			<div class="row" style="margin-bottom: 0">
-				<div class="col s12 m12">
-					<p class="translate title">events</p>
-				</div>
-			</div>
-			<div class="row box">
-				<p class="subtitle translate">events_info</p>
-				
-				<div class="input-field col s4 m4">
-					<input class="value" id="uri" type="text" placeholder="www.domain.com:1234" />
-					<label for="uri" class="translate">uri</label>
-				</div>
-				
-                <div class="input-field col s2 m2">
-					<div class="row">
-						<div class="col">
-							<label for="secure">
-								<input class="value" id="secure" type="checkbox" />
-								<span class="translate">ssl</span>
-							</label>
+		
+		<!-- INFO -->
+		<div id="info" class="col s12">
+			
+			<div class="row">
+				<div class="col s12 m12 page">
+					<div class="row box">
+						<div class="col s12 m12">
+							<a target="_blank" href="https://www.npmjs.com/package/iobroker.nello">
+								<img src="https://camo.githubusercontent.com/d1d9548f021f712a2838de2229b6ed3deb95b504/68747470733a2f2f6e6f6465692e636f2f6e706d2f696f62726f6b65722e6e656c6c6f2e706e673f646f776e6c6f6164733d74727565" />
+							</a>
+							<br />
+							
+							<img src="https://camo.githubusercontent.com/416f011b2ea9c9180638ce851126d72b8d7700e7/687474703a2f2f696d672e736869656c64732e696f2f6e706d2f762f696f62726f6b65722e6e656c6c6f2e737667" />
+							<img src="https://camo.githubusercontent.com/f3384c5a305415756b92302e6df1f5acb8d526e7/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f646d2f696f62726f6b65722e6e656c6c6f2e737667" />
+							<br />
+							
+							<ul>
+								<li>For setup instructions please <a target="_blank" href="https://github.com/Zefau/ioBroker.nello#setup-instructions-english">see manual on Github</a>.</li>
+								<li>For smart home / alexa integration please <a target="_blank" href="https://github.com/Zefau/ioBroker.nello#smart-home--alexa-integration-using-iobrokerjavascript">see ideas on Github</a>.</li>
+								<li>If you experience issues please <a target="_blank" href="https://github.com/Zefau/ioBroker.nello/issues">submit a ticket on Github</a> or <a target="_blank" href="https://forum.iobroker.net/viewtopic.php?f=35&t=12835">ask on the ioBroker forum</a>.</li>
+							</ul>
 						</div>
 					</div>
-					<div class="row">
-						<div class="col hideCol">
-							<label for="selfSigned">
-								<input class="value" id="selfSigned" type="checkbox" />
-								<span class="translate">selfSigned</span>
-							</label>
-						</div>
-					</div>
-                </div>
-                <div class="col s2 m2 hideCol">
-                    <label class="translate" for="certPublic">public</label>
-                    <select id="certPublic" class="value" data-select="certificate" data-type="public"></select>
-                </div>
-                <div class="col s2 m2 hideCol">
-                    <label class="translate" for="certPrivate">private</label>
-                    <select id="certPrivate" class="value" data-select="certificate" data-type="private"></select>
-                </div>
-                <div class="col s2 m2 hideCol">
-                    <label class="translate" for="certChained">chained</label>
-                    <select id="certChained" class="value" data-select="certificate" data-type="chained"></select>
+					
 				</div>
 			</div>
 		</div>
