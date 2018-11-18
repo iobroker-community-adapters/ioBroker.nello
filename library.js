@@ -6,7 +6,7 @@
  * @description Library of general functions as well as helping functions handling ioBroker
  * @author Zefau <https://github.com/Zefau/>
  * @license MIT License
- * @version 0.4.1
+ * @version 0.5.0
  *
  */
 class Library
@@ -57,6 +57,25 @@ class Library
 	}
 
 	/**
+	 * Convert an integer to IP.
+	 *
+	 * @param	{integer}	number		Number to be converted to IP address
+	 * @return	{string}				Converted IP address
+	 *
+	 */
+	getIP(number)
+	{
+		var ip = [];
+		ip.push(number & 255);
+		ip.push((number >> 8) & 255);
+		ip.push((number >> 16) & 255);
+		ip.push((number >> 24) & 255);
+		
+		ip.reverse();
+		return ip.join('.');
+	}
+	
+	/**
 	 * Sends a message to another adapter.
 	 *
 	 * @param	{string}	receiver	
@@ -85,7 +104,7 @@ class Library
 	 */
 	getDateTime(timestamp)
 	{
-		if (timestamp === undefined)
+		if (timestamp === undefined || timestamp <= 0)
 			return '';
 		
 		var date    = new Date(timestamp);
