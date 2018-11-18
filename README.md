@@ -94,7 +94,7 @@ In order to use the voice output of Alexa we define a function ```say```. Place 
  * @return      void
  * 
  */
-function say(message, alexas = '#YOUR ALEXA ID#')
+function say(message, alexas = '#YOUR ALEXA ID#') // use alexas = ['#YOUR ALEXA ID 1#', '#YOUR ALEXA ID 2#'] for default voice output from multiple devices
 {
     alexas = typeof alexas === 'string' ? [alexas] : alexas;
     alexas.forEach(function(alexa)
@@ -105,7 +105,7 @@ function say(message, alexas = '#YOUR ALEXA ID#')
 ```
 _(updated on 2018-11-18 to support voice output from multiple alexa devices at a time)_
 
-You can use this function within ioBroker.javascript to say a phrase using Alexa  ```say('Hello World')```.
+You can use this function within ioBroker.javascript to say a phrase using Alexa  ```say('Hello World')``` or ```say('Hello World', ['#YOUR ALEXA ID 1#', '#YOUR ALEXA ID 2#'])``` for voice output from multiple devices.
 
 Create a script in the "common" folder of ioBroker.javascript (or use the one you created above) and add the following listener to it:
 ```
