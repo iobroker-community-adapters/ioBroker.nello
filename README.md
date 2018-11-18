@@ -74,31 +74,36 @@ You can use this function for every state within ioBroker Object tree to registe
 
 Now create a new script in the "common" folder using the function:
 ```
-cloud('nello.0.[YOUR DOOR ID]._openDoor', 'Tür öffnen');
+cloud('nello.0.#YOUR DOOR ID#._openDoor', 'Tür öffnen');
 ```
-Replace **[YOUR DOOR ID]** with the ID of the door you want to open. You find the ID in the ioBroker.nello state tree ("Objects" tab of ioBroker).
+Replace **#YOUR DOOR ID#** (including #) with the ID of the door you want to open. You find the ID in the ioBroker.nello state tree ("Objects" tab of ioBroker).
 
 Eventually, search / discover new devices in your Alexa app and create a routine in the Alexa app (e.g. "Alexa, open door") and assign the newly discovered state to it. Finished! Now you may tell Alexa to open your door for you.
 
 ### Let Alexa inform you about door ring
 This requires the ioBroker adapter ioBroker.alexa2 (https://github.com/Apollon77/ioBroker.alexa2).
 
-In order to use the voice output of Alexa we define a function ```say```. Place the following function in a script in the "global" folder of ioBroker.javascript (you may place it in the same one as above). **IMPORTANT**: Replace [YOUR ALEXA ID] with your Alexa ID (replace brackets "[]" as well!). You may find the Alexa ID in the Objects tree of ioBroker ```alexa2.0.Echo-Devices```.
+In order to use the voice output of Alexa we define a function ```say```. Place the following function in a script in the "global" folder of ioBroker.javascript (you may place it in the same one as above). **IMPORTANT**: Replace #YOUR ALEXA ID# (including #) with your Alexa ID. You may find the Alexa ID in the Objects tree of ioBroker ```alexa2.0.Echo-Devices```.
 
 ```
 /**
  * Say something with Alexa.
  * 
  * @param       {string}        message         Message to say
- * @param       {string}        alexa           Alexa Device to say the voice message
+ * @param       {string|array}  alexas          Alexa Device to say the voice message
  * @return      void
  * 
  */
-function say(message, alexa = '[YOUR ALEXA ID]')
+function say(message, alexas = '#YOUR ALEXA ID#')
 {
-    setState('alexa2.0.Echo-Devices.'+alexa+'.Commands.speak', message);
+    alexas = typeof alexas === 'string' ? [alexas] : alexas;
+    alexas.forEach(function(alexa)
+    {
+        setState('alexa2.0.Echo-Devices.' + alexa + '.Commands.speak', message);
+    });
 }
 ```
+_(updated on 2018-11-18 to support voice output from multiple alexa devices at a time)_
 
 You can use this function within ioBroker.javascript to say a phrase using Alexa  ```say('Hello World')```.
 
@@ -110,7 +115,7 @@ var L = {
     'actionOpen': 'Die Haustür wurde geöffnet.'
 };
 
-on({id: 'nello.0.[YOUR DOOR ID].events.feed', change: 'any'}, function(obj)
+on({id: 'nello.0.#YOUR DOOR ID#.events.feed', change: 'any'}, function(obj)
 {
     var events = JSON.parse(obj.state.val);
     if (events.length === 0) return;
@@ -127,7 +132,7 @@ on({id: 'nello.0.[YOUR DOOR ID].events.feed', change: 'any'}, function(obj)
 });
 ```
 Based on the action of the event, Alexa will inform you about the door being opened or the door bell being recognized.
-**IMPORTANT**: Replace [YOUR DOOR ID] with your nello door ID (replace brackets "[]" as well!).
+**IMPORTANT**: Replace #YOUR DOOR ID# (including #) with your nello door ID.
 
 
 ## Changelog
