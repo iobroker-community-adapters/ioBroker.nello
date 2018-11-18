@@ -24,7 +24,7 @@
     "url": "https://github.com/Zefau/ioBroker.nello"
   },
   "dependencies": {
-    "nello": "^0.5.3"
+    "nello": "^0.5.4"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
