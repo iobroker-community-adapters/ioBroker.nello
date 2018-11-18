@@ -56,13 +56,15 @@
 		 */
 		generateToken.on('click', function()
 		{
-			// client id and secret given, but token missing
+			$('.errorMessage').text('');
+			
+			// client id and secret given
 			if (cid.val() && csecret.val())
 			{
 				console.log("Generating token..");
-				sendTo(null, 'getToken', {clientId: cid.val(), clientSecret: csecret.val()}, function(res)
+				sendTo(null, 'setToken', {clientId: cid.val(), clientSecret: csecret.val()}, function(res)
 				{
-					console.log("Received result.");
+					console.log("Received result (" + JSON.stringify(res) + ").");
 					if (res !== false)
 					{
 						$('#token_type, #token_type-existing').val(res.type).focus();

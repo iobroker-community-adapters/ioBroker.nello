@@ -257,18 +257,29 @@ adapter.on('stateChange', function(id, state)
  * HANDLE MESSAGES
  *
  */
-adapter.on('message', async function(msg)
+adapter.on('message', function(msg)
 {
 	adapter.log.debug('Message: ' + JSON.stringify(msg));
 	
 	switch(msg.command)
 	{
-		case 'getToken':
+		case 'setToken':
 			nello = new Nello();
-			var token = await nello.getToken(msg.message.clientId, msg.message.clientSecret);
-			adapter.log.debug('Generated token using Client ID and Client Secret: ' + JSON.stringify(token));
-			
-			library.msg(msg.from, msg.command, token, msg.callback);
+			nello.setToken(msg.message.clientId, msg.message.clientSecret, function(res)
+			{
+				adapter.log.debug(JSON.stringify(res));
+				
+				if (res.result === true)
+				{
+					adapter.log.debug('Generated token using Client ID and Client Secret: ' + JSON.stringify(res.token));
+					library.msg(msg.from, msg.command, res.token, msg.callback);
+				}
+				else
+				{
+					adapter.log.warn('Failed generating token!');
+					library.msg(msg.from, msg.command, false, msg.callback);
+				}
+			});
 			break;
 	}
 });
