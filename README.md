@@ -137,6 +137,9 @@ Based on the action of the event, Alexa will inform you about the door being ope
 
 ## Changelog
 
+### 0.4.2 (2018-11-18)
+- (zefau) Bug fixes
+
 ### 0.4.1 (2018-11-18)
 - (zefau) replaced Promises (async/await) with callback to be backward compatibility with Node.js v6 (and v4)
 
