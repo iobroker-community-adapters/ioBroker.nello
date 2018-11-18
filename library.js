@@ -6,7 +6,7 @@
  * @description Library of general functions as well as helping functions handling ioBroker
  * @author Zefau <https://github.com/Zefau/>
  * @license MIT License
- * @version 0.4
+ * @version 0.4.1
  *
  */
 class Library
@@ -66,13 +66,13 @@ class Library
 	 * @return	void
 	 *
 	 */
-	msg(receiver, command, message, callback = function() {})
+	msg(receiver, command, message, callback)
 	{
 		this._adapter.sendTo(
 			receiver,
 			command,
 			typeof message !== 'object' ? {message: message} : message,
-			callback
+			callback === undefined ? function() {} : callback
 		);
 	}
 
