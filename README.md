@@ -132,7 +132,7 @@ on({id: 'nello.0.#YOUR DOOR ID#.events.feed', change: 'any'}, function(obj)
 });
 ```
 Based on the action of the event, Alexa will inform you about the door being opened or the door bell being recognized.
-**IMPORTANT**: Replace #YOUR DOOR ID# (including #) with your nello door ID.
+**IMPORTANT**: Replace #YOUR DOOR ID# (also replace #) with your nello door ID.
 
 
 ## Changelog
