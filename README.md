@@ -137,6 +137,9 @@ Based on the action of the event, Alexa will inform you about the door being ope
 
 ## Changelog
 
+### 0.4.3 (2018-11-21)
+- (zefau) Bug fixes: Fixed incorrect interpretation of https, when only http was configured
+
 ### 0.4.2 (2018-11-18)
 - (zefau) Bug fixes
 
