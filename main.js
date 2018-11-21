@@ -65,15 +65,16 @@ adapter.on('ready', function()
 		return;
 	}
 	
+	adapter.log.debug(JSON.stringify(adapter.config));
 	nello = new Nello({
 		'type': adapter.config.token_type,
 		'access': adapter.config.access_token,
-	}, {
-		'cert': adapter.config.certPublicVal || null,
+	}, adapter.config.secure ? {
+		'cert': adapter.conf.certPublicVal || null,
 		'key': adapter.config.certPrivateVal || null,
 		'ca': adapter.config.certChainedVal || null,
 		'selfSigned': adapter.config.selfSigned || true
-	});
+	} : {});
 	
 	
 	/*
