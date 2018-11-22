@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "nello",
-        "version": "0.4.3",
+        "version": "0.4.4",
         "title": "nello.io adapter",
         "desc": {
             "en": "ioBroker nello.io Adapter",
@@ -9,6 +9,10 @@
             "ru": "ioBroker nello.io драйвер"
         },
         "news": {
+            "0.4.4": {
+                "en": "Updated admin panel and added instructions for alexa integration (loading from Github README.md)",
+                "de": "Admin-Panel aktualisiert und um die Alexa Integration erweitert"
+            },
             "0.4.3": {
                 "en": "Bug fixes: Fixed incorrect interpretation of https, when only http was configured",
                 "de": "Problembeseitigung: Fehler in der Interpretation der HTTPs Konfiguration behoben, wenn nur HTTP eingestellt wurde"
