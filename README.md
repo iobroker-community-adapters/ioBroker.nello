@@ -139,6 +139,10 @@ Based on the action of the event, Alexa will inform you about the door being ope
 ## Changelog
 
 ### 0.4.3 (2018-11-21)
+- (zefau) Updated admin panel and added instructions for alexa integration (loading from Github README.md)
+- (zefau) Bug fixes: Fixed an issue regarding certificates when using HTTPs
+
+### 0.4.3 (2018-11-21)
 - (zefau) Bug fixes: Fixed incorrect interpretation of https, when only http was configured
 
 ### 0.4.2 (2018-11-18)
