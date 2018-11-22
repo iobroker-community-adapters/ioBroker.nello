@@ -65,12 +65,11 @@ adapter.on('ready', function()
 		return;
 	}
 	
-	adapter.log.debug(JSON.stringify(adapter.config));
 	nello = new Nello({
 		'type': adapter.config.token_type,
 		'access': adapter.config.access_token,
-	}, adapter.config.secure ? {
-		'cert': adapter.conf.certPublicVal || null,
+	}, adapter.config.secure === true ? {
+		'cert': adapter.config.certPublicVal || null,
 		'key': adapter.config.certPrivateVal || null,
 		'ca': adapter.config.certChainedVal || null,
 		'selfSigned': adapter.config.selfSigned || true
@@ -277,8 +276,8 @@ adapter.on('message', function(msg)
 				}
 				else
 				{
-					adapter.log.warn('Failed generating token!');
-					library.msg(msg.from, msg.command, false, msg.callback);
+					adapter.log.warn('Failed generating token (' + JSON.stringify(res) + ')!');
+					library.msg(msg.from, msg.command, res, msg.callback);
 				}
 			});
 			break;
