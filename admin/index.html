@@ -82,7 +82,7 @@
 				sendTo(null, 'setToken', {clientId: cid.val(), clientSecret: csecret.val()}, function(res)
 				{
 					console.log("Received result (" + JSON.stringify(res) + ").");
-					if (res !== false)
+					if (res !== false && res.result !== false)
 					{
 						$('#token_type, #token_type-existing').val(res.type).focus();
 						$('#access_token, #access_token-existing').val(res.access).focus();
@@ -92,7 +92,7 @@
 						modal.close();
 					}
 					else
-						$('.errorMessage').text('ERROR: Could not fetch token.');
+						$('.errorMessage').text(res.error !== undefined ? res.error : 'ERROR: Could not fetch token.');
 				});
 			}
 			else
