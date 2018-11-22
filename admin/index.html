@@ -12,6 +12,7 @@
 	<script type="text/javascript" src="../../lib/js/materialize.js"></script>
 	<script type="text/javascript" src="../../js/adapter-settings.js"></script>
 	
+	<script type="text/javascript" src="https://cdn.rawgit.com/showdownjs/showdown/1.9.0/dist/showdown.min.js"></script>
 	<script type="text/javascript" src="words.js"></script>
 	<script type="text/javascript">
     var onChange;
@@ -35,6 +36,21 @@
 		var getToken = $('#button_getToken');
 		var generateToken = $('#button_generateToken');
 		var secure = $('#secure');
+		
+		/*
+		 * Get Alexa Tutorials
+		 */
+		var strStart = '## Smart Home / Alexa integration using ioBroker.javascript';
+		var strEnd = '\n## ';
+		
+		$.get('https://raw.githubusercontent.com/Zefau/ioBroker.nello/master/README.md', function(data)
+		{
+			var intStart = data.indexOf(strStart);
+			var intEnd = data.indexOf(strEnd, intStart + strStart.length);
+			
+			var converter = new showdown.Converter();
+			$('#alexaIntegration').html(converter.makeHtml(data.slice(intStart, intEnd)));
+		});
 		
 		/*
 		 * Checkbox
@@ -85,6 +101,8 @@
 	});
 	</script>
 	<script type="text/javascript" src="admin.js"></script>
+	
+	<link rel="stylesheet" href="github-markdown.css" />
 	<style>
 		.m select {display: block !important}
 		.hidden {display: none}
@@ -144,8 +162,9 @@
 		<!-- TABS -->
 		<div class="col s12">
 			<ul class="tabs">
-				<li class="tab col s3"><a class="active" href="#config">Configuration</a></li>
-				<li class="tab col s3"><a href="#info">Information</a></li>
+				<li class="tab col s3"><a class="translate active" href="#config">tab_config</a></li>
+				<li class="tab col s3"><a class="translate" href="#alexa">tab_alexa</a></li>
+				<li class="tab col s3"><a class="translate" href="#info">tab_info</a></li>
 			</ul>
 		</div>
 		
@@ -231,6 +250,22 @@
 			
 		</div>
 		
+		<!-- ALEXA -->
+		<div id="alexa" class="col s12">
+			
+			<div class="row">
+				<div class="col s12 m12 page">
+					<div class="row box">
+						<div class="col s12 m12">
+							<div class="markdown-body" id="alexaIntegration"></div>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+			
+		</div>
+		
 		<!-- INFO -->
 		<div id="info" class="col s12">
 			
@@ -257,6 +292,7 @@
 					
 				</div>
 			</div>
+			
 		</div>
 		
 	</div>
