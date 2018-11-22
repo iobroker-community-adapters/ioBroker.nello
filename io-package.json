@@ -73,8 +73,9 @@
         ],
         "readme": "https://github.com/Zefau/ioBroker.nello/blob/master/README.md",
         "loglevel": "info",
+	"enabled": true,
         "messagebox": true,
-		"subscribe": "messagebox",
+	"subscribe": "messagebox",
         "type": "hardware",
         "authors": [
             {
