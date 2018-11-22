@@ -64,10 +64,11 @@ function cloud(node, label, settings = {})
 {
     log('Published '+node+' as '+label+' in Cloud Adapter.');
     
-    settings = typeof settings === 'string' ? {type: settings} : {};
-    extendObject(node, {common: {smartName: {en: label, smartType: settings.type || 'SWITCH', byOn: settings.byOn || ''}}});
+    settings = typeof settings === 'string' ? {type: settings} : settings;
+    extendObject(node, {common: {smartName: {en: label, smartType: settings.type || 'SWITCH', byON: settings.byON || ''}}});
 }
 ```
+_(updated on 2018-11-22 and fixed incorrect empty settings)_
 
 You can use this function for every state within ioBroker Object tree to register the state in the ioBroker.cloud adapter and use it within Alexa.
 **IMPORTANT**: Go into adapter settings of ioBroker.javascript and check the box "Enable command setObject"!
