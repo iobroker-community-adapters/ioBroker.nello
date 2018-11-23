@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "nello",
-        "version": "0.4.5",
+        "version": "0.4.6",
         "title": "nello.io adapter",
         "desc": {
             "en": "ioBroker nello.io Adapter",
@@ -9,6 +9,10 @@
             "ru": "ioBroker nello.io драйвер"
         },
         "news": {
+            "0.4.6": {
+                "en": "Translated log message in Admin Panel to German",
+                "de": "Übersetzung der Protokoll-Benachrichtungen ins Deutsche"
+            },
             "0.4.5": {
                 "en": "Improved error log in the admin panel",
                 "de": "Fehlerbehandlung in den Adapter Einstellungen verbessert"
