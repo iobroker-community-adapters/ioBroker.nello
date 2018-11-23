@@ -1,4 +1,17 @@
 /**
+ * Status Message
+ *
+ *
+ */
+function log(message, severity, id)
+{
+	var log = $(id || '#log').html();
+	$(id || '#log').html(log + '<span class="log ' + (severity || 'info') + ' translate">' + message + '</span>');
+	console.log((severity !== undefined ? severity.toUpperCase() : 'INFO') + ': ' + message);
+}
+
+
+/**
  * Load settings.
  *
  *
@@ -28,6 +41,7 @@ function load(settings, onChange)
 	onChange(false);
 	M.updateTextFields();
 }
+
 
 /**
  * Save settings.

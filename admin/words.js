@@ -14,6 +14,26 @@ systemDictionary = {
 		"en": "Information",
 		"de": "Informationen"
 	},
+	"message_connecting": {
+		"en": "Connecting to adapter..",
+		"de": ""
+	},
+	"message_noconnection": {
+		"en": "No connection to adapter! Please start adapter first.",
+		"de": ""
+	},
+	"message_connected": {
+		"en": "Connected to adapter. Retrieving token..",
+		"de": ""
+	},
+	"message_missing-clientid": {
+		"en": "Fill in Client ID and Client Secret to generate token!",
+		"de": ""
+	},
+	"message_error-token": {
+		"en": "ERROR: Could not fetch token.",
+		"de": ""
+	},
 	"auth": {
 		"en": "Authentication Credentials",
 		"de": "Authentifizierung"

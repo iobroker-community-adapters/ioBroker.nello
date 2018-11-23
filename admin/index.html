@@ -63,7 +63,7 @@
 		 */
 		getToken.on('click', function()
 		{
-			$('.errorMessage').text('');
+			$('#statusLog').text('');
 			var modal = M.Modal.getInstance($('#modal'));
 			modal.open();
 		});
@@ -73,15 +73,22 @@
 		 */
 		generateToken.on('click', function()
 		{
-			$('.errorMessage').text('');
+			$('#log').html('');
 			
 			// client id and secret given
 			if (cid.val() && csecret.val())
 			{
-				console.log("Generating token..");
+				log(translateWord('message_connecting'));
+				
+				// cancel
+				var timeout = setTimeout(function() {log(translateWord('message_noconnection'), 'error');}, 7000);
+				
+				// send request
 				sendTo(null, 'setToken', {clientId: cid.val(), clientSecret: csecret.val()}, function(res)
 				{
-					console.log("Received result (" + JSON.stringify(res) + ").");
+					log(translateWord('message_connected'));
+					clearTimeout(timeout);
+					
 					if (res !== false && res.result !== false)
 					{
 						$('#token_type, #token_type-existing').val(res.type).focus();
@@ -92,11 +99,11 @@
 						modal.close();
 					}
 					else
-						$('.errorMessage').text(res.error !== undefined ? res.error : 'ERROR: Could not fetch token.');
+						log(res.error !== undefined ? res.error : translateWord('message_error-token'), 'error');
 				});
 			}
 			else
-				$('.errorMessage').text('Fill in Client ID and Client Secret to generate token!');
+				log(translateWord('message_missing-clientid'), 'error');
 		});
 	});
 	</script>
@@ -111,6 +118,15 @@
 			margin: 0 !important;
 			background-color: #fff; /*#acd8fa*/
 		}
+		
+		#log {
+			background-color: #fff;
+			padding: 20px 30px;
+		}
+		.log {display: block}
+		.log.error {color: #a00}
+		.log.success {color: #0a0}
+		.log.info {color: #00a}
 		
 		img {margin: 5px}
 		a.active {font-weight: bold}
@@ -146,7 +162,8 @@
 			</div>
 			<div class="row">
 				<div class="col s12 m12">
-					<p class="errorMessage"></p>
+					<strong style="font-weight: bold">Status:</strong>
+					<div id="log"></div>
 				</div>
 			</div>
 			
