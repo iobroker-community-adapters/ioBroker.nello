@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "nello",
-        "version": "0.4.4",
+        "version": "0.4.5",
         "title": "nello.io adapter",
         "desc": {
             "en": "ioBroker nello.io Adapter",
@@ -9,6 +9,10 @@
             "ru": "ioBroker nello.io драйвер"
         },
         "news": {
+            "0.4.5": {
+                "en": "Improved error log in the admin panel",
+                "de": "Fehlerbehandlung in den Adapter Einstellungen verbessert"
+            },
             "0.4.4": {
                 "en": "Updated admin panel and added instructions for alexa integration (loading from Github README.md)",
                 "de": "Admin-Panel aktualisiert und um die Alexa Integration erweitert"
