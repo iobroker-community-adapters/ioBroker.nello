@@ -24,6 +24,14 @@ To use this service, client credentials must be obtained from the nello auth adm
 This quick setup will retrieve your locations (all available doors) from the nello API including the respective address. Furthermore, the assigned time windows of the locations will be retrieved. Additionally, you may open the door with this basic setup.
 To receive events (door bell rings), you have to follow the advanced setup.
 
+If you successfully quick-setup ioBroker.nello, you will find the following in the ioBroker Log:
+```
+nello.0	2018-11-24 21:29:48.132	info	Updating time windows of location XXXXX.
+nello.0	2018-11-24 21:29:47.905	info	Updating location: {"location_id":"XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX","address":{"number":"X","country":"XXXXX","street":"XXXXX ","zip":"XXXXX","city":"XXXXX","state":""}}
+nello.0	2018-11-24 21:29:47.342	info	starting. Version X.X.X in /opt/iobroker/node_modules/iobroker.nello, node: vX.XX.X
+```
+
+
 ### Advanced Setup
 To received events (door bell rings) you have to provide an external URL (with port) in the ioBroker.nello adapter settings.
 This URL (incl. port) is sent to the nello API and registered. In case a door bell ring is registered by the API, the API will push this information to the provided URL. Please refer to https://en.wikipedia.org/wiki/Webhook for more information.
@@ -32,6 +40,11 @@ If you no DynDNS address and no idea what the shit I'm talking about, please ref
 1. Place the external DynDNS address including a port of your choice in the ioBroker.nello adapter settings
 2. Open the port of your choice in your router and route it to the ioBroker
 3. Done. You will now have additional states in your nello tree within the channel "events" and all events are written to a state named "feed".
+
+If you successfully advanced-setup ioBroker.nello, you will additionally find the following in the ioBroker Log:
+```
+nello.0	2018-11-24 21:29:48.220	info	Listener attached to uri https://XXXX.XXXXX.XX:YYYY.
+```
 
 
 ## Installation (German)
