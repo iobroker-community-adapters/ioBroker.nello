@@ -24,12 +24,44 @@ To use this service, client credentials must be obtained from the nello auth adm
 This quick setup will retrieve your locations (all available doors) from the nello API including the respective address. Furthermore, the assigned time windows of the locations will be retrieved. Additionally, you may open the door with this basic setup.
 To receive events (door bell rings), you have to follow the advanced setup.
 
+#### Log
 If you successfully quick-setup ioBroker.nello, you will find the following in the ioBroker Log:
 ```
 nello.0	2018-11-24 21:29:48.132	info	Updating time windows of location XXXXX.
 nello.0	2018-11-24 21:29:47.905	info	Updating location: {"location_id":"XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX","address":{"number":"X","country":"XXXXX","street":"XXXXX ","zip":"XXXXX","city":"XXXXX","state":""}}
 nello.0	2018-11-24 21:29:47.342	info	starting. Version X.X.X in /opt/iobroker/node_modules/iobroker.nello, node: vX.XX.X
 ```
+
+#### States
+If you successfully quick-setup ioBroker.nello, you will find yours doors as devices within "**nello.0.**". The format of a door is _xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx_. Within each device, the following channels and states are created:
+
+| Channel | State | Description |
+| ------- | ----- | ------------- |
+| address | - | Address data of the location |
+| address | address | Full address of the location |
+| address | city | City of the location |
+| address | country | Country of the location |
+| address | state | State  of the location |
+| address | street | Street with number of the location |
+| address | streetName | Street name of the location |
+| address | streetNumber | Street number of the location |
+| address | zip | ZIP code of the location |
+| timeWindows | - | Time Windows of the location |
+| timeWindows | indexedTimeWindows | Index of all time windows |
+| timeWindows.0000000000000000000 | - | Time Window: Description of the time window |
+| timeWindows.0000000000000000000 | enabled | State whether time window is enabled |
+| timeWindows.0000000000000000000 | icalObj | JSON object of the calendar data |
+| timeWindows.0000000000000000000 | icalRaw | Text of the calendar data in iCal format |
+| timeWindows.0000000000000000000 | id | ID of the time window |
+| timeWindows.0000000000000000000 | image | (not in used) |
+| timeWindows.0000000000000000000 | name | Name of the time window |
+| timeWindows.0000000000000000000 | state | State |
+| - | &#95;openDoor | Open door of location XXXXX |
+| - | id | ID of location XXXXX |
+| - | refreshedDateTime | Last update (DateTime) of location XXXXX |
+| - | refreshedTimestamp | Last update (Timestamp) of location XXXXX |
+
+**Remark: You will _only_ see those states if you have successfully quick-setup ioBroker.nello!**
 
 
 ### Advanced Setup
@@ -41,10 +73,52 @@ If you no DynDNS address and no idea what the shit I'm talking about, please ref
 2. Open the port of your choice in your router and route it to the ioBroker
 3. Done. You will now have additional states in your nello tree within the channel "events" and all events are written to a state named "feed".
 
+#### Log
 If you successfully advanced-setup ioBroker.nello, you will additionally find the following in the ioBroker Log:
 ```
 nello.0	2018-11-24 21:29:48.220	info	Listener attached to uri https://XXXX.XXXXX.XX:YYYY.
 ```
+
+In case an event has been recognized by the webook listener, you will find any of those entries in the ioBroker Log:
+```
+nello.0	2018-11-24 21:38:48.322	info	Received data from the webhook listener (action -deny-).
+```
+**deny**: When nello detects a bell ring, but neither a Time Window nor a Homezone Event caused the door to be opened.
+
+```
+nello.0	2018-11-24 21:38:48.322	info	Received data from the webhook listener (action -swipe-).
+```
+**swipe**: When the door opens by an authorized user.
+
+```
+nello.0	2018-11-24 21:38:48.322	info	Received data from the webhook listener (action -geo-).
+```
+**geo**: When the door is opened because of the Homezone Unlock feature (with a bell ring).
+
+```
+nello.0	2018-11-24 21:38:48.322	info	Received data from the webhook listener (action -tw-).
+```
+**tw**: When the door is opened because of a Time indow (with a bell ring).
+
+#### States
+If you successfully advanced-setup ioBroker.nello, the following additional channels and states are created:
+
+| Channel | State | Description |
+| ------- | ----- | ------------- |
+| events | - | Events of the location |
+| events | feed | Activity feed / Event history |
+| events | refreshedDateTime | DateTime of the last event |
+| events | refreshedTimestamp | Timestamp of the last event |
+
+**Remark: You will _only_ see those states if you have successfully advanced-setup ioBroker.nello AND a first event as been recognized (someone rang on your)!**
+
+The "feed" state will provide a JSON of all events registered by the webhook. This will be an array of objects, where each object provides the following indizes (for details see https://nellopublicapi.docs.apiary.io/#reference/0/locations-collection/add-/-update-webhook):
+- **action**: deny, swipe, tw or geo
+- **data**:
+    - location_id
+    - timestamp
+    - user_id (only actions swipe, tw or geo)
+    - name (only actions swipe, tw or geo)
 
 
 ## Installation (German)
@@ -62,7 +136,7 @@ This requires the ioBroker adapter ioBroker.cloud (https://github.com/ioBroker/i
 
 Save the following function within a script in the "global" folder in the "Scripts" tab of ioBroker:
 
-```
+```javascript
 /**
  * Register node in Cloud Adapter
  * 
@@ -87,7 +161,7 @@ You can use this function for every state within ioBroker Object tree to registe
 **IMPORTANT**: Go into adapter settings of ioBroker.javascript and check the box "Enable command setObject"!
 
 Now create a new script in the "common" folder using the function:
-```
+```javascript
 cloud('nello.0.#YOUR DOOR ID#._openDoor', 'Tür öffnen');
 ```
 Replace **#YOUR DOOR ID#** (also replace #) with the ID of the door you want to open. You find the ID in the ioBroker.nello state tree ("Objects" tab of ioBroker).
@@ -99,7 +173,7 @@ This requires the ioBroker adapter ioBroker.alexa2 (https://github.com/Apollon77
 
 In order to use the voice output of Alexa we define a function ```say```. Place the following function in a script in the "global" folder of ioBroker.javascript (you may place it in the same one as above). **IMPORTANT**: Replace #YOUR ALEXA ID# (also replace #) with your Alexa ID. You may find the Alexa ID in the Objects tree of ioBroker ```alexa2.0.Echo-Devices```.
 
-```
+```javascript
 /**
  * Say something with Alexa.
  * 
@@ -122,7 +196,7 @@ _(updated on 2018-11-18 to support voice output from multiple alexa devices at a
 You can use this function within ioBroker.javascript to say a phrase using Alexa  ```say('Hello World')``` or ```say('Hello World', ['#YOUR ALEXA ID 1#', '#YOUR ALEXA ID 2#'])``` for voice output from multiple devices.
 
 Create a script in the "common" folder of ioBroker.javascript (or use the one you created above) and add the following listener to it:
-```
+```javascript
 var L = {
     'actionRingUnknown': 'Es hat an der Tür geklingelt!',
     'actionOpenName': '%name% hat die Tür geöffnet.',
