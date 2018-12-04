@@ -12,7 +12,6 @@
 	<script type="text/javascript" src="../../lib/js/materialize.js"></script>
 	<script type="text/javascript" src="../../js/adapter-settings.js"></script>
 	
-	<script type="text/javascript" src="https://cdn.rawgit.com/showdownjs/showdown/1.9.0/dist/showdown.min.js"></script>
 	<script type="text/javascript" src="words.js"></script>
 	<script type="text/javascript">
     var onChange;
@@ -36,21 +35,6 @@
 		var getToken = $('#button_getToken');
 		var generateToken = $('#button_generateToken');
 		var secure = $('#secure');
-		
-		/*
-		 * Get Alexa Tutorials
-		 */
-		var strStart = '## Smart Home / Alexa integration using ioBroker.javascript';
-		var strEnd = '\n## ';
-		
-		$.get('https://raw.githubusercontent.com/Zefau/ioBroker.nello/master/README.md', function(data)
-		{
-			var intStart = data.indexOf(strStart);
-			var intEnd = data.indexOf(strEnd, intStart + strStart.length);
-			
-			var converter = new showdown.Converter();
-			$('#alexaIntegration').html(converter.makeHtml(data.slice(intStart, intEnd)));
-		});
 		
 		/*
 		 * Checkbox
@@ -109,7 +93,6 @@
 	</script>
 	<script type="text/javascript" src="admin.js"></script>
 	
-	<link rel="stylesheet" href="github-markdown.css" />
 	<style>
 		.m select {display: block !important}
 		.hidden {display: none}
@@ -180,8 +163,8 @@
 		<div class="col s12">
 			<ul class="tabs">
 				<li class="tab col s3"><a class="translate active" href="#config">tab_config</a></li>
-				<li class="tab col s3"><a class="translate" href="#alexa">tab_alexa</a></li>
-				<li class="tab col s3"><a class="translate" href="#info">tab_info</a></li>
+				<li class="tab col s3"><a target="_blank" class="translate" href="https://github.com/Zefau/ioBroker.nello#smart-home--alexa-integration-using-iobrokerjavascript">tab_alexa</a></li>
+				<li class="tab col s3"><a target="_blank" class="translate" href="https://github.com/Zefau/ioBroker.nello#iobrokernello">tab_info</a></li>
 			</ul>
 		</div>
 		
@@ -262,51 +245,6 @@
 							<select id="certChained" class="value" data-select="certificate" data-type="chained"></select>
 						</div>
 					</div>
-				</div>
-			</div>
-			
-		</div>
-		
-		<!-- ALEXA -->
-		<div id="alexa" class="col s12">
-			
-			<div class="row">
-				<div class="col s12 m12 page">
-					<div class="row box">
-						<div class="col s12 m12">
-							<div class="markdown-body" id="alexaIntegration"></div>
-						</div>
-					</div>
-					
-				</div>
-			</div>
-			
-		</div>
-		
-		<!-- INFO -->
-		<div id="info" class="col s12">
-			
-			<div class="row">
-				<div class="col s12 m12 page">
-					<div class="row box">
-						<div class="col s12 m12">
-							<a target="_blank" href="https://www.npmjs.com/package/iobroker.nello">
-								<img src="https://camo.githubusercontent.com/d1d9548f021f712a2838de2229b6ed3deb95b504/68747470733a2f2f6e6f6465692e636f2f6e706d2f696f62726f6b65722e6e656c6c6f2e706e673f646f776e6c6f6164733d74727565" />
-							</a>
-							<br />
-							
-							<img src="https://camo.githubusercontent.com/416f011b2ea9c9180638ce851126d72b8d7700e7/687474703a2f2f696d672e736869656c64732e696f2f6e706d2f762f696f62726f6b65722e6e656c6c6f2e737667" />
-							<img src="https://camo.githubusercontent.com/f3384c5a305415756b92302e6df1f5acb8d526e7/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f646d2f696f62726f6b65722e6e656c6c6f2e737667" />
-							<br />
-							
-							<ul>
-								<li>For setup instructions please <a target="_blank" href="https://github.com/Zefau/ioBroker.nello#setup-instructions-english">see manual on Github</a>.</li>
-								<li>For smart home / alexa integration please <a target="_blank" href="https://github.com/Zefau/ioBroker.nello#smart-home--alexa-integration-using-iobrokerjavascript">see ideas on Github</a>.</li>
-								<li>If you experience issues please <a target="_blank" href="https://github.com/Zefau/ioBroker.nello/issues">submit a ticket on Github</a> or <a target="_blank" href="https://forum.iobroker.net/viewtopic.php?f=35&t=12835">ask on the ioBroker forum</a>.</li>
-							</ul>
-						</div>
-					</div>
-					
 				</div>
 			</div>
 			
