@@ -36,7 +36,7 @@ nello.0	2018-11-24 21:29:47.342	info	starting. Version X.X.X in /opt/iobroker/no
 If you successfully quick-setup ioBroker.nello, you will find yours doors as devices within "**nello.0.**". The format of a door is _xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx_. Within each device, the following channels and states are created:
 
 | Channel | State | Description |
-| ------- | ----- | ------------- |
+|:------- |:----- |:------------- |
 | address | - | Address data of the location |
 | address | address | Full address of the location |
 | address | city | City of the location |
@@ -104,7 +104,7 @@ nello.0	2018-11-24 21:38:48.322	info	Received data from the webhook listener (ac
 If you successfully advanced-setup ioBroker.nello, the following additional channels and states are created:
 
 | Channel | State | Description |
-| ------- | ----- | ------------- |
+|:------- |:----- |:------------- |
 | events | - | Events of the location |
 | events | feed | Activity feed / Event history |
 | events | refreshedDateTime | DateTime of the last event |
