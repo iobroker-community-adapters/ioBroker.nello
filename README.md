@@ -225,7 +225,7 @@ Based on the action of the event, Alexa will inform you about the door being ope
 
 ## Changelog
 
-### 1.0.0 (2018-12-##) [ IN DEVELOPMENT ]
+### 1.0.0 (2018-12-08)
 - (zefau) added option to refresh time windows after a specific time
 
 ### 0.4.5 / 0.4.6 (2018-11-23)
