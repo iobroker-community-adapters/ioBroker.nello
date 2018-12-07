@@ -5,7 +5,7 @@ const adapter = utils.Adapter('nello');
 /*
  * internal libraries
  */
-const Library = require(__dirname + '/library.js');
+const Library = require(__dirname + '/lib/library.js');
 const Nello = require('nello');
 
 /*
@@ -113,51 +113,22 @@ adapter.on('ready', function()
 				});
 				
 				// CHANNEL: time windows
-				adapter.getStatesOf(location.location_id, 'timeWindows', function(err, states)
-				{
-					for(var d = 0; d < states.length; d++)
-						adapter.delObject(states[d]._id);
-				});
+				deleteTimeWindows(location);
 				
 				adapter.createChannel(location.location_id, 'timeWindows', {name: 'Time Windows of the location'}, {}, function()
 				{
-					nello.getTimeWindows(location.location_id, function(res)
+					getTimeWindows(location);
+					if (adapter.config.refresh !== undefined && adapter.config.refresh > 10)
 					{
-						// catch error
-						if (res.result === false)
-						{
-							adapter.log.error(res.error);
-							return false;
-						}
-						
-						// loop through time windows
-						adapter.log.info('Updating time windows of location ' + location.address.address + '.');
-						
-						var index = "";
-						res.timeWindows.forEach(function(window)
-						{
-							// create states
-							library.set({node: location.location_id + '.timeWindows.' + window.id, description: 'Time Window: ' + window.name}, '');
-							
-							// add to index
-							index = index + window.id + ',';
-							
-							// add data
-							window.icalRaw = window.ical._raw;
-							delete window.ical._raw;
-							
-							window.icalObj = JSON.stringify(window.ical);
-							delete window.ical;
-							
-							for (var key in window)
+						setInterval(
+							function()
 							{
-								library.set(Object.assign({node: location.location_id + '.timeWindows.' + window.id + '.' + key}, nodes['timeWindows.' + key] || {}), window[key]);
-							}
-						});
-						
-						// create index with time window IDs
-						library.set({node: location.location_id + '.timeWindows.indexedTimeWindows', description: 'Index of all time windows', role: 'text'}, index);
-					});
+								deleteTimeWindows(location);
+								getTimeWindows(location);
+							},
+							Math.round(parseInt(adapter.config.refresh)*1000)
+						);
+					}
 				});
 				
 				// CHANNEL: events
@@ -283,3 +254,61 @@ adapter.on('message', function(msg)
 			break;
 	}
 });
+
+/**
+ * Get time windows.
+ *
+ */
+function getTimeWindows(location)
+{
+	nello.getTimeWindows(location.location_id, function(res)
+	{
+		// catch error
+		if (res.result === false)
+		{
+			adapter.log.error(res.error);
+			return false;
+		}
+		
+		// loop through time windows
+		adapter.log.info('Updating time windows of location ' + location.address.address + '.');
+		
+		var index = "";
+		res.timeWindows.forEach(function(window)
+		{
+			// create states
+			library.set({node: location.location_id + '.timeWindows.' + window.id, description: 'Time Window: ' + window.name}, '');
+			
+			// add to index
+			index = index + window.id + ',';
+			
+			// add data
+			window.icalRaw = window.ical._raw;
+			delete window.ical._raw;
+			
+			window.icalObj = JSON.stringify(window.ical);
+			delete window.ical;
+			
+			for (var key in window)
+			{
+				library.set(Object.assign({node: location.location_id + '.timeWindows.' + window.id + '.' + key}, nodes['timeWindows.' + key] || {}), window[key]);
+			}
+		});
+		
+		// create index with time window IDs
+		library.set({node: location.location_id + '.timeWindows.indexedTimeWindows', description: 'Index of all time windows', role: 'text'}, index);
+	});
+}
+
+/**
+ * Delete states of old time windows.
+ *
+ */
+function deleteTimeWindows(location)
+{
+	adapter.getStatesOf(location.location_id, 'timeWindows', function(err, states)
+	{
+		for(var d = 0; d < states.length; d++)
+			adapter.delObject(states[d]._id);
+	});
+}
