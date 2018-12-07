@@ -1,22 +1,29 @@
 /**
+ * Admin functions.
+ * @version 0.3.0
+ *
+ *
+ */
+
+
+/**
  * Status Message
  *
  *
  */
-function log(message, severity, id)
+function _log(message, severity, id)
 {
 	var log = $(id || '#log').html();
-	$(id || '#log').html(log + '<span class="log ' + (severity || 'info') + ' translate">' + message + '</span>');
+	$(id || '#log').append('<li class="log ' + (severity || 'info') + ' translate">' + message + '</li>');
 	console.log((severity !== undefined ? severity.toUpperCase() : 'INFO') + ': ' + message);
 }
-
 
 /**
  * Load settings.
  *
  *
  */
-function load(settings, onChange)
+function _load(settings, onChange)
 {
 	if (!settings)
 		return;
@@ -32,33 +39,34 @@ function load(settings, onChange)
 		
 		// load settings
 		if ($key.attr('type') === 'checkbox')
-			$key.prop('checked', settings[id]).trigger('change').on('change', function() {onChange()});
+			$key.prop('checked', settings[id]).trigger('change').on('change', function() {onChange();});
 		
 		else
-			$key.val(settings[id]).on('change', function() {onChange()}).on('keyup', function() {onChange()});
+			$key.val(settings[id]).on('change', function() {onChange();}).on('keyup', function() {onChange();});
 	});
 	
 	onChange(false);
 	M.updateTextFields();
 }
 
-
 /**
  * Save settings.
  *
  *
  */
-function save(callback)
+function _save(callback, obj)
 {
-	var obj = {};
+	obj = obj !== undefined ? obj : {};
 	$('.value').each(function()
 	{
 		var $this = $(this);
 		var key = $this.attr('id');
 		
+		// save checkboxes
 		if ($this.attr('type') === 'checkbox')
 			obj[key] = $this.prop('checked');
 		
+		// save certificates
 		else if ($this.attr('data-select') === "certificate")
 		{
 			socket.emit('getObject', 'system.certificates', function (err, res) {
@@ -70,8 +78,9 @@ function save(callback)
 			});
 		}
 		
+		// save settings
 		else
-			obj[key] = settings.decode.fields.indexOf(key) > -1 ? decode(settings.decode.key, $this.val()) : $this.val();
+			obj[key] = $this.val();
 	});
 	
 	callback(obj);

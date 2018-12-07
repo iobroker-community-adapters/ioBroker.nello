@@ -109,5 +109,17 @@ systemDictionary = {
 	"chained": {
 		"en": "Chained / Intermediate Certificate",
 		"de": "Chained / Intermediate Zertifikat"
+	},
+	"timewindows": {
+		"en": "Time Window Settings",
+		"de": "Einstellungen für Zeitfenster"
+	},
+	"timewindows_info": {
+		"en": "Time for refreshing the time windows of all locations (in seconds). If set to 0, time windows will only be refreshed on adapter startup.",
+		"de": "Intervall in Sekunden, nach dem die eingestellten Zeitfenster aktualisiert werden. Wenn auf 0 eingestellt, werden die Zeitfenster nur bei einem Adapter Start aktualisiert."
+	},
+	"refresh": {
+		"en": "Refresh (in seconds)",
+		"de": "Aktualisierung (in Sekunden)"
 	}
 };

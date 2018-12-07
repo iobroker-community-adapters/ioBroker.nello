@@ -14,11 +14,21 @@
 	
 	<script type="text/javascript" src="words.js"></script>
 	<script type="text/javascript">
-    	var onChange;
+    var onChange;
 	
-	/*
-	 * PAGE LOADED
-	 */
+	// load
+	function load(settings, onChange)
+	{
+		_load(settings, onChange);
+	}
+	
+	// save
+	function save(callback)
+	{
+		_save(callback);
+	}
+	
+	// page loaded
 	$(window).on('load', function()
 	{
 		M.Tabs.init($('.tabs'));
@@ -189,6 +199,26 @@
 						</div>
 					</div>
 					
+				</div>
+			</div>
+			
+			<!-- Time Windows -->
+			<div class="row">
+				<div class="col s12 m12 page">
+					<div class="row" style="margin-bottom: 0">
+						<div class="col s12 m12">
+							<p class="translate title">timewindows</p>
+						</div>
+					</div>
+					<div class="row box">
+						<p class="subtitle translate">timewindows_info</p>
+						
+						<div class="input-field col s4 m4">
+							<input class="value" id="refresh" type="text" placeholder="0" />
+							<label for="refresh" class="translate">refresh</label>
+						</div>
+						
+					</div>
 				</div>
 			</div>
 			
