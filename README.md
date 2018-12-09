@@ -225,6 +225,9 @@ Based on the action of the event, Alexa will inform you about the door being ope
 
 ## Changelog
 
+### 1.0.1 (2018-12-09)
+- (zefau) fixed log function causing error, which prevented token generation
+
 ### 1.0.0 (2018-12-08)
 - (zefau) added option to refresh time windows after a specific time
 
