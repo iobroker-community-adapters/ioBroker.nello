@@ -22,16 +22,13 @@ nello one verbindet die Gegensprechanlage mit dem Smartphone und dem hauseigenen
 
 ## Installation
 ### Schnellinstallation
-The nello auth API is responsible for authentication of all nello client apps. This service follows OAuth2 as an authentication scheme to authenticate an app/user. For further information about the OAuth2 standard, please check here: https://oauth.net/2/.
-To use this service, client credentials must be obtained from the nello auth admin UI located at: https://auth.nello.io/admin. Please not that for the time being you can only get one pair of client_id and client_secret. They consist of a client_id and a client_secret.
-
 1. Generiere eine Client ID und ein Client Secret über die Website https://auth.nello.io/admin
 2. In den ioBroker.nello adapter Einstellungen die Client ID und das Client Secret eintragen
 3. Den Button "Get Token" nutzen, um einen Token zu generieren
 4. Speichern und den Adapter genießen
 
-This quick setup will retrieve your locations (all available doors) from the nello API including the respective address. Furthermore, the assigned time windows of the locations will be retrieved. Additionally, you may open the door with this basic setup.
-To receive events (door bell rings), you have to follow the advanced setup.
+Die Schnellinstallation ermöglicht es, alle in nello eingestellten Türen mit den Adressdaten zu laden. Außerdem werden die eingestellten Zeitfenster geladen und es kann mit ioBroker die Tür geöffnet werden.
+Um Events / Ereignisse (z.B. Türklingeln) zu empfangen, muss die erweiterte Installation durchgeführt werden.
 
 #### Protokollierung
 Wenn die Schnellinstallation erfolgreich war, erscheinen die folgenden Einträge in der ioBroker Protokollierung:
@@ -70,7 +67,7 @@ Wenn die Schnellinstallation erfolgreich war, erscheinen die Türen jeweils als 
 | - | refreshedDateTime | Last update (DateTime) of location XXXXX |
 | - | refreshedTimestamp | Last update (Timestamp) of location XXXXX |
 
-**Remark: You will _only_ see those states if you have successfully quick-setup ioBroker.nello!**
+**ACHTUNG: Die dargestellten Objekte werden _nur_ dargestellt, wenn die Schnellinstallation erfolgreich war!**
 
 
 ### Erweiterte Installation
@@ -83,7 +80,7 @@ If you no DynDNS address and no idea what the shit I'm talking about, please ref
 3. Done. You will now have additional states in your nello tree within the channel "events" and all events are written to a state named "feed".
 
 #### Protokollierung
-If you successfully advanced-setup ioBroker.nello, you will additionally find the following in the ioBroker Log:
+Wenn die erweiterte Installation erfolgreich war, erscheinen zusätzlich die folgenden Einträge in der ioBroker Protokollierung:
 ```
 nello.0	2018-11-24 21:29:48.220	info	Listener attached to uri https://XXXX.XXXXX.XX:YYYY.
 ```
