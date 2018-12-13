@@ -12,7 +12,7 @@ Developers may find the javascript implementation of the nello.io API via https:
 
 ## [English Readme / Englische Anleitung](https://github.com/Zefau/ioBroker.nello/blob/master/README.md)
 
-**Table of contents**
+**Inhaltsverzeichnis**
 1. [Setup instructions (Quick Setup)](https://github.com/Zefau/ioBroker.nello#quick-setup)
 2. [Setup instructions (Advanced Setup)](https://github.com/Zefau/ioBroker.nello#advanced-setup)
 3. [Smart Home / Alexa integration using ioBroker.javascript](https://github.com/Zefau/ioBroker.nello#smart-home--alexa-integration-using-iobrokerjavascript)
@@ -22,21 +22,21 @@ Developers may find the javascript implementation of the nello.io API via https:
 5. [Licence](https://github.com/Zefau/ioBroker.nello#license)
 
 
-## Setup instructions
-### Quick Setup
+## Installation
+### Schnellinstallation
 The nello auth API is responsible for authentication of all nello client apps. This service follows OAuth2 as an authentication scheme to authenticate an app/user. For further information about the OAuth2 standard, please check here: https://oauth.net/2/.
 To use this service, client credentials must be obtained from the nello auth admin UI located at: https://auth.nello.io/admin. Please not that for the time being you can only get one pair of client_id and client_secret. They consist of a client_id and a client_secret.
 
-1. Generate Client ID and Client Secret on https://auth.nello.io/admin
-2. In the ioBroker.nello adapter settings, fill in both Client ID / Client Secret
-3. Press the button "Get Token" to generate a token
-4. Save and enjoy the adapter
+1. Generiere eine Client ID und ein Client Secret über die Website https://auth.nello.io/admin
+2. In den ioBroker.nello adapter Einstellungen die Client ID und das Client Secret eintragen
+3. Den Button "Get Token" nutzen, um einen Token zu generieren
+4. Speichern und den Adapter genießen
 
 This quick setup will retrieve your locations (all available doors) from the nello API including the respective address. Furthermore, the assigned time windows of the locations will be retrieved. Additionally, you may open the door with this basic setup.
 To receive events (door bell rings), you have to follow the advanced setup.
 
-#### Log
-If you successfully quick-setup ioBroker.nello, you will find the following in the ioBroker Log:
+#### Protokollierung
+Wenn die Schnellinstallation erfolgreich war, erscheinen die folgenden Einträge in der ioBroker Protokollierung:
 ```
 nello.0	2018-11-24 21:29:48.132	info	Updating time windows of location XXXXX.
 nello.0	2018-11-24 21:29:47.905	info	Updating location: {"location_id":"XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX","address":{"number":"X","country":"XXXXX","street":"XXXXX ","zip":"XXXXX","city":"XXXXX","state":""}}
@@ -44,9 +44,9 @@ nello.0	2018-11-24 21:29:47.342	info	starting. Version X.X.X in /opt/iobroker/no
 ```
 
 #### States
-If you successfully quick-setup ioBroker.nello, you will find yours doors as devices within "**nello.0.**". The format of a door is _xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx_. Within each device, the following channels and states are created:
+Wenn die Schnellinstallation erfolgreich war, erscheinen die Türen jeweils als Gerät im Baum der Objekte unter "**nello.0.**". Das Format einer Tür ist _xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx_. Innerhalb eines jeden Geräts werden die folgenden Kanäle und Objekte angelegt:
 
-| Channel | State | Description |
+| Kanal | Objekt | Beschreibung |
 |:------- |:----- |:------------- |
 | address | - | Address data of the location |
 | address | address | Full address of the location |
@@ -75,7 +75,7 @@ If you successfully quick-setup ioBroker.nello, you will find yours doors as dev
 **Remark: You will _only_ see those states if you have successfully quick-setup ioBroker.nello!**
 
 
-### Advanced Setup
+### Erweiterte Installation
 To received events (door bell rings) you have to provide an external URL (with port) in the ioBroker.nello adapter settings.
 This URL (incl. port) is sent to the nello API and registered. In case a door bell ring is registered by the API, the API will push this information to the provided URL. Please refer to https://en.wikipedia.org/wiki/Webhook for more information.
 If you no DynDNS address and no idea what the shit I'm talking about, please refer to https://www.howtogeek.com/66438/how-to-easily-access-your-home-network-from-anywhere-with-ddns/.
@@ -84,7 +84,7 @@ If you no DynDNS address and no idea what the shit I'm talking about, please ref
 2. Open the port of your choice in your router and route it to the ioBroker
 3. Done. You will now have additional states in your nello tree within the channel "events" and all events are written to a state named "feed".
 
-#### Log
+#### Protokollierung
 If you successfully advanced-setup ioBroker.nello, you will additionally find the following in the ioBroker Log:
 ```
 nello.0	2018-11-24 21:29:48.220	info	Listener attached to uri https://XXXX.XXXXX.XX:YYYY.
