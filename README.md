@@ -10,7 +10,7 @@ Developers may find the javascript implementation of the nello.io API via https:
 
 [![NPM](https://nodei.co/npm/iobroker.nello.png?downloads=true)](https://nodei.co/npm/iobroker.nello/)
 
-## [German Readme / Deutsche Anleitung](https://github.com/Zefau/ioBroker.nello/blob/master/README..de.md)
+## [German Readme / Deutsche Anleitung](https://github.com/Zefau/ioBroker.nello/blob/master/README.de.md)
 
 **Table of contents**
 1. [Setup instructions (Quick Setup)](https://github.com/Zefau/ioBroker.nello#quick-setup)
