@@ -10,8 +10,19 @@ Developers may find the javascript implementation of the nello.io API via https:
 
 [![NPM](https://nodei.co/npm/iobroker.nello.png?downloads=true)](https://nodei.co/npm/iobroker.nello/)
 
+## [German Readme / Deutsche Anleitung](https://github.com/Zefau/ioBroker.nello/blob/master/README..de.md)
 
-## Setup instructions (English)
+**Table of contents**
+1. [Setup instructions (Quick Setup)](https://github.com/Zefau/ioBroker.nello#quick-setup)
+2. [Setup instructions (Advanced Setup)](https://github.com/Zefau/ioBroker.nello#advanced-setup)
+3. [Smart Home / Alexa integration using ioBroker.javascript](https://github.com/Zefau/ioBroker.nello#smart-home--alexa-integration-using-iobrokerjavascript)
+   1. [Open door using Alexa](https://github.com/Zefau/ioBroker.nello#open-door-using-alexa)
+   2. [Let Alexa inform you about door ring](https://github.com/Zefau/ioBroker.nello#let-alexa-inform-you-about-door-ring)
+4. [Changelog](https://github.com/Zefau/ioBroker.nello#changelog)
+5. [Licence](https://github.com/Zefau/ioBroker.nello#license)
+
+
+## Setup instructions
 ### Quick Setup
 The nello auth API is responsible for authentication of all nello client apps. This service follows OAuth2 as an authentication scheme to authenticate an app/user. For further information about the OAuth2 standard, please check here: https://oauth.net/2/.
 To use this service, client credentials must be obtained from the nello auth admin UI located at: https://auth.nello.io/admin. Please not that for the time being you can only get one pair of client_id and client_secret. They consist of a client_id and a client_secret.
@@ -119,13 +130,6 @@ The "feed" state will provide a JSON of all events registered by the webhook. Th
     - timestamp
     - user_id (only actions swipe, tw or geo)
     - name (only actions swipe, tw or geo)
-
-
-## Installation (German)
-1. Generiere eine Client ID und ein Client Secret über die Website https://auth.nello.io/admin
-2. In den ioBroker.nello adapter Einstellungen die Client ID und das Client Secret eintragen
-3. Den Button "Get Token" nutzen, um einen Token zu generieren
-4. Speichern und den Adapter genießen
 
 
 ## Smart Home / Alexa integration using ioBroker.javascript
