@@ -1,8 +1,6 @@
 ![Logo](https://raw.githubusercontent.com/Zefau/ioBroker.nello/master/admin/nello.png)
 # ioBroker.nello
-nello one connects your intercom with your smartphone and Wi-Fi. This adapter connects your nello one to ioBroker using the official API (https://nellopublicapi.docs.apiary.io/).
-
-Developers may find the javascript implementation of the nello.io API via https://github.com/Zefau/nello.io.
+nello one verbindet die Gegensprechanlage mit dem Smartphone und dem hauseigenen Netzwerk. Dieser Adapter verbindet nello one mit dem ioBroker über die offizielle API (https://nellopublicapi.docs.apiary.io/).
 
 [![NPM version](http://img.shields.io/npm/v/iobroker.nello.svg)](https://www.npmjs.com/package/iobroker.nello)
 [![Travis CI](https://travis-ci.org/Zefau/ioBroker.nello.svg?branch=master)](https://travis-ci.org/Zefau/ioBroker.nello)
@@ -13,13 +11,13 @@ Developers may find the javascript implementation of the nello.io API via https:
 ## [English Readme / Englische Anleitung](https://github.com/Zefau/ioBroker.nello/blob/master/README.md)
 
 **Inhaltsverzeichnis**
-1. [Setup instructions (Quick Setup)](https://github.com/Zefau/ioBroker.nello#quick-setup)
-2. [Setup instructions (Advanced Setup)](https://github.com/Zefau/ioBroker.nello#advanced-setup)
+1. [Installation (Schnellinstallation)](https://github.com/Zefau/ioBroker.nello/blob/master/README.de.md#schnellinstallation)
+2. [Installation (Erweiterte Installation)](https://github.com/Zefau/ioBroker.nello/blob/master/README.de.md#erweiterte-installation)
 3. [Smart Home / Alexa integration using ioBroker.javascript](https://github.com/Zefau/ioBroker.nello#smart-home--alexa-integration-using-iobrokerjavascript)
    1. [Open door using Alexa](https://github.com/Zefau/ioBroker.nello#open-door-using-alexa)
    2. [Let Alexa inform you about door ring](https://github.com/Zefau/ioBroker.nello#let-alexa-inform-you-about-door-ring)
 4. [Changelog](https://github.com/Zefau/ioBroker.nello#changelog)
-5. [Licence](https://github.com/Zefau/ioBroker.nello#license)
+5. [Lizenz](https://github.com/Zefau/ioBroker.nello/blob/master/README.de.md#lizenz)
 
 
 ## Installation
@@ -43,7 +41,7 @@ nello.0	2018-11-24 21:29:47.905	info	Updating location: {"location_id":"XXXXXXXX
 nello.0	2018-11-24 21:29:47.342	info	starting. Version X.X.X in /opt/iobroker/node_modules/iobroker.nello, node: vX.XX.X
 ```
 
-#### States
+#### Objekte
 Wenn die Schnellinstallation erfolgreich war, erscheinen die Türen jeweils als Gerät im Baum der Objekte unter "**nello.0.**". Das Format einer Tür ist _xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx_. Innerhalb eines jeden Geräts werden die folgenden Kanäle und Objekte angelegt:
 
 | Kanal | Objekt | Beschreibung |
@@ -111,7 +109,7 @@ nello.0	2018-11-24 21:38:48.322	info	Received data from the webhook listener (ac
 ```
 **tw**: When the door is opened because of a Time indow (with a bell ring).
 
-#### States
+#### Objekte
 If you successfully advanced-setup ioBroker.nello, the following additional channels and states are created:
 
 | Channel | State | Description |
@@ -132,10 +130,10 @@ The "feed" state will provide a JSON of all events registered by the webhook. Th
     - name (only actions swipe, tw or geo)
 
 
-## Smart Home / Alexa integration using ioBroker.javascript
+## Smart Home / Alexa Integration mit ioBroker.javascript
 Some examples of a possible integration within your smart home.
 
-### Open door using Alexa
+### Tür mit Alexa öffnen
 This requires the ioBroker adapter ioBroker.cloud (https://github.com/ioBroker/ioBroker.cloud).
 
 Save the following function within a script in the "global" folder in the "Scripts" tab of ioBroker:
@@ -172,8 +170,8 @@ Replace **#YOUR DOOR ID#** (also replace #) with the ID of the door you want to 
 
 Eventually, search / discover new devices in your Alexa app and create a routine in the Alexa app (e.g. "Alexa, open door") and assign the newly discovered state to it. Finished! Now you may tell Alexa to open your door for you.
 
-### Let Alexa inform you about door ring
-This requires the ioBroker adapter ioBroker.alexa2 (https://github.com/Apollon77/ioBroker.alexa2).
+### Über das Türklingeln durch Alexa infomieren lassen
+Diese Funktionalität benötigt den ioBroker Adapter ioBroker.alexa2 (https://github.com/Apollon77/ioBroker.alexa2).
 
 In order to use the voice output of Alexa we define a function ```say```. Place the following function in a script in the "global" folder of ioBroker.javascript (you may place it in the same one as above). **IMPORTANT**: Replace #YOUR ALEXA ID# (also replace #) with your Alexa ID. You may find the Alexa ID in the Objects tree of ioBroker ```alexa2.0.Echo-Devices```.
 
@@ -195,7 +193,6 @@ function say(message, alexas = '#YOUR ALEXA ID#') // use alexas = ['#YOUR ALEXA 
     });
 }
 ```
-_(updated on 2018-11-18 to support voice output from multiple alexa devices at a time)_
 
 You can use this function within ioBroker.javascript to say a phrase using Alexa  ```say('Hello World')``` or ```say('Hello World', ['#YOUR ALEXA ID 1#', '#YOUR ALEXA ID 2#'])``` for voice output from multiple devices.
 
