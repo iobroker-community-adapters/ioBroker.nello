@@ -229,6 +229,9 @@ Based on the action of the event, Alexa will inform you about the door being ope
 
 ## Changelog
 
+### CURRENT DEVELOPMENT
+- (zefau) fixed design issue with Google Chrome in admin backend
+
 ### 1.0.1 (2018-12-09)
 - (zefau) fixed log function causing error, which prevented token generation
 
