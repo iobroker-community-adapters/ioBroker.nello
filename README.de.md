@@ -13,9 +13,9 @@ nello one verbindet die Gegensprechanlage mit dem Smartphone und dem hauseigenen
 **Inhaltsverzeichnis**
 1. [Installation (Schnellinstallation)](https://github.com/Zefau/ioBroker.nello/blob/master/README.de.md#schnellinstallation)
 2. [Installation (Erweiterte Installation)](https://github.com/Zefau/ioBroker.nello/blob/master/README.de.md#erweiterte-installation)
-3. [Smart Home / Alexa integration using ioBroker.javascript](https://github.com/Zefau/ioBroker.nello#smart-home--alexa-integration-using-iobrokerjavascript)
-   1. [Open door using Alexa](https://github.com/Zefau/ioBroker.nello#open-door-using-alexa)
-   2. [Let Alexa inform you about door ring](https://github.com/Zefau/ioBroker.nello#let-alexa-inform-you-about-door-ring)
+3. [Smart Home / Alexa Integration mit ioBroker.javascript](https://github.com/Zefau/ioBroker.nello/blob/master/README.de.md#smart-home--alexa-integration-mit-iobrokerjavascript)
+   1. [Tür mit Alexa öffnen](https://github.com/Zefau/ioBroker.nello/blob/master/README.de.md#t%C3%BCr-mit-alexa-%C3%B6ffnen)
+   2. [Über das Türklingeln durch Alexa infomieren lassen](https://github.com/Zefau/ioBroker.nello/blob/master/README.de.md#%C3%BCber-das-t%C3%BCrklingeln-durch-alexa-infomieren-lassen)
 4. [Changelog](https://github.com/Zefau/ioBroker.nello#changelog)
 5. [Lizenz](https://github.com/Zefau/ioBroker.nello/blob/master/README.de.md#lizenz)
 
