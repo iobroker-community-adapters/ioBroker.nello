@@ -170,7 +170,8 @@ Nun ist die Suche nach neuen Geräte in der Alexa App anzustoßen. Mit dem neu g
 ### Über das Türklingeln durch Alexa infomieren lassen
 Diese Funktionalität benötigt den ioBroker Adapter ioBroker.alexa2 (https://github.com/Apollon77/ioBroker.alexa2).
 
-In order to use the voice output of Alexa we define a function ```say```. Place the following function in a script in the "global" folder of ioBroker.javascript (you may place it in the same one as above). **IMPORTANT**: Replace #YOUR ALEXA ID# (also replace #) with your Alexa ID. You may find the Alexa ID in the Objects tree of ioBroker ```alexa2.0.Echo-Devices```.
+Um die Sprachausgabe von Alexa zu nutzen, ist die Funktion ```say``` zu definieren. Hierzu ist die folgenden Funktion als Skript im "global" Ordner von ioBroker.javascript zu hinterlegen (es kann dasselbe Skript sein, wie oben bereits genutzt).
+**WICHTIG**: Die Angabe #YOUR ALEXA ID# (inklusive dem #) ist mit der Alexa ID zu setzen. Die Alexa ID ist im Objekt-Baum unter ```alexa2.0.Echo-Devices``` zu finden (der Name des Ordner ist die ID).
 
 ```javascript
 /**
@@ -191,9 +192,9 @@ function say(message, alexas = '#YOUR ALEXA ID#') // use alexas = ['#YOUR ALEXA 
 }
 ```
 
-You can use this function within ioBroker.javascript to say a phrase using Alexa  ```say('Hello World')``` or ```say('Hello World', ['#YOUR ALEXA ID 1#', '#YOUR ALEXA ID 2#'])``` for voice output from multiple devices.
+Die Funktion kann nun dazu genutzt werden, um mit ioBroker.javascript eine Sprachausgabe zu erzeugen, z.B. durch ```say('Hello World')``` oder ```say('Hello World', ['#YOUR ALEXA ID 1#', '#YOUR ALEXA ID 2#'])```, für eine Ausgabe mit mehreren Alexa Geräten.
 
-Create a script in the "common" folder of ioBroker.javascript (or use the one you created above) and add the following listener to it:
+Nun ist ein Skript im "common" Ordner zu erstellen (es kann das zuvor verwendete genutzt werden) und der folgende Listener ist hinzuzufügen:
 ```javascript
 var L = {
     'actionRingUnknown': 'Es hat an der Tür geklingelt!',
@@ -217,8 +218,8 @@ on({id: 'nello.0.#YOUR DOOR ID#.events.feed', change: 'any'}, function(obj)
         say(L.actionOpen);
 });
 ```
-Based on the action of the event, Alexa will inform you about the door being opened or the door bell being recognized.
-**IMPORTANT**: Replace #YOUR DOOR ID# (also replace #) with your nello door ID.
+Abhängig der Art des Events wird Alexa nun darüber informieren, dass die Tür geöffnet wurde bzw. das Klingeln abgelehnt wurde.
+Die Angabe **#YOUR DOOR ID#** (inklusive dem #) ist mit der ID der Tür zu ersetzen.
 
 
 ## Lizenz
