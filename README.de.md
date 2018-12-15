@@ -16,7 +16,7 @@ nello one verbindet die Gegensprechanlage mit dem Smartphone und dem hauseigenen
 3. [Smart Home / Alexa Integration mit ioBroker.javascript](https://github.com/Zefau/ioBroker.nello/blob/master/README.de.md#smart-home--alexa-integration-mit-iobrokerjavascript)
    1. [Tür mit Alexa öffnen](https://github.com/Zefau/ioBroker.nello/blob/master/README.de.md#t%C3%BCr-mit-alexa-%C3%B6ffnen)
    2. [Über das Türklingeln durch Alexa infomieren lassen](https://github.com/Zefau/ioBroker.nello/blob/master/README.de.md#%C3%BCber-das-t%C3%BCrklingeln-durch-alexa-infomieren-lassen)
-4. [Changelog](https://github.com/Zefau/ioBroker.nello#changelog)
+4. [Changelog (nur in englischer Readme)](https://github.com/Zefau/ioBroker.nello#changelog)
 5. [Lizenz](https://github.com/Zefau/ioBroker.nello/blob/master/README.de.md#lizenz)
 
 
