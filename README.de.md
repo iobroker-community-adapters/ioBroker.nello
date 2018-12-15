@@ -43,41 +43,41 @@ Wenn die Schnellinstallation erfolgreich war, erscheinen die Türen jeweils als 
 
 | Kanal | Objekt | Beschreibung |
 |:------- |:----- |:------------- |
-| address | - | Address data of the location |
-| address | address | Full address of the location |
-| address | city | City of the location |
-| address | country | Country of the location |
-| address | state | State  of the location |
-| address | street | Street with number of the location |
-| address | streetName | Street name of the location |
-| address | streetNumber | Street number of the location |
-| address | zip | ZIP code of the location |
-| timeWindows | - | Time Windows of the location |
-| timeWindows | indexedTimeWindows | Index of all time windows |
-| timeWindows.0000000000000000000 | - | Time Window: Description of the time window |
-| timeWindows.0000000000000000000 | enabled | State whether time window is enabled |
-| timeWindows.0000000000000000000 | icalObj | JSON object of the calendar data |
-| timeWindows.0000000000000000000 | icalRaw | Text of the calendar data in iCal format |
-| timeWindows.0000000000000000000 | id | ID of the time window |
-| timeWindows.0000000000000000000 | image | (not in used) |
-| timeWindows.0000000000000000000 | name | Name of the time window |
-| timeWindows.0000000000000000000 | state | State |
-| - | &#95;openDoor | Open door of location XXXXX |
-| - | id | ID of location XXXXX |
-| - | refreshedDateTime | Last update (DateTime) of location XXXXX |
-| - | refreshedTimestamp | Last update (Timestamp) of location XXXXX |
+| address | - | Adressdaten des nello Orts |
+| address | address | Komplette Adresse des nello Orts |
+| address | city | Stadt des nello Orts |
+| address | country | Land des nello Orts |
+| address | state | Bundesland des nello Orts |
+| address | street | Straße (inkl. Nummer) des nello Orts |
+| address | streetName | Straßenname des nello Orts |
+| address | streetNumber | Straßennummer des nello Orts |
+| address | zip | Postleitzahl (PLZ) des nello Orts |
+| timeWindows | - | Zeitfenster des nello's |
+| timeWindows | indexedTimeWindows | Index / Liste aller vorhandenen Zeitfenster |
+| timeWindows.0000000000000000000 | - | Zeitfenster |
+| timeWindows.0000000000000000000 | enabled | Status, ob das Zeitfenster aktiviert ist |
+| timeWindows.0000000000000000000 | icalObj | JSON Objekt der Kalenderdaten |
+| timeWindows.0000000000000000000 | icalRaw | Text / String der Kalenderdaten im iCal Format |
+| timeWindows.0000000000000000000 | id | ID des Zeitfensters |
+| timeWindows.0000000000000000000 | image | (nicht in Benutzung) |
+| timeWindows.0000000000000000000 | name | Name des Zeitfensters |
+| timeWindows.0000000000000000000 | state | Status |
+| - | &#95;openDoor | Button zum Öffnen der Tür |
+| - | id | ID des nello Orts |
+| - | refreshedDateTime | Letzte Aktualisierung (Datum) im Adapter |
+| - | refreshedTimestamp | Letzte Aktualisierung (Timestamp) im Adapter |
 
 **ACHTUNG: Die dargestellten Objekte werden _nur_ dargestellt, wenn die Schnellinstallation erfolgreich war!**
 
 
 ### Erweiterte Installation
-To received events (door bell rings) you have to provide an external URL (with port) in the ioBroker.nello adapter settings.
-This URL (incl. port) is sent to the nello API and registered. In case a door bell ring is registered by the API, the API will push this information to the provided URL. Please refer to https://en.wikipedia.org/wiki/Webhook for more information.
-If you no DynDNS address and no idea what the shit I'm talking about, please refer to https://www.howtogeek.com/66438/how-to-easily-access-your-home-network-from-anywhere-with-ddns/.
+Um Events (z.B. Türklingeln) zu empfangen, muss eine externe DynDNS URL / Adresse (inklusive Port) in den ioBroker.nello Adapter Einstellungen hinterlegt werden. Eine DynDNS URL / Adresse ist eine Internetadresse, die auf die lokale IP weiterleitet (siehe auch https://de.wikipedia.org/wiki/Dynamisches_DNS). Diese DynDNS URL / Adresse (inklusive Port) wird dann durch den Adapter an die nello API geschickt und dort registriert (dies nennt sich Webhook, siehe auch https://de.wikipedia.org/wiki/WebHooks). Wenn es klingelt oder die Tür geöffnet wird, schickt die nello API eine Push-Nachricht an die angegebene URL. 
 
-1. Place the external DynDNS address including a port of your choice in the ioBroker.nello adapter settings
-2. Open the port of your choice in your router and route it to the ioBroker
-3. Done. You will now have additional states in your nello tree within the channel "events" and all events are written to a state named "feed".
+Wie eine externe URL bzw. eine DynDNS Adresse einzurichten ist, kann unter https://www.digital-eliteboard.com/threads/einrichtung-eines-no-ip-accounts.193317/ nachgelesen werden.
+
+1. Die externe DynDNS Adresse inklusive (beliebigen) Port in the ioBroker.nello Adapter Einstellungen eintragen
+2. Den beliebig gewählten Portim Router freigeben und auf die lokale ioBroker IP weiterleiten
+3. Fertig. Ab jetzt werden die Events von ioBroker.nello empfangen und ausgelesen. Es erscheinen nun weitere Objekte im ioBroker Baum. Alle Events werden in das Objekt "feed" geschrieben.
 
 #### Protokollierung
 Wenn die erweiterte Installation erfolgreich war, erscheinen zusätzlich die folgenden Einträge in der ioBroker Protokollierung:
@@ -85,55 +85,55 @@ Wenn die erweiterte Installation erfolgreich war, erscheinen zusätzlich die fol
 nello.0	2018-11-24 21:29:48.220	info	Listener attached to uri https://XXXX.XXXXX.XX:YYYY.
 ```
 
-In case an event has been recognized by the webook listener, you will find any of those entries in the ioBroker Log:
+Wenn der Webhook ein Event registriert, erscheint der folgende Eintrag in der ioBroker Protokollierung:
 ```
 nello.0	2018-11-24 21:38:48.322	info	Received data from the webhook listener (action -deny-).
 ```
-**deny**: When nello detects a bell ring, but neither a Time Window nor a Homezone Event caused the door to be opened.
+**deny**: Es wurde geklingelt, aber weder ein Zeitfenster noch eine Heimzone hat die Tür geöffnet (das Klingeln wurde abgelehnt und die Tür nicht geöffnet).
 
 ```
 nello.0	2018-11-24 21:38:48.322	info	Received data from the webhook listener (action -swipe-).
 ```
-**swipe**: When the door opens by an authorized user.
+**swipe**: Die Tür wurde durch einen berechtigten Benutzer geöffnet.
 
 ```
 nello.0	2018-11-24 21:38:48.322	info	Received data from the webhook listener (action -geo-).
 ```
-**geo**: When the door is opened because of the Homezone Unlock feature (with a bell ring).
+**geo**: Die Tür wurde durch die Funktionalität "Heimzone" geöffnet.
 
 ```
 nello.0	2018-11-24 21:38:48.322	info	Received data from the webhook listener (action -tw-).
 ```
-**tw**: When the door is opened because of a Time indow (with a bell ring).
+**tw**: Die Tür wurde durch ein Zeitfenster geöffnet.
 
 #### Objekte
-If you successfully advanced-setup ioBroker.nello, the following additional channels and states are created:
+Wenn die erweiterte Installation erfolgreich war, erscheinen folgenden zusätzlichen Objekte im Baum der Objekte unter "**nello.0.**":
 
-| Channel | State | Description |
+| Kanal | Objekt | Beschreibung |
 |:------- |:----- |:------------- |
-| events | - | Events of the location |
-| events | feed | Activity feed / Event history |
-| events | refreshedDateTime | DateTime of the last event |
-| events | refreshedTimestamp | Timestamp of the last event |
+| events | - | Events des nello Orts |
+| events | feed | Aktivitätsfeed / alle Events |
+| events | refreshedDateTime | Datum des letzten Events |
+| events | refreshedTimestamp | Timestamp des letzten Events |
 
-**Remark: You will _only_ see those states if you have successfully advanced-setup ioBroker.nello AND a first event as been recognized (someone rang on your)!**
+**ACHTUNG: Die dargestellten Objekte werden _nur_ dargestellt, wenn die erweiterte Installation erfolgreich war UND der erste Event erkennt wurde (es also geklingelt wurde)!**
 
-The "feed" state will provide a JSON of all events registered by the webhook. This will be an array of objects, where each object provides the following indizes (for details see https://nellopublicapi.docs.apiary.io/#reference/0/locations-collection/add-/-update-webhook):
-- **action**: deny, swipe, tw or geo
+Das "feed"-Objekt stellt eine JSON-Zeichenkette aller registrierten Events zur Verfügung. Es handelt sich hierbei um ein Array der Objekte, wobei jedes Objekt die folgenden Indizes hat (für Details siehe https://nellopublicapi.docs.apiary.io/#reference/0/locations-collection/add-/-update-webhook):
+- **action**: deny, swipe, tw oder geo
 - **data**:
     - location_id
     - timestamp
-    - user_id (only actions swipe, tw or geo)
-    - name (only actions swipe, tw or geo)
+    - user_id (nur für die Events swipe, tw or geo)
+    - name (nur für die Events swipe, tw or geo)
 
 
 ## Smart Home / Alexa Integration mit ioBroker.javascript
-Some examples of a possible integration within your smart home.
+Nachfolgend einige Beispiele der Integration in das eigene Smart-Home.
 
 ### Tür mit Alexa öffnen
-This requires the ioBroker adapter ioBroker.cloud (https://github.com/ioBroker/ioBroker.cloud).
+Diese Funktionalität benötigt den ioBroker Adapter ioBroker.cloud (https://github.com/ioBroker/ioBroker.cloud).
 
-Save the following function within a script in the "global" folder in the "Scripts" tab of ioBroker:
+Die folgende Funktion ist im Ordner "global" (im "Skripts" Bereich von ioBroker) zu speichern:
 
 ```javascript
 /**
@@ -154,18 +154,18 @@ function cloud(node, label, settings = {})
     extendObject(node, {common: {smartName: {en: label, smartType: settings.type || 'SWITCH', byON: settings.byON || ''}}});
 }
 ```
-_(updated on 2018-11-22 and fixed incorrect empty settings)_
 
-You can use this function for every state within ioBroker Object tree to register the state in the ioBroker.cloud adapter and use it within Alexa.
-**IMPORTANT**: Go into adapter settings of ioBroker.javascript and check the box "Enable command setObject"!
+Diese Funktion kann genutzt werden um jedes Objekt in ioBroker für die ioBroker.cloud zu registrieren und damit mit Alexa zu nutzen.
+**WICHTIG**: In den Adapter-Einstellungen von ioBroker.javascript muss "Enable command setObject" aktiviert sein!
 
-Now create a new script in the "common" folder using the function:
+Nun muss das folgende neue Skript im Ordner "common" angelegt werden:
+
 ```javascript
 cloud('nello.0.#YOUR DOOR ID#._openDoor', 'Tür öffnen');
 ```
-Replace **#YOUR DOOR ID#** (also replace #) with the ID of the door you want to open. You find the ID in the ioBroker.nello state tree ("Objects" tab of ioBroker).
+Die Angabe **#YOUR DOOR ID#** (inklusive dem #) ist mit der ID der Tür, die geöffnet werden soll, zu ersetzen. Diese ID ist im ioBroker.nello Objekt-Baum zu finden.
 
-Eventually, search / discover new devices in your Alexa app and create a routine in the Alexa app (e.g. "Alexa, open door") and assign the newly discovered state to it. Finished! Now you may tell Alexa to open your door for you.
+Nun ist die Suche nach neuen Geräte in der Alexa App anzustoßen. Mit dem neu gefundenen Gerät kann nun eine Routine (z.B. "Alexa, Tür öffnen") angelegt werden. Fertig! Nun kann Alexa genutzt werden, um die Tür zu öffnen.
 
 ### Über das Türklingeln durch Alexa infomieren lassen
 Diese Funktionalität benötigt den ioBroker Adapter ioBroker.alexa2 (https://github.com/Apollon77/ioBroker.alexa2).
