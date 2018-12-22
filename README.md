@@ -229,7 +229,8 @@ Based on the action of the event, Alexa will inform you about the door being ope
 
 ## Changelog
 
-### CURRENT DEVELOPMENT
+### CURRENT DEVELOPMENT / IN TEST
+- (zefau) added support for using ioBroker.cloud / ioBroker.iot for receiving events (instead of custom DynDNS address)
 - (zefau) fixed design issue with Google Chrome in admin backend
 
 ### 1.0.1 (2018-12-09)
