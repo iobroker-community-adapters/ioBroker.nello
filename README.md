@@ -76,7 +76,11 @@ If you successfully quick-setup ioBroker.nello, you will find yours doors as dev
 
 
 ### Advanced Setup
-To received events (door bell rings) you have to provide an external URL (with port) in the ioBroker.nello adapter settings.
+#### Option 1: ioBroker.cloud / ioBroker.iot Custom URL (recommended)
+_Instructions will follow_
+
+#### Option 2: DynDNS URL
+To received events (door bell rings) you may alternately provide an external URL (with port) in the ioBroker.nello adapter settings.
 This URL (incl. port) is sent to the nello API and registered. In case a door bell ring is registered by the API, the API will push this information to the provided URL. Please refer to https://en.wikipedia.org/wiki/Webhook for more information.
 If you no DynDNS address and no idea what the shit I'm talking about, please refer to https://www.howtogeek.com/66438/how-to-easily-access-your-home-network-from-anywhere-with-ddns/.
 
@@ -85,7 +89,7 @@ If you no DynDNS address and no idea what the shit I'm talking about, please ref
 3. Done. You will now have additional states in your nello tree within the channel "events" and all events are written to a state named "feed".
 
 #### Log
-If you successfully advanced-setup ioBroker.nello, you will additionally find the following in the ioBroker Log:
+Independently of the option you chose, if you successfully advanced-setup ioBroker.nello, you will additionally find the following in the ioBroker Log:
 ```
 nello.0	2018-11-24 21:29:48.220	info	Listener attached to uri https://XXXX.XXXXX.XX:YYYY.
 ```
