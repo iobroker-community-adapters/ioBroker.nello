@@ -43,7 +43,7 @@ adapter.on('unload', function(callback)
 {
     try
 	{
-        adapter.log.info('cleaned everything up...');
+        adapter.log.info('Adapter stopped und unloaded.');
         callback();
     }
 	catch(e)
@@ -65,6 +65,10 @@ adapter.on('ready', function()
 		return;
 	}
 	
+	// configurations
+	if (!adapter.config.iot) adapter.config.iot = 'iot.0.services.custom_nello';
+	
+	// initialize nello class
 	nello = new Nello({
 		'type': adapter.config.token_type,
 		'access': adapter.config.access_token,
@@ -132,46 +136,38 @@ adapter.on('ready', function()
 				});
 				
 				// CHANNEL: events
-				if (!adapter.config.uri || adapter.config.uri.indexOf(':') === -1)
-					adapter.log.warn('Can not attach event listener! Please specify external URL including Port in adapter settings!');
+				if (!adapter.config.uri && !adapter.config.iobroker)
+					adapter.log.warn('Can not attach event listener! Please specify ioBroker.cloud / ioBroker.iot URL or external DynDNS URL in adapter settings!');
 				
 				else
 				{
 					adapter.createChannel(location.location_id, 'events', {name: 'Events of the location'}, {}, function()
 					{
-						// listen to events
-						nello.listen(location.location_id, adapter.config.uri, function(res)
+						// attach listener
+						nello.attach(location.location_id, adapter.config.iobroker ? adapter.config.iobroker : adapter.config.uri, function(res)
 						{
-							adapter.log.debug('LISTENER: ' + JSON.stringify(res) + '...');
-							
-							// successfully attached listener
-							if (res.result === true && res.body === undefined)
-								adapter.log.info('Listener attached to uri ' + res.uri.url + ':' + res.uri.port + '.');
-							
-							// received data
-							else if (res.result === true && res.body !== undefined)
+							if (res.result === true)
 							{
-								if (res.body !== null)
+								adapter.log.info('Listener attached to url ' + res.url + '.');
+								
+								// attach listener to iobroker.cloud / iobroker.iot
+								if (adapter.config.iobroker)
 								{
-									adapter.log.info('Received data from the webhook listener (action -' + res.body.action + '-).');
+									adapter.subscribeForeignStates(adapter.config.iot);
+									adapter.log.debug('Subscribed to state ' + adapter.config.iot + '.');
+								}
+								
+								// attach listener to DynDNS URL
+								else if (adapter.config.uri)
+								{
+									var port = nello._getPort(adapter.config.uri);
+									if (port === null) return;
 									
-									library.set({node: location.location_id + '.events.refreshedTimestamp', description: 'Timestamp of the last event', role: 'value'}, Math.round(res.body.data.timestamp));
-									library.set({node: location.location_id + '.events.refreshedDateTime', description: 'DateTime of the last event', role: 'text'}, library.getDateTime(res.body.data.timestamp*1000));
-									
-									adapter.getState(location.location_id + '.events.feed', function(err, state)
-									{
-										var feed = state !== undefined && state !== null && state.val !== '' ? JSON.parse(state.val) : [];
-										library.set({node: location.location_id + '.events.feed', description: 'Activity feed / Event history', role: 'json'}, JSON.stringify(feed.concat([res.body])));
-									});
+									nello.listen(port, function(res) {setEvent(res.body)});
 								}
 							}
-							
-							// error
 							else
-							{
-								adapter.log.warn('Something went wrong listening to events!');
-								adapter.log.debug(JSON.stringify(res));
-							}
+								adapter.log.warn('Failed to attach listener for webhooks (used url ' + res.url + ').');
 						});
 					});
 				}
@@ -208,6 +204,11 @@ adapter.on('stateChange', function(id, state)
 {
 	adapter.log.debug('State of ' + id + ' has changed ' + JSON.stringify(state) + '.');
 	
+	// event received
+	if (id === adapter.config.iot)
+		setEvent(JSON.parse(state.val));
+	
+	// door opened
 	if (id.indexOf('_openDoor') > -1 && state.ack !== true)
 	{
 		var location = {};
@@ -310,5 +311,27 @@ function deleteTimeWindows(location)
 	{
 		for(var d = 0; d < states.length; d++)
 			adapter.delObject(states[d]._id);
+	});
+}
+
+/**
+ *
+ *
+ *
+ */
+function setEvent(res)
+{
+	adapter.log.debug('LISTENER: ' + JSON.stringify(res) + '...');
+	if (res.action === undefined || res.action === null || res.data === undefined || res.data === null) return false;
+	
+	adapter.log.info('Received data from the webhook listener (action -' + res.action + '-).');
+	
+	library.set({node: res.data.location_id + '.events.refreshedTimestamp', description: 'Timestamp of the last event', role: 'value'}, Math.round(res.data.timestamp));
+	library.set({node: res.data.location_id + '.events.refreshedDateTime', description: 'DateTime of the last event', role: 'text'}, library.getDateTime(res.data.timestamp*1000));
+
+	adapter.getState(res.data.location_id + '.events.feed', function(err, state)
+	{
+		var feed = state !== undefined && state !== null && state.val !== '' ? JSON.parse(state.val) : [];
+		library.set({node: res.data.location_id + '.events.feed', description: 'Activity feed / Event history', role: 'json'}, JSON.stringify(feed.concat([res])));
 	});
 }
