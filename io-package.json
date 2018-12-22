@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "nello",
-        "version": "1.0.1",
+        "version": "1.1.0",
         "title": "nello.io adapter",
         "desc": {
             "en": "ioBroker nello.io Adapter",
@@ -9,6 +9,10 @@
             "ru": "ioBroker nello.io драйвер"
         },
         "news": {
+            "1.1.0": {
+                "en": "added usage of ioBroker.iot / ioBroker.cloud to receive events (instead of custom DynDNS url)",
+                "de": "Möglichkeit zur Nutzung von ioBroker.iot / ioBroker.cloud hinzugefügt, um Events zu empfangen (statt eigener DynDNS Adresse)"
+            },
             "1.0.1": {
                 "en": "fixed log function causing error, which prevented token generation",
                 "de": "Fehler bei der Log Funktion bereinigt, wodurch keine Tokens generiert wurden"
@@ -89,9 +93,10 @@
         ],
         "readme": "https://github.com/Zefau/ioBroker.nello/blob/master/README.md",
         "loglevel": "info",
-	"enabled": true,
+		"materialize": true,
+		"enabled": true,
         "messagebox": true,
-	"subscribe": "messagebox",
+		"subscribe": "messagebox",
         "type": "hardware",
         "authors": [
             {
