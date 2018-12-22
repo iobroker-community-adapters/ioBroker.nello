@@ -78,13 +78,49 @@ systemDictionary = {
 		"en": "Get new token",
 		"de": "Neuen Token generieren"
 	},
+	"timewindows": {
+		"en": "Time Window Settings",
+		"de": "Einstellungen für Zeitfenster"
+	},
+	"timewindows_info": {
+		"en": "Time for refreshing the time windows of all locations (in seconds). If set to 0, time windows will only be refreshed on adapter startup.",
+		"de": "Intervall in Sekunden, nach dem die eingestellten Zeitfenster aktualisiert werden. Wenn auf 0 eingestellt, werden die Zeitfenster nur bei einem Adapter Start aktualisiert."
+	},
+	"refresh": {
+		"en": "Refresh (in seconds)",
+		"de": "Aktualisierung (in Sekunden)"
+	},
 	"events": {
 		"en": "Subscribe / listen to events (Configuration of the webhook)",
 		"de": "Events abonnieren (Konfiguration des Webhooks)"
 	},
 	"events_info": {
-		"en": "Please configure the external DNS-URL and the port to listen to events sent by nello. Possible events are swipe, geo, tw and deny (documented here <a href='https://nellopublicapi.docs.apiary.io/#reference'>https://nellopublicapi.docs.apiary.io/#reference</a>). Furthermore, remember to open the port on your router.",
-		"de": "Zum Abonnieren von Events bitte die externe DNS-URL sowie den Port angeben, zu dem nello die Benachrichtungen schickt. Mögliche Events sind swipe, geo, tw und deny (im Detail unter <a href='https://nellopublicapi.docs.apiary.io/#reference'>https://nellopublicapi.docs.apiary.io/#reference</a> dokumentiert). Außerdem muss der Port auf dem Router weitergeleitet werden."
+		"en": "Listening to events allows you to receive a door ring or a door opening action. Possible events are swipe, geo, tw and deny (documented here <a href='https://nellopublicapi.docs.apiary.io/#reference'>https://nellopublicapi.docs.apiary.io/#reference</a>).",
+		"de": "Events abonnieren ermöglichen es, ein Türklingeln oder Türöffnen zu empfangen. Mögliche Events sind swipe, geo, tw und deny (im Detail unter <a href='https://nellopublicapi.docs.apiary.io/#reference'>https://nellopublicapi.docs.apiary.io/#reference</a> dokumentiert)."
+	},
+	"webhook_iobroker": {
+		"en": "Option 1: ioBroker.cloud/iot (recommended)",
+		"de": "Option 1: ioBroker.cloud/iot (empfohlen)"
+	},
+	"webhook_dyndns": {
+		"en": "Option 2: DynDNS Address",
+		"de": "Option 2: DynDNS Adresse"
+	},
+	"iobroker_info": {
+		"en": "Use iobroker.cloud or iobroker.iot Adapter to receive events from your nello. <a target='_blank' href='https://github.com/Zefau/ioBroker.nello#advanced-setup'>See setup instructions here</a>.",
+		"de": "Benutze den iobroker.cloud oder iobroker.iot Adapter, um Events von nello zu empfangen. <a target='_blank' href='https://github.com/Zefau/ioBroker.nello/blob/master/README.de.md#erweiterte-installation'>Siehe Anleitung zur Installation hier</a>."
+	},
+	"iobroker": {
+		"en": "ioBroker.iot Service URL",
+		"de": "ioBroker.iot Service URL"
+	},
+	"iot": {
+		"en": "ioBroker.iot nello State",
+		"de": "ioBroker.iot nello Objekt"
+	},
+	"dyndns_info": {
+		"en": "Please configure the external DNS-URL and the port to listen to events sent by nello. Furthermore, remember to open the port on your router.",
+		"de": "Zum Abonnieren von Events bitte die externe DNS-URL sowie den Port angeben, zu dem nello die Benachrichtungen schickt. Außerdem muss der Port auf dem Router weitergeleitet werden."
 	},
 	"uri": {
 		"en": "URL (format www.domain.com:port)",
@@ -110,16 +146,4 @@ systemDictionary = {
 		"en": "Chained / Intermediate Certificate",
 		"de": "Chained / Intermediate Zertifikat"
 	},
-	"timewindows": {
-		"en": "Time Window Settings",
-		"de": "Einstellungen für Zeitfenster"
-	},
-	"timewindows_info": {
-		"en": "Time for refreshing the time windows of all locations (in seconds). If set to 0, time windows will only be refreshed on adapter startup.",
-		"de": "Intervall in Sekunden, nach dem die eingestellten Zeitfenster aktualisiert werden. Wenn auf 0 eingestellt, werden die Zeitfenster nur bei einem Adapter Start aktualisiert."
-	},
-	"refresh": {
-		"en": "Refresh (in seconds)",
-		"de": "Aktualisierung (in Sekunden)"
-	}
 };

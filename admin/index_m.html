@@ -1,0 +1,315 @@
+<html>
+<head>
+	<!-- these 4 files always have to be included -->
+	<link rel="stylesheet" type="text/css" href="../../lib/css/materialize.css">
+	<link rel="stylesheet" type="text/css" href="../../css/adapter.css"/>
+
+	<script type="text/javascript" src="../../lib/js/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="../../socket.io/socket.io.js"></script>
+
+	<!-- these files always have to be included -->
+	<script type="text/javascript" src="../../js/translate.js"></script>
+	<script type="text/javascript" src="../../lib/js/materialize.js"></script>
+	<script type="text/javascript" src="../../js/adapter-settings.js"></script>
+	
+	<script type="text/javascript" src="words.js"></script>
+	<script type="text/javascript">
+	<!--
+	// load
+	function load(settings, onChange)
+	{
+		_load(settings, onChange);
+	}
+	
+	// save
+	function save(callback)
+	{
+		_save(callback);
+	}
+	
+	// page loaded
+	$(window).on('load', function()
+	{
+        $('.modal').modal(); // initialize all modals
+		
+		var cid = $('#client_id');
+		var csecret = $('#client_secret');
+		var getToken = $('#button_getToken');
+		var generateToken = $('#button_generateToken');
+		var secure = $('#secure');
+		
+		/*
+		 * Checkbox
+		 */
+		function showHideSettings(state) {$('.hideCol').toggleClass('hidden', state)}
+		secure.on('change', function() {showHideSettings(!$(this).prop('checked'))});
+		
+		/*
+		 * Get token
+		 */
+		getToken.on('click', function()
+		{
+			$('#statusLog').text('');
+			$('#modal').modal('open');
+		});
+		
+		/*
+		 * Generate token
+		 */
+		generateToken.on('click', function()
+		{
+			$('#log').html('');
+			
+			// client id and secret given
+			if (cid.val() && csecret.val())
+			{
+				_log(translateWord('message_connecting'));
+				
+				// cancel
+				var timeout = setTimeout(function() {_log(translateWord('message_noconnection'), 'error');}, 7000);
+				
+				// send request
+				sendTo(null, 'setToken', {clientId: cid.val(), clientSecret: csecret.val()}, function(res)
+				{
+					_log(translateWord('message_connected'));
+					clearTimeout(timeout);
+					
+					if (res !== false && res.result !== false)
+					{
+						$('#token_type, #token_type-existing').val(res.type).focus();
+						$('#access_token, #access_token-existing').val(res.access).focus();
+						
+						$('#access_token').trigger('change');
+						$('#modal').modal('close');
+					}
+					else
+						_log(res.error !== undefined ? res.error : translateWord('message_error-token'), 'error');
+				});
+			}
+			else
+				_log(translateWord('message_missing-clientid'), 'error');
+		});
+	});
+	// -->
+	</script>
+	<script type="text/javascript" src="admin.js"></script>
+	
+	<style>
+		.m select {display: block !important}
+		.hidden {display: none}
+		.box {
+			padding-top: 5px !important;
+			margin: 0 !important;
+			background-color: #fff; /*#acd8fa*/
+		}
+		
+		#log {
+			background-color: #fff;
+			padding: 20px 30px;
+		}
+		.log {display: block}
+		.log.error {color: #a00}
+		.log.success {color: #0a0}
+		.log.info {color: #00a}
+		
+		img {margin: 5px}
+		a.active {font-weight: bold}
+		p.title {margin-bottom: 0}
+		p.subtitle {padding: 0 .75rem}
+		p.errorMessage {
+			padding: 5px;
+			color: #c00;
+		}
+	</style>
+</head>
+<body>
+
+
+<div class="m adapter-container" id="settings">
+	
+	<!-- Modal Structure -->
+	<div id="modal" class="modal">
+		<div class="modal-content">
+			<strong class="translate">button_getToken</strong><br />
+			<p class="translate">token_APIinfo</p>
+			<p class="translate">token_fillInClientId</p>
+			
+			<div class="row">
+				<div class="input-field col s6 m6">
+					<input id="client_id" type="text"/>
+					<label for="client_id" class="translate">client_id</label>
+				</div>
+				<div class="input-field col s6 m6">
+					<input id="client_secret" type="text" />
+					<label for="client_secret" class="translate">client_secret</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col s12 m12">
+					<strong style="font-weight: bold">Status:</strong>
+					<div id="log"></div>
+				</div>
+			</div>
+			
+		</div>
+		<div class="modal-footer">
+			<a href="#!" class="modal-close waves-effect waves-green btn-flat translate">button_closeModal</a>
+			<a href="#!" class="btn green translate" id="button_generateToken">button_getToken</a>
+		</div>
+	</div>
+	
+	<div class="row">
+		
+		<!-- TABS -->
+		<div class="col s12">
+			<ul class="tabs">
+				<li class="tab col s3"><a class="translate active" href="#config">tab_config</a></li>
+				<li class="tab col s3"><a target="_blank" class="translate" href="https://github.com/Zefau/ioBroker.nello#smart-home--alexa-integration-using-iobrokerjavascript">tab_alexa</a></li>
+				<li class="tab col s3"><a target="_blank" class="translate" href="https://github.com/Zefau/ioBroker.nello#iobrokernello">tab_info</a></li>
+			</ul>
+		</div>
+		
+		<!-- CONFIG -->
+		<div id="config" class="col s12">
+			
+			<!-- Token -->
+			<div class="row">
+				<div class="col s12 m12">
+					<div class="row" style="margin-bottom: 0">
+						<div class="col s12 m12">
+							<p class="translate title">auth</p>
+						</div>
+					</div>
+					<div class="row box">
+						<p class="subtitle translate">token_fillin</p>
+						
+						<div class="input-field col s5 m5">
+							<input class="value" id="token_type" type="text" />
+							<label for="token_type" class="translate">token_type</label>
+						</div>
+						<div class="input-field col s5 m5">
+							<input class="value" id="access_token" type="text" />
+							<label for="access_token" class="translate">access_token</label>
+						</div>
+						<div class="input-field col s2 m2 center">
+							<a class="btn red translate" id="button_getToken">button_getToken</a>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+			
+			<!-- Time Windows -->
+			<div class="row">
+				<div class="col s12 m12">
+					<div class="row" style="margin-bottom: 0">
+						<div class="col s12 m12">
+							<p class="translate title">timewindows</p>
+						</div>
+					</div>
+					<div class="row box">
+						<p class="subtitle translate">timewindows_info</p>
+						
+						<div class="input-field col s4 m4">
+							<input class="value" id="refresh" type="text" placeholder="0" />
+							<label for="refresh" class="translate">refresh</label>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+			
+			<!-- Events -->
+			<div class="row">
+				<div class="col s12 m12">
+					<div class="row" style="margin-bottom: 0">
+						<div class="col s12 m12">
+							<p class="translate title">events</p>
+						</div>
+					</div>
+					<div class="row box">
+						<div class="col s12">
+							<div class="row">
+								<div class="col s12">
+									<p class="subtitle translate">events_info</p>
+								</div>
+							</div>
+							
+							<!-- TABS -->
+							<div class="row">
+								<div class="col s12" style="margin-bottom: 10px">
+									<ul class="tabs">
+										<li class="tab col s3"><a class="translate active" href="#webhook_iobroker">webhook_iobroker</a></li>
+										<li class="tab col s3"><a class="translate" href="#webhook_dyndns">webhook_dyndns</a></li>
+									</ul>
+								</div>
+							</div>
+							
+							<!-- WEBHOOK: IOBROKER -->
+							<div class="row" id="webhook_iobroker">
+								<div class="col s12">
+									<p class="subtitle translate">iobroker_info</p>
+									
+									<div class="input-field col s10 m8">
+										<input class="value" id="iobroker" type="text" placeholder="https://service.iobroker.in/iotService?..." />
+										<label for="iobroker" class="translate">iobroker</label>
+									</div>
+									<div class="input-field col s10 m4">
+										<input class="value" id="iot" type="text" placeholder="iot.0.services.custom_nello" />
+										<label for="iot" class="translate">iot</label>
+									</div>
+								</div>
+							</div>
+							
+							<!-- WEBHOOK: DYNDNS -->
+							<div class="row" id="webhook_dyndns">
+								<div class="col s12">
+									<p class="subtitle translate">dyndns_info</p>
+									
+									<div class="input-field col s4 m4">
+										<input class="value" id="uri" type="text" placeholder="www.domain.com:1234" />
+										<label for="uri" class="translate">uri</label>
+									</div>
+									
+									<div class="input-field col s2 m2">
+										<div class="row">
+											<div class="col">
+												<input class="value" id="secure" type="checkbox" />
+												<label for="secure" class="translate">ssl</label>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col hideCol">
+												<input class="value" id="selfSigned" type="checkbox" />
+												<label for="selfSigned">selfSigned</label>
+											</div>
+										</div>
+									</div>
+									<div class="input-field col s2 m2 hideCol">
+										<select id="certPublic" class="value" data-select="certificate" data-type="public"></select>
+										<label class="translate" for="certPublic">public</label>
+									</div>
+									<div class="input-field col s2 m2 hideCol">
+										<select id="certPrivate" class="value" data-select="certificate" data-type="private"></select>
+										<label class="translate" for="certPrivate">private</label>
+									</div>
+									<div class="input-field col s2 m2 hideCol">
+										<select id="certChained" class="value" data-select="certificate" data-type="chained"></select>
+										<label class="translate" for="certChained">chained</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		
+	</div>
+
+</div>
+
+</body>
+</html>
