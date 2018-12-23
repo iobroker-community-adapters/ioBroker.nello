@@ -65,8 +65,16 @@ adapter.on('ready', function()
 		return;
 	}
 	
-	// configurations
+	// check SSL settings
+	if (adapter.config.secure && !adapter.config.certPublicVal || !adapter.config.certPrivateVal)
+	{
+		adapter.log.error('Usage of Secure Connection (HTTPS) has been selected, but either public certificate or private key (or both) is unselected! Please go to settings and select certificates!');
+		return;
+	}
+	
+	// check iot URL
 	if (!adapter.config.iot) adapter.config.iot = 'iot.0.services.custom_nello';
+	
 	
 	// initialize nello class
 	nello = new Nello({
@@ -160,7 +168,7 @@ adapter.on('ready', function()
 								// attach listener to DynDNS URL
 								else if (adapter.config.uri)
 								{
-									var port = nello._getPort(adapter.config.uri);
+									var port = nello._getPort(res.url);
 									if (port === null) return;
 									
 									nello.listen(port, function(res) {setEvent(res.body)});
@@ -317,16 +325,15 @@ function deleteTimeWindows(location)
 /**
  *
  *
- *
  */
 function setEvent(res)
 {
+	if (res === undefined || res.action === undefined || res.action === null || res.data === undefined || res.data === null) return false;
 	adapter.log.debug('LISTENER: ' + JSON.stringify(res) + '...');
-	if (res.action === undefined || res.action === null || res.data === undefined || res.data === null) return false;
-	
 	adapter.log.info('Received data from the webhook listener (action -' + res.action + '-).');
 	
-	library.set({node: res.data.location_id + '.events.refreshedTimestamp', description: 'Timestamp of the last event', role: 'value'}, Math.round(res.data.timestamp));
+	res.data.timestamp = res.data.timestamp !== null ? res.data.timestamp : Math.round(Date.now()/1000);
+	library.set({node: res.data.location_id + '.events.refreshedTimestamp', description: 'Timestamp of the last event', role: 'value'}, res.data.timestamp);
 	library.set({node: res.data.location_id + '.events.refreshedDateTime', description: 'DateTime of the last event', role: 'text'}, library.getDateTime(res.data.timestamp*1000));
 
 	adapter.getState(res.data.location_id + '.events.feed', function(err, state)
