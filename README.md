@@ -77,10 +77,17 @@ If you successfully quick-setup ioBroker.nello, you will find yours doors as dev
 
 ### Advanced Setup
 #### Option 1: ioBroker.cloud / ioBroker.iot Custom URL (recommended)
-_Instructions will follow_
+To receive events (door bell rings) it is recommended to use either ioBroker.cloud or ioBroker.iot adapter.
+The ioBroker.cloud / ioBroker.iot adpater will receive the event from nello and write it in a state, which is then readable by the ioBroker.nello adapter.
+
+1. Go to the adapter settings of ioBroker.cloud or ioBroker.iot and navigate to the _Services and IFTTT_ Tab.
+2. Add the term "_nello_" to the "_White list for services_" and copy the link for the custom services ("_Use following link for custom service_").
+3. Replace ```custom_<SERVICE_NAME>``` with the service name ```custom_nello``` (make sure that the term appended to ```custom_``` matches the whitelisted word in step #2). Futhermore, remove ```&data=<SOME_TEXT>``` because it is not necessary.
+4. Go to the nello adapter configuration and paste the link into "_ioBroker.iot Service URL_" (in Option 1).
+5. Make sure the state listed in "_ioBroker.iot nello State_" is correct. You will find a state called ```custom_nello``` (based on the specific service name you have assigned in step #3) within the ioBroker objects either via ```cloud.0.services.custom_nello``` or ```iot.0.services.custom_nello```. Enter the correct state in "_ioBroker.iot nello State_".
 
 #### Option 2: DynDNS URL
-To received events (door bell rings) you may alternately provide an external URL (with port) in the ioBroker.nello adapter settings.
+To receive events (door bell rings) you may alternatively provide an external URL (with port) in the ioBroker.nello adapter settings.
 This URL (incl. port) is sent to the nello API and registered. In case a door bell ring is registered by the API, the API will push this information to the provided URL. Please refer to https://en.wikipedia.org/wiki/Webhook for more information.
 If you no DynDNS address and no idea what the shit I'm talking about, please refer to https://www.howtogeek.com/66438/how-to-easily-access-your-home-network-from-anywhere-with-ddns/.
 
