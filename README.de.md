@@ -258,12 +258,6 @@ on({id: 'nello.0.ID.events.feed', change: 'any'}, function(obj)
    else
       say(L.actionOpen);
 });
-
-var L = {
-    'actionRingUnknown': 'Es hat an der Tür geklingelt!',
-    'actionOpenName': '%name% hat die Tür geöffnet.',
-    'actionOpen': 'Die Haustür wurde geöffnet.'
-};
 ```
 _(aktualisiert am 02.01.2019, um auch die "geo" Option mit einer Alexa Ansage zu berücksichtigen)_
 
