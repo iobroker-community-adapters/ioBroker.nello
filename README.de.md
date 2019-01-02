@@ -16,7 +16,7 @@ nello one verbindet die Gegensprechanlage mit dem Smartphone und dem hauseigenen
 3. [Benutzung / Aktionen](#benutzung--aktionen)
    1. [Tür öffnen](#tür-öffnen)
    2. [Anlegen eines Zeitfensters](#anlegen-eines-zeitfensters)
-   3. [Löschen eines Zeitfensters](#loeschen-eines-zeitfensters)
+   3. [Löschen eines Zeitfensters](#löschen-eines-zeitfensters)
 4. [Smart Home / Alexa Integration mit ioBroker.javascript](#smart-home--alexa-integration-mit-iobrokerjavascript)
    1. [Tür mit Alexa öffnen](#t%C3%BCr-mit-alexa-%C3%B6ffnen)
    2. [Über das Türklingeln durch Alexa infomieren lassen](#%C3%BCber-das-t%C3%BCrklingeln-durch-alexa-infomieren-lassen)
@@ -58,7 +58,7 @@ Wenn die Schnellinstallation erfolgreich war, erscheinen die Türen jeweils als 
 | address | zip | Postleitzahl (PLZ) des nello Orts |
 | timeWindows | - | Zeitfenster des nello's |
 | timeWindows | indexedTimeWindows | Index / Liste aller vorhandenen Zeitfenster |
-| timeWindows | createTimeWindow | JSON Objekt um ein neues Zeitfenster anzulegen ([Dokumentation](#anlegen-eines-zeitfensters-über-timewindowscreatetimewindow)) |
+| timeWindows | createTimeWindow | JSON Objekt um ein neues Zeitfenster anzulegen ([Dokumentation](#anlegen-eines-zeitfensters)) |
 | timeWindows.0000000000000000000 | - | Zeitfenster |
 | timeWindows.0000000000000000000 | enabled | Status, ob das Zeitfenster aktiviert ist |
 | timeWindows.0000000000000000000 | icalObj | JSON Objekt der Kalenderdaten |
