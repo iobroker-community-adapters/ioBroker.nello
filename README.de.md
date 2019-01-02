@@ -11,13 +11,17 @@ nello one verbindet die Gegensprechanlage mit dem Smartphone und dem hauseigenen
 ## [English Readme / Englische Anleitung](https://github.com/Zefau/ioBroker.nello/blob/master/README.md)
 
 **Inhaltsverzeichnis**
-1. [Installation (Schnellinstallation)](https://github.com/Zefau/ioBroker.nello/blob/master/README.de.md#schnellinstallation)
-2. [Installation (Erweiterte Installation)](https://github.com/Zefau/ioBroker.nello/blob/master/README.de.md#erweiterte-installation)
-3. [Smart Home / Alexa Integration mit ioBroker.javascript](https://github.com/Zefau/ioBroker.nello/blob/master/README.de.md#smart-home--alexa-integration-mit-iobrokerjavascript)
-   1. [Tür mit Alexa öffnen](https://github.com/Zefau/ioBroker.nello/blob/master/README.de.md#t%C3%BCr-mit-alexa-%C3%B6ffnen)
-   2. [Über das Türklingeln durch Alexa infomieren lassen](https://github.com/Zefau/ioBroker.nello/blob/master/README.de.md#%C3%BCber-das-t%C3%BCrklingeln-durch-alexa-infomieren-lassen)
-4. [Changelog (nur in englischer Readme)](https://github.com/Zefau/ioBroker.nello#changelog)
-5. [Lizenz](https://github.com/Zefau/ioBroker.nello/blob/master/README.de.md#lizenz)
+1. [Installation (Schnellinstallation)](#schnellinstallation)
+2. [Installation (Erweiterte Installation)](#erweiterte-installation)
+3. [Benutzung / Aktionen](#benutzung--aktionen)
+   1. [Tür öffnen](#tür-öffnen)
+   2. [Anlegen eines Zeitfensters](#anlegen-eines-zeitfensters)
+   3. [Löschen eines Zeitfensters](#loeschen-eines-zeitfensters)
+4. [Smart Home / Alexa Integration mit ioBroker.javascript](#smart-home--alexa-integration-mit-iobrokerjavascript)
+   1. [Tür mit Alexa öffnen](#t%C3%BCr-mit-alexa-%C3%B6ffnen)
+   2. [Über das Türklingeln durch Alexa infomieren lassen](#%C3%BCber-das-t%C3%BCrklingeln-durch-alexa-infomieren-lassen)
+5. [Changelog (nur in englischer Readme)](https://github.com/Zefau/ioBroker.nello#changelog)
+6. [Lizenz](#lizenz)
 
 
 ## Installation
@@ -156,7 +160,7 @@ Beispiel eines Zeitfensters:
 {"name":"Putzfrau","ical":"BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nDTSTART:20190101T163000Z\r\nDTEND:20190101T170000Z\r\nSUMMARY:Putzfrau\r\nEND:VEVENT\r\nEND:VCALENDAR"}
 ```
 
-### 
+### Löschen eines Zeitfensters
 Um ein Zeitfenster zu löschen, muss der entsprechenden Button im Objektbaum des Zeitfensters betätigt werden.
 
 
