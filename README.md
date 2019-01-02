@@ -240,27 +240,39 @@ You can use this function within ioBroker.javascript to say a phrase using Alexa
 Create a script in the "common" folder of ioBroker.javascript (or use the one you created above) and add the following listener to it:
 ```javascript
 var L = {
+   'actionRingUnknown': 'Es hat geklingelt',
+   'actionOpenName': '%name% hat die Tür geöffnet',
+   'actionOpenGeo': '%name% hat das Haus betreten',
+   'actionOpen': 'Die Haustür wurde geöffnet'
+};
+
+on({id: 'nello.0.ID.events.feed', change: 'any'}, function(obj)
+{
+   var events = JSON.parse(obj.state.val);
+   if (events.length === 0) return;
+
+   var event = events[events.length-1];
+   if (event.action == 'deny')
+      say(L.actionRingUnknown);
+
+   else if (event.action == 'swipe')
+      say(L.actionOpenName.replace(/%name%/gi, event.data.name));
+
+   else if (event.action == 'geo')
+      say(L.actionOpenGeo.replace(/%name%/gi, event.data.name));
+
+   else
+      say(L.actionOpen);
+});
+
+var L = {
     'actionRingUnknown': 'Es hat an der Tür geklingelt!',
     'actionOpenName': '%name% hat die Tür geöffnet.',
     'actionOpen': 'Die Haustür wurde geöffnet.'
 };
-
-on({id: 'nello.0.#YOUR DOOR ID#.events.feed', change: 'any'}, function(obj)
-{
-    var events = JSON.parse(obj.state.val);
-    if (events.length === 0) return;
-    
-    var event = events[events.length-1];
-    if (event.action == 'deny')
-        say(L.actionRingUnknown);
-    
-    else if (event.action == 'swipe' || event.action == 'geo')
-        say(L.actionOpenName.replace(/%name%/gi, event.data.name));
-        
-    else
-        say(L.actionOpen);
-});
 ```
+_(updated on 2019-01-02 to also reflect geo option with specific Alexa phrase)_
+
 Based on the action of the event, Alexa will inform you about the door being opened or the door bell being recognized.
 **IMPORTANT**: Replace #YOUR DOOR ID# (also replace #) with your nello door ID.
 
