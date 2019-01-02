@@ -13,13 +13,16 @@ Developers may find the javascript implementation of the nello.io API via https:
 ## [German Readme / Deutsche Anleitung](https://github.com/Zefau/ioBroker.nello/blob/master/README.de.md)
 
 **Table of contents**
-1. [Setup instructions (Quick Setup)](https://github.com/Zefau/ioBroker.nello#quick-setup)
-2. [Setup instructions (Advanced Setup)](https://github.com/Zefau/ioBroker.nello#advanced-setup)
-3. [Smart Home / Alexa integration using ioBroker.javascript](https://github.com/Zefau/ioBroker.nello#smart-home--alexa-integration-using-iobrokerjavascript)
-   1. [Open door using Alexa](https://github.com/Zefau/ioBroker.nello#open-door-using-alexa)
-   2. [Let Alexa inform you about door ring](https://github.com/Zefau/ioBroker.nello#let-alexa-inform-you-about-door-ring)
-4. [Changelog](https://github.com/Zefau/ioBroker.nello#changelog)
-5. [Licence](https://github.com/Zefau/ioBroker.nello#license)
+1. [Setup instructions (Quick Setup)](#quick-setup)
+2. [Setup instructions (Advanced Setup)](#advanced-setup)
+3. [Usage / Actions]()
+   1. [Adding a Time Window]()
+   2. [Deleting a Time Window]() 
+4. [Smart Home / Alexa integration using ioBroker.javascript](#smart-home--alexa-integration-using-iobrokerjavascript)
+   1. [Open door using Alexa](#open-door-using-alexa)
+   2. [Let Alexa inform you about door ring](#let-alexa-inform-you-about-door-ring)
+5. [Changelog](#changelog)
+6. [Licence](#license)
 
 
 ## Setup instructions
@@ -59,7 +62,7 @@ If you successfully quick-setup ioBroker.nello, you will find yours doors as dev
 | address | zip | ZIP code of the location |
 | timeWindows | - | Time Windows of the location |
 | timeWindows | indexedTimeWindows | Index of all time windows |
-| timeWindows | createTimeWindow | JSON object for creating a new timewindow ([Documentation](#adding-a-new-timewindow-with-timewindowscreatetimewindow)) |
+| timeWindows | **createTimeWindow** | JSON object for creating a new timewindow ([Documentation](#adding-a-new-timewindow-with-timewindowscreatetimewindow)) |
 | timeWindows.0000000000000000000 | - | Time Window: Description of the time window |
 | timeWindows.0000000000000000000 | enabled | State whether time window is enabled |
 | timeWindows.0000000000000000000 | icalObj | JSON object of the calendar data |
@@ -68,13 +71,14 @@ If you successfully quick-setup ioBroker.nello, you will find yours doors as dev
 | timeWindows.0000000000000000000 | image | (not in used) |
 | timeWindows.0000000000000000000 | name | Name of the time window |
 | timeWindows.0000000000000000000 | state | State |
-| timeWindows.0000000000000000000 | deleteTimeWindow | Delete this timewindow |
-| - | &#95;openDoor | Open door of location XXXXX |
+| timeWindows.0000000000000000000 | **deleteTimeWindow** | Delete this timewindow |
+| - | **&#95;openDoor** | Open door of location XXXXX |
 | - | id | ID of location XXXXX |
 | - | refreshedDateTime | Last update (DateTime) of location XXXXX |
 | - | refreshedTimestamp | Last update (Timestamp) of location XXXXX |
 
 **Remark: You will _only_ see those states if you have successfully quick-setup ioBroker.nello!**
+_Highlighted states will trigger / perform an action when changed_
 
 
 ### Advanced Setup
@@ -143,6 +147,22 @@ The "feed" state will provide a JSON of all events registered by the webhook. Th
     - timestamp
     - user_id (only actions swipe, tw or geo)
     - name (only actions swipe, tw or geo)
+
+
+## Usage / Actions
+### Adding a new Time Window (with state timeWindows.createTimeWindow)
+For adding a new time window, paste the contents to the state "_timeWindows.createTimeWindow_". The following format is expected:
+```
+{"name":"<NAME>","ical":"<iCal-String>"}
+```
+The format of the iCal-String can be found in the Nello API documentation (https://nellopublicapi.docs.apiary.io/#reference/0/locations-collection/create-a-new-time-window). It is important to separate the individual elements with '\r\n'.
+
+Example of a timewindow:
+```
+{"name":"Cleaner","ical":"BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nDTSTART:20190101T163000Z\r\nDTEND:20190101T170000Z\r\nSUMMARY:Cleaner\r\nEND:VEVENT\r\nEND:VCALENDAR"}
+```
+### Deleting a Time Window
+tbd
 
 
 ## Smart Home / Alexa integration using ioBroker.javascript
@@ -239,22 +259,14 @@ on({id: 'nello.0.#YOUR DOOR ID#.events.feed', change: 'any'}, function(obj)
 Based on the action of the event, Alexa will inform you about the door being opened or the door bell being recognized.
 **IMPORTANT**: Replace #YOUR DOOR ID# (also replace #) with your nello door ID.
 
-## Adding a new Timewindow with timeWindows.createTimeWindow
-
-For adding a new timewindow the following format is expected:
-```
-{"name":"<NAME>","ical":"<iCal-String>"}
-```
-The format of the iCal-String can be found in the Nello API documentation (https://nellopublicapi.docs.apiary.io/#reference/0/locations-collection/create-a-new-time-window). It is important to separate the individual elements with '\r\n'.
-
-Example of a timewindow:
-```
-{"name":"Cleaner","ical":"BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nDTSTART:20190101T163000Z\r\nDTEND:20190101T170000Z\r\nSUMMARY:Cleaner\r\nEND:VEVENT\r\nEND:VCALENDAR"}
-```
 
 ## Changelog
 
-### CURRENT DEVELOPMENT / IN TEST
+### 1.2.0 (2019-01-02)
+- (@[CrEaK](https://github.com/CrEaK)) added states and support for adding / deleting time windows
+- (zefau) changed all states to readonly except for newly introduced time window states
+
+### 1.1.0 (2019-01-01)
 - (zefau) added support for using ioBroker.cloud / ioBroker.iot for receiving events (instead of custom DynDNS address)
 - (zefau) fixed design issue with Google Chrome in admin backend
 
