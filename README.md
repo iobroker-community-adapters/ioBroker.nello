@@ -16,8 +16,9 @@ Developers may find the javascript implementation of the nello.io API via https:
 1. [Setup instructions (Quick Setup)](#quick-setup)
 2. [Setup instructions (Advanced Setup)](#advanced-setup)
 3. [Usage / Actions](#usage--actions)
-   1. [Adding a Time Window](#adding-a-new-time-window)
-   2. [Deleting a Time Window](#deleting-a-time-window) 
+   1. [Open Door](#open-door)
+   2. [Adding a Time Window](#adding-a-new-time-window)
+   3. [Deleting a Time Window](#deleting-a-time-window) 
 4. [Smart Home / Alexa integration using ioBroker.javascript](#smart-home--alexa-integration-using-iobrokerjavascript)
    1. [Open door using Alexa](#open-door-using-alexa)
    2. [Let Alexa inform you about door ring](#let-alexa-inform-you-about-door-ring)
@@ -150,6 +151,8 @@ The "feed" state will provide a JSON of all events registered by the webhook. Th
 
 
 ## Usage / Actions
+### Open Door
+To open the door of your nello, press the button of the state ```_openDoor```.
 ### Adding a new Time Window
 For adding a new time window, paste the contents to the state "_timeWindows.createTimeWindow_". The following format is expected:
 ```
