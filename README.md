@@ -154,7 +154,8 @@ The "feed" state will provide a JSON of all events registered by the webhook. Th
 ### Open Door
 To open the door of your nello, press the button of the state ```_openDoor```.
 ### Adding a new Time Window
-For adding a new time window, paste the contents to the state "_timeWindows.createTimeWindow_". The following format is expected:
+For adding a new time window, paste the contents to the state ```timeWindows.createTimeWindow```. The following format is expected:
+
 ```
 {"name":"<NAME>","ical":"<iCal-String>"}
 ```
