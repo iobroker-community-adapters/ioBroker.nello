@@ -238,9 +238,9 @@ Die Angabe **#YOUR DOOR ID#** (inklusive dem #) ist mit der ID der Tür zu erset
 
 Zum Anlegen eines Zeitfensters wird folgendes Format erwartet:
 ```
-{"name":"<NAME>","ical":"<ICAL-String>"}
+{"name":"<NAME>","ical":"<iCal-String>"}
 ```
-Format des ICAL-String ist in der Nello-API-Dokumentation zu entnehmen (https://nellopublicapi.docs.apiary.io/#reference/0/locations-collection/create-a-new-time-window). Wichtig ist die Trennung der einzelnen Elemente mit '\r\n'.
+Format des iCal-String ist in der Nello-API-Dokumentation zu entnehmen (https://nellopublicapi.docs.apiary.io/#reference/0/locations-collection/create-a-new-time-window). Wichtig ist die Trennung der einzelnen Elemente mit '\r\n'.
 
 Beispiel eines Zeitfensters:
 ```
