@@ -234,27 +234,39 @@ Die Funktion kann nun dazu genutzt werden, um mit ioBroker.javascript eine Sprac
 Nun ist ein Skript im "common" Ordner zu erstellen (es kann das zuvor verwendete genutzt werden) und der folgende Listener ist hinzuzufügen:
 ```javascript
 var L = {
+   'actionRingUnknown': 'Es hat geklingelt',
+   'actionOpenName': '%name% hat die Tür geöffnet',
+   'actionOpenGeo': '%name% hat das Haus betreten',
+   'actionOpen': 'Die Haustür wurde geöffnet'
+};
+
+on({id: 'nello.0.ID.events.feed', change: 'any'}, function(obj)
+{
+   var events = JSON.parse(obj.state.val);
+   if (events.length === 0) return;
+
+   var event = events[events.length-1];
+   if (event.action == 'deny')
+      say(L.actionRingUnknown);
+
+   else if (event.action == 'swipe')
+      say(L.actionOpenName.replace(/%name%/gi, event.data.name));
+
+   else if (event.action == 'geo')
+      say(L.actionOpenGeo.replace(/%name%/gi, event.data.name));
+
+   else
+      say(L.actionOpen);
+});
+
+var L = {
     'actionRingUnknown': 'Es hat an der Tür geklingelt!',
     'actionOpenName': '%name% hat die Tür geöffnet.',
     'actionOpen': 'Die Haustür wurde geöffnet.'
 };
-
-on({id: 'nello.0.#YOUR DOOR ID#.events.feed', change: 'any'}, function(obj)
-{
-    var events = JSON.parse(obj.state.val);
-    if (events.length === 0) return;
-    
-    var event = events[events.length-1];
-    if (event.action == 'deny')
-        say(L.actionRingUnknown);
-    
-    else if (event.action == 'swipe' || event.action == 'geo')
-        say(L.actionOpenName.replace(/%name%/gi, event.data.name));
-        
-    else
-        say(L.actionOpen);
-});
 ```
+_(aktualisiert am 02.01.2019, um auch die "geo" Option mit einer Alexa Ansage zu berücksichtigen)_
+
 Abhängig der Art des Events wird Alexa nun darüber informieren, dass die Tür geöffnet wurde bzw. das Klingeln abgelehnt wurde.
 Die Angabe **#YOUR DOOR ID#** (inklusive dem #) ist mit der ID der Tür zu ersetzen.
 
