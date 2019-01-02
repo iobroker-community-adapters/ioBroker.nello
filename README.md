@@ -155,14 +155,15 @@ For adding a new time window, paste the contents to the state "_timeWindows.crea
 ```
 {"name":"<NAME>","ical":"<iCal-String>"}
 ```
-The format of the iCal-String can be found in the Nello API documentation (https://nellopublicapi.docs.apiary.io/#reference/0/locations-collection/create-a-new-time-window). It is important to separate the individual elements with '\r\n'.
+The format of the iCal-String can be found in the Nello API documentation (https://nellopublicapi.docs.apiary.io/#reference/0/locations-collection/create-a-new-time-window). **It is important to separate the individual elements with ```\r\n```**.
 
 Example of a timewindow:
 ```
 {"name":"Cleaner","ical":"BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nDTSTART:20190101T163000Z\r\nDTEND:20190101T170000Z\r\nSUMMARY:Cleaner\r\nEND:VEVENT\r\nEND:VCALENDAR"}
 ```
+
 ### Deleting a Time Window
-tbd
+To delete a time window, press the button within the object tree of the respective time window.
 
 
 ## Smart Home / Alexa integration using ioBroker.javascript
