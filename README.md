@@ -265,6 +265,7 @@ Based on the action of the event, Alexa will inform you about the door being ope
 ### 1.2.0 (2019-01-02)
 - (@[CrEaK](https://github.com/CrEaK)) added states and support for adding / deleting time windows
 - (zefau) changed all states to readonly except for newly introduced time window states
+- (zefau) fixed bug showing incorrect error with SSL configuration when using ioBroker.cloud/iot
 
 ### 1.1.0 (2019-01-01)
 - (zefau) added support for using ioBroker.cloud / ioBroker.iot for receiving events (instead of custom DynDNS address)
