@@ -130,6 +130,7 @@ adapter.on('ready', function()
 				adapter.createChannel(location.location_id, 'timeWindows', {name: 'Time Windows of the location'}, {}, function()
 				{
 					getTimeWindows(location);
+				
 					if (adapter.config.refresh !== undefined && adapter.config.refresh > 10)
 					{
 						setInterval(
@@ -220,15 +221,87 @@ adapter.on('stateChange', function(id, state)
 	if (id.indexOf('_openDoor') > -1 && state.ack !== true)
 	{
 		var location = {};
+		location.address = {};
 		adapter.getObject(id, function(err, obj)
 		{
 			location.location_id = obj.common.locationId;
 			adapter.getState(location.location_id + '.address.address', function(err, state)
 			{
-				location.address = state.val;
-				adapter.log.info('Triggered to open door of location ' + location.address + ' (' + location.location_id + ').');
+				location.address.address = state.val;
+				adapter.log.info('Triggered to open door of location ' + location.address.address + ' (' + location.location_id + ').');
 				nello.openDoor(location.location_id);
 			});
+		});
+	}
+	// timewindow delete
+	if (id.indexOf('deleteTimeWindow') > -1 && state.ack !== true)
+	{
+		var location = {};
+		location.address = {};
+		adapter.getObject(id, function(err, obj)
+		{			
+			location.location_id = obj.common.locationId;	
+			location.timewindowId = obj.common.timewindowId;
+			adapter.getState(location.location_id + '.address.address', function(err, state)
+			{
+				location.address.address = state.val;
+				adapter.log.info('Triggered to delete timewindow (' + location.timewindowId + ') of location ' + location.address.address + ' (' + location.location_id + ').');
+				nello.deleteTimeWindow(obj.common.locationId, obj.common.timewindowId, function(res) { 
+						if(res.result === false) {
+							adapter.log.error('Deleting timewindow failed: ' + res.error);										
+						} else {
+							adapter.log.info('Timewindow with id ' + location.timewindowId +' was deleted');
+							// delete old timewindow object
+							adapter.delObject(location.location_id + '.timeWindows.' + location.timewindowId);		
+							// refresh timewindows for indexedTimeWindows
+							getTimeWindows(location);			
+						}						
+					});
+			});
+		});
+	}
+	// timewindow create (when value is not null for example after clearing)
+	if (id.indexOf('timeWindows.createTimeWindow') > -1 && state.ack !== true && state.val !== null)
+	{
+		var location = {};
+		location.address = {};
+		adapter.getObject(id, function(err, obj)
+		{			
+				location.location_id = obj.common.locationId;	
+				try {
+					location.timewindowData = JSON.parse(state.val);
+					adapter.getState(location.location_id + '.address.address', function(err, state)
+					{
+						location.address.address = state.val;
+						
+						// Validation if name is present
+						if(location.timewindowData.name === false || typeof location.timewindowData.name !== 'string'){
+							adapter.log.error('No name for timewindow provided');					
+						}	
+						// Simple validation of ical (used from https://github.com/Zefau/nello.io)
+						if (location.timewindowData.ical === false || typeof location.timewindowData.ical !== 'string' || (location.timewindowData.ical.indexOf('BEGIN:VCALENDAR') === -1 || location.timewindowData.ical.indexOf('END:VCALENDAR') === -1 || location.timewindowData.ical.indexOf('BEGIN:VEVENT') === -1 || location.timewindowData.ical.indexOf('END:VEVENT') === -1)){
+							adapter.log.error('Wrong ical data for timewindow provided! Missing BEGIN:VCALENDAR, END:VCALENDAR, BEGIN:VEVENT or END:VEVENT.');
+						}							
+						
+						adapter.log.info('Triggered to create timewindow of location ' + location.address.address + ' (' + location.location_id + ').');	
+						nello.createTimeWindow(obj.common.locationId, location.timewindowData, function(res) { 
+							if(res.result === false) {
+								adapter.log.error('Creation for timewindow failed: ' + res.error);										
+							} else {
+								adapter.log.info('Timewindow with id ' + res.timeWindow.id +' was created');
+								// refresh timewindows for new timewindow							
+								getTimeWindows(location);							
+							}						
+						});
+					});
+				} catch(ex) {
+					adapter.log.error('Parsing error for timewindow data: ' + ex);
+					// cancel
+					return;
+				} finally {
+					// clearing createTimewindow state
+					adapter.setState(id, null);
+				}
 		});
 	}
 });
@@ -301,11 +374,33 @@ function getTimeWindows(location)
 			for (var key in window)
 			{
 				library.set(Object.assign({node: location.location_id + '.timeWindows.' + window.id + '.' + key}, nodes['timeWindows.' + key] || {}), window[key]);
-			}
+			}				
+			
+			// create button to delete the timewindow
+			library.set({
+					node: location.location_id + '.timeWindows.' + window.id + '.deleteTimeWindow',
+					description: 'Delete the Timewindow ' + window.id + ' of location ' + location.address.address,
+					common: {locationId: location.location_id, timewindowId: window.id, role: 'button.delete', type: 'boolean'}
+				},
+				false
+			);
+			
+			// attach listener
+			adapter.subscribeStates(location.location_id + '.timeWindows.' + window.id + '.deleteTimeWindow');
 		});
 		
 		// create index with time window IDs
 		library.set({node: location.location_id + '.timeWindows.indexedTimeWindows', description: 'Index of all time windows', role: 'text'}, index);
+					
+		// create object for creating a timewindow
+		library.set({
+				node: location.location_id + '.timeWindows.createTimeWindow',
+				description: 'Creating a timewindow for location ' + location.address.streetName,
+				common: {locationId: location.location_id, role: 'json', type: 'string'}
+			}
+		);
+		// attach listener
+		adapter.subscribeStates( location.location_id + '.timeWindows.createTimeWindow');
 	});
 }
 
