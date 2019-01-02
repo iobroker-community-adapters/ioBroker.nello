@@ -139,6 +139,26 @@ Das "feed"-Objekt stellt eine JSON-Zeichenkette aller registrierten Events zur V
     - user_id (nur für die Events swipe, tw or geo)
     - name (nur für die Events swipe, tw or geo)
 
+## Benutzung / Aktionen
+### Tür öffnen
+Zum Öffnen der Tür, muss der Button ```_openDoor``` betätigt werden.
+
+### Anlegen eines Zeitfensters 
+Um ein Zeitfenster anzulegen, müssen die Daten in den State ```timeWindows.createTimeWindow``` eingefügt werden. Zum Anlegen eines Zeitfensters wird folgendes Format erwartet:
+
+```
+{"name":"<NAME>","ical":"<iCal-String>"}
+```
+Format des iCal-String ist in der Nello-API-Dokumentation zu entnehmen (https://nellopublicapi.docs.apiary.io/#reference/0/locations-collection/create-a-new-time-window). **Wichtig ist die Trennung der einzelnen Elemente mit ```\r\n```.**
+
+Beispiel eines Zeitfensters:
+```
+{"name":"Putzfrau","ical":"BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nDTSTART:20190101T163000Z\r\nDTEND:20190101T170000Z\r\nSUMMARY:Putzfrau\r\nEND:VEVENT\r\nEND:VCALENDAR"}
+```
+
+### 
+Um ein Zeitfenster zu löschen, muss der entsprechenden Button im Objektbaum des Zeitfensters betätigt werden.
+
 
 ## Smart Home / Alexa Integration mit ioBroker.javascript
 Nachfolgend einige Beispiele der Integration in das eigene Smart-Home.
@@ -234,18 +254,6 @@ on({id: 'nello.0.#YOUR DOOR ID#.events.feed', change: 'any'}, function(obj)
 Abhängig der Art des Events wird Alexa nun darüber informieren, dass die Tür geöffnet wurde bzw. das Klingeln abgelehnt wurde.
 Die Angabe **#YOUR DOOR ID#** (inklusive dem #) ist mit der ID der Tür zu ersetzen.
 
-## Anlegen eines Zeitfensters über timeWindows.createTimeWindow
-
-Zum Anlegen eines Zeitfensters wird folgendes Format erwartet:
-```
-{"name":"<NAME>","ical":"<iCal-String>"}
-```
-Format des iCal-String ist in der Nello-API-Dokumentation zu entnehmen (https://nellopublicapi.docs.apiary.io/#reference/0/locations-collection/create-a-new-time-window). Wichtig ist die Trennung der einzelnen Elemente mit '\r\n'.
-
-Beispiel eines Zeitfensters:
-```
-{"name":"Putzfrau","ical":"BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nDTSTART:20190101T163000Z\r\nDTEND:20190101T170000Z\r\nSUMMARY:Putzfrau\r\nEND:VEVENT\r\nEND:VCALENDAR"}
-```
 
 ## Lizenz
 Die MIT Lizenz (MIT)
