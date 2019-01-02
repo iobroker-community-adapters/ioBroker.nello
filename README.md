@@ -59,6 +59,7 @@ If you successfully quick-setup ioBroker.nello, you will find yours doors as dev
 | address | zip | ZIP code of the location |
 | timeWindows | - | Time Windows of the location |
 | timeWindows | indexedTimeWindows | Index of all time windows |
+| timeWindows | createTimeWindow | JSON object for creating a new timewindow ([Documentation](#adding-a-new-timewindow-with-timewindowscreatetimewindow)) |
 | timeWindows.0000000000000000000 | - | Time Window: Description of the time window |
 | timeWindows.0000000000000000000 | enabled | State whether time window is enabled |
 | timeWindows.0000000000000000000 | icalObj | JSON object of the calendar data |
@@ -67,6 +68,7 @@ If you successfully quick-setup ioBroker.nello, you will find yours doors as dev
 | timeWindows.0000000000000000000 | image | (not in used) |
 | timeWindows.0000000000000000000 | name | Name of the time window |
 | timeWindows.0000000000000000000 | state | State |
+| timeWindows.0000000000000000000 | deleteTimeWindow | Delete this timewindow |
 | - | &#95;openDoor | Open door of location XXXXX |
 | - | id | ID of location XXXXX |
 | - | refreshedDateTime | Last update (DateTime) of location XXXXX |
@@ -237,6 +239,18 @@ on({id: 'nello.0.#YOUR DOOR ID#.events.feed', change: 'any'}, function(obj)
 Based on the action of the event, Alexa will inform you about the door being opened or the door bell being recognized.
 **IMPORTANT**: Replace #YOUR DOOR ID# (also replace #) with your nello door ID.
 
+## Adding a new Timewindow with timeWindows.createTimeWindow
+
+For adding a new timewindow the following format is expected:
+```
+{"name":"<NAME>","ical":"<iCal-String>"}
+```
+The format of the iCal-String can be found in the Nello API documentation (https://nellopublicapi.docs.apiary.io/#reference/0/locations-collection/create-a-new-time-window). It is important to separate the individual elements with '\r\n'.
+
+Example of a timewindow:
+```
+{"name":"Cleaner","ical":"BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nDTSTART:20190101T163000Z\r\nDTEND:20190101T170000Z\r\nSUMMARY:Cleaner\r\nEND:VEVENT\r\nEND:VCALENDAR"}
+```
 
 ## Changelog
 

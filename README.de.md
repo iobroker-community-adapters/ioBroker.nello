@@ -54,6 +54,7 @@ Wenn die Schnellinstallation erfolgreich war, erscheinen die Türen jeweils als 
 | address | zip | Postleitzahl (PLZ) des nello Orts |
 | timeWindows | - | Zeitfenster des nello's |
 | timeWindows | indexedTimeWindows | Index / Liste aller vorhandenen Zeitfenster |
+| timeWindows | createTimeWindow | JSON Objekt um ein neues Zeitfenster anzulegen ([Dokumentation](#anlegen-eines-zeitfensters-über-timewindowscreatetimewindow)) |
 | timeWindows.0000000000000000000 | - | Zeitfenster |
 | timeWindows.0000000000000000000 | enabled | Status, ob das Zeitfenster aktiviert ist |
 | timeWindows.0000000000000000000 | icalObj | JSON Objekt der Kalenderdaten |
@@ -62,6 +63,7 @@ Wenn die Schnellinstallation erfolgreich war, erscheinen die Türen jeweils als 
 | timeWindows.0000000000000000000 | image | (nicht in Benutzung) |
 | timeWindows.0000000000000000000 | name | Name des Zeitfensters |
 | timeWindows.0000000000000000000 | state | Status |
+| timeWindows.0000000000000000000 | deleteTimeWindow | Button zum Löschen des Zeitfensters |
 | - | &#95;openDoor | Button zum Öffnen der Tür |
 | - | id | ID des nello Orts |
 | - | refreshedDateTime | Letzte Aktualisierung (Datum) im Adapter |
@@ -232,6 +234,18 @@ on({id: 'nello.0.#YOUR DOOR ID#.events.feed', change: 'any'}, function(obj)
 Abhängig der Art des Events wird Alexa nun darüber informieren, dass die Tür geöffnet wurde bzw. das Klingeln abgelehnt wurde.
 Die Angabe **#YOUR DOOR ID#** (inklusive dem #) ist mit der ID der Tür zu ersetzen.
 
+## Anlegen eines Zeitfensters über timeWindows.createTimeWindow
+
+Zum Anlegen eines Zeitfensters wird folgendes Format erwartet:
+```
+{"name":"<NAME>","ical":"<iCal-String>"}
+```
+Format des iCal-String ist in der Nello-API-Dokumentation zu entnehmen (https://nellopublicapi.docs.apiary.io/#reference/0/locations-collection/create-a-new-time-window). Wichtig ist die Trennung der einzelnen Elemente mit '\r\n'.
+
+Beispiel eines Zeitfensters:
+```
+{"name":"Putzfrau","ical":"BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nDTSTART:20190101T163000Z\r\nDTEND:20190101T170000Z\r\nSUMMARY:Putzfrau\r\nEND:VEVENT\r\nEND:VCALENDAR"}
+```
 
 ## Lizenz
 Die MIT Lizenz (MIT)
