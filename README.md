@@ -87,11 +87,21 @@ _Highlighted states will trigger / perform an action when changed_
 To receive events (door bell rings) it is recommended to use either ioBroker.cloud or ioBroker.iot adapter.
 The ioBroker.cloud / ioBroker.iot adpater will receive the event from nello and write it in a state, which is then readable by the ioBroker.nello adapter.
 
-1. Go to the adapter settings of ioBroker.cloud or ioBroker.iot and navigate to the _Services and IFTTT_ Tab.
-2. Add the term "_nello_" to the "_White list for services_" and copy the link for the custom services ("_Use following link for custom service_").
+##### ioBroker.iot
+1. Go to the adapter settings of ioBroker.iot and navigate to the _Services and IFTTT_ Tab.
+2. Add the term "_nello_" to the "_White list for services_" and copy the link for the custom services ("_Use following link for custom service_"), which looks like ```https://service.iobroker.in/v1/iotService?service=custom_<SERVICE_NAME>&key=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&user=email@domain.com&data=<SOME_TEXT>```.
 3. Replace ```custom_<SERVICE_NAME>``` with the service name ```custom_nello``` (make sure that the term appended to ```custom_``` matches the whitelisted word in step #2). Futhermore, remove ```&data=<SOME_TEXT>``` because it is not necessary.
 4. Go to the nello adapter configuration and paste the link into "_ioBroker.iot Service URL_" (in Option 1).
-5. Make sure the state listed in "_ioBroker.iot nello State_" is correct. You will find a state called ```custom_nello``` (based on the specific service name you have assigned in step #3) within the ioBroker objects either via ```cloud.0.services.custom_nello``` or ```iot.0.services.custom_nello```. Enter the correct state in "_ioBroker.iot nello State_".
+5. Make sure the state listed in "_ioBroker.iot nello State_" is correct. You will find the state called ```custom_nello``` within the ioBroker objects via ```iot.0.services```.
+
+##### ioBroker.cloud
+1. Go to the adapter settings of ioBroker.cloud and navigate to the _Services and IFTTT_ Tab.
+2. Add the term "_nello_" to the "_White list for services_" and copy the link for the custom services ("_Use following link for custom service_"), which looks like ```https://iobroker.net/service/```.
+3. Add ```custom_nello``` (make sure that the term appended to ```custom_``` matches the whitelisted word in step #2).
+4. Add your API key, so the URL eventually looks like ```https://iobroker.net/service/custom_nello/xxxxxx```.
+4. Go to the nello adapter configuration and paste the link into "_ioBroker.iot Service URL_" (in Option 1).
+5. Change the state listed in "_ioBroker.iot nello State_". You will find the correct state via ```cloud.0.services```. Enter the correct state in the field.
+
 
 #### Option 2: DynDNS URL
 To receive events (door bell rings) you may alternatively provide an external URL (with port) in the ioBroker.nello adapter settings.
