@@ -427,7 +427,7 @@ function setEvent(res)
 	adapter.log.debug('LISTENER: ' + JSON.stringify(res) + '...');
 	adapter.log.info('Received data from the webhook listener (action -' + res.action + '-).');
 	
-	res.data.timestamp = res.data.timestamp !== null ? res.data.timestamp : Math.round(Date.now()/1000);
+	res.data.timestamp = res.data.timestamp != null ? res.data.timestamp : Math.round(Date.now()/1000);
 	library.set({node: res.data.location_id + '.events.refreshedTimestamp', description: 'Timestamp of the last event', role: 'value'}, res.data.timestamp);
 	library.set({node: res.data.location_id + '.events.refreshedDateTime', description: 'DateTime of the last event', role: 'text'}, library.getDateTime(res.data.timestamp*1000));
 
