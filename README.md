@@ -64,6 +64,7 @@ If you successfully quick-setup ioBroker.nello, you will find yours doors as dev
 | address | zip | ZIP code of the location |
 | timeWindows | - | Time Windows of the location |
 | timeWindows | indexedTimeWindows | Index of all time windows |
+| timeWindows | deleteAllTimeWindows | Deletion of all time windows |
 | timeWindows | **createTimeWindow** | JSON object for creating a new timewindow ([Documentation](#adding-a-new-time-window)) |
 | timeWindows.0000000000000000000 | - | Time Window: Description of the time window |
 | timeWindows.0000000000000000000 | enabled | State whether time window is enabled |

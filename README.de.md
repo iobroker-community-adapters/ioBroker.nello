@@ -59,6 +59,7 @@ Wenn die Schnellinstallation erfolgreich war, erscheinen die Türen jeweils als 
 | address | zip | Postleitzahl (PLZ) des nello Orts |
 | timeWindows | - | Zeitfenster des nello's |
 | timeWindows | indexedTimeWindows | Index / Liste aller vorhandenen Zeitfenster |
+| timeWindows | deleteAllTimeWindows | Löschen aller vorhandenen Zeitfenster |
 | timeWindows | createTimeWindow | JSON Objekt um ein neues Zeitfenster anzulegen ([Dokumentation](#anlegen-eines-zeitfensters)) |
 | timeWindows.0000000000000000000 | - | Zeitfenster |
 | timeWindows.0000000000000000000 | enabled | Status, ob das Zeitfenster aktiviert ist |
