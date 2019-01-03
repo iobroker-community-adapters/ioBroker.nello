@@ -13,6 +13,7 @@ const Nello = require('nello');
  */
 var library = new Library(adapter);
 var nello;
+var timewindowMap = {};
 var nodes = {
 	
 	// address
@@ -327,33 +328,28 @@ adapter.on('stateChange', function(id, state)
 			{
 				location.address.address = state.val;
 				adapter.log.info('Triggered to delete all time windows of location ' + location.address.address + ' (' + location.location_id + ').');
-				// Using indexedTimeWindows here and not api function `deleteAllTimeWindows` to know which callback is the last to update the objects
-				adapter.getState(location.location_id + '.timeWindows.indexedTimeWindows', function(err, state)
+				var timeWindowCount = Object.keys(timewindowMap).length;
+				// Using timewindowMap-Kekys here and not api function `deleteAllTimeWindows` to know which callback is the last to update the objects		
+				Object.keys(timewindowMap).forEach(function(timewindowId) 
 				{
-					// Getting all time window ids with splitting the string to an array
-					var indexedTimeWindows = state.val.split(',');
-					var timeWindowCount = indexedTimeWindows.length;
-					indexedTimeWindows.forEach(function(timewindowId) 
+					nello.deleteTimeWindow(obj.common.locationId, timewindowId, function(res)
 					{
-						nello.deleteTimeWindow(obj.common.locationId, timewindowId, function(res)
+						timeWindowCount--;
+						if (res.result === false)
+							adapter.log.error('Deleting time window failed: ' + res.error);							
+						else
 						{
-							timeWindowCount--;
-							if (res.result === false)
-								adapter.log.error('Deleting time window failed: ' + res.error);							
-							else
+							adapter.log.info('Time window with id ' + timewindowId +' was deleted.');
+							// Last timewindow was deleted -> update objects
+							if(timeWindowCount === 0)
 							{
-								adapter.log.info('Time window with id ' + timewindowId +' was deleted.');
-								// Last timewindow was deleted -> update objects
-								if(timeWindowCount === 0)
-								{
-									adapter.log.info('All time windows have been deleted.');
-									// delete all old timewindows
-									deleteTimeWindows(location);	
-									// refresh timewindows for indexedTimeWindows
-									getTimeWindows(location);
-								}
-							}						
-						});
+								adapter.log.info('All time windows have been deleted.');
+								// delete all old timewindows
+								deleteTimeWindows(location);	
+								// refresh timewindows for indexedTimeWindows
+								getTimeWindows(location);
+							}
+						}						
 					});
 				});
 			});
@@ -411,14 +407,14 @@ function getTimeWindows(location)
 		adapter.log.info('Updating time windows of location ' + location.address.address + '.');
 		
 		// Using Array to merge the string with .join(',') to have no ending ',' 
-		var indexArray = [];
 		res.timeWindows.forEach(function(window)
 		{
 			// create states
 			library.set({node: location.location_id + '.timeWindows.' + window.id, description: 'Time Window: ' + window.name}, '');
 			
-			// add to index
-			indexArray.push(window.id);
+			// add to timewindowMap
+			//indexArray.push(window.id);
+			timewindowMap[window.id] = window;
 			
 			// add data
 			window.icalRaw = window.ical._raw;
@@ -444,7 +440,7 @@ function getTimeWindows(location)
 		});
 		
 		// create index with time window IDs
-		library.set({node: location.location_id + '.timeWindows.indexedTimeWindows', description: 'Index of all time windows', role: 'text'}, indexArray.join(','));
+		library.set({node: location.location_id + '.timeWindows.indexedTimeWindows', description: 'Index of all time windows', role: 'text'}, Object.keys(timewindowMap).join(','));
 		
 		// create object for creating a timewindow
 		library.set({
