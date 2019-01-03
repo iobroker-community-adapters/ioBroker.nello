@@ -276,7 +276,7 @@ Abhängig der Art des Events wird Alexa nun darüber informieren, dass die Tür 
 Die Angabe **#YOUR DOOR ID#** (inklusive dem #) ist mit der ID der Tür zu ersetzen.
 
 ### Über das Türklingeln durch RGB Lampen informieren lassen
-Diese Funktionalität benötigt einen Adapter, der die Lampen in ioBroker verfügbar macht, z. B.ioBroker.hue (https://github.com/ioBroker/ioBroker.hue).
+Diese Funktionalität benötigt einen Adapter, der die Lampen in ioBroker verfügbar macht, z. B. ioBroker.hue (https://github.com/ioBroker/ioBroker.hue).
 
 Um die RGB Lampen nutzen zu können, sind die Funktionen ```color``` und ```colors``` zu definieren. Hierzu sind die folgenden Funktionen als Skript im "global" Ordner von ioBroker.javascript zu hinterlegen (es kann dasselbe Skript sein, wie oben bereits genutzt).
 
