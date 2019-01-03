@@ -365,7 +365,7 @@ on({id: 'nello.0.#YOUR DOOR ID#.events.feed', change: 'any'}, function(obj)
     if (events.length === 0) return;
     
     // reset previous color state
-    setState(lamp, rgb.reset);
+    color(lamp, rgb.reset);
 
     // do the magic
     var event = events[events.length-1];
