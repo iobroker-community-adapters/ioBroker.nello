@@ -406,14 +406,12 @@ function getTimeWindows(location)
 		// loop through time windows
 		adapter.log.info('Updating time windows of location ' + location.address.address + '.');
 		
-		// Using Array to merge the string with .join(',') to have no ending ',' 
 		res.timeWindows.forEach(function(window)
 		{
 			// create states
 			library.set({node: location.location_id + '.timeWindows.' + window.id, description: 'Time Window: ' + window.name}, '');
 			
 			// add to timewindowMap
-			//indexArray.push(window.id);
 			timewindowMap[window.id] = window;
 			
 			// add data
@@ -479,6 +477,8 @@ function deleteTimeWindows(location)
 		for(var d = 0; d < states.length; d++)
 			adapter.delObject(states[d]._id);
 	});
+	// clearing the time window map
+	timewindowMap = {};
 }
 
 /**
