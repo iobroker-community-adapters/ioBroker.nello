@@ -22,6 +22,7 @@ Developers may find the javascript implementation of the nello.io API via https:
 4. [Smart Home / Alexa integration using ioBroker.javascript](#smart-home--alexa-integration-using-iobrokerjavascript)
    1. [Open door using Alexa](#open-door-using-alexa)
    2. [Let Alexa inform you about door ring](#let-alexa-inform-you-about-door-ring)
+   3. [Let colored lamps inform you about door ring](#let-colored-lamps-inform-you-about-door-ring)
 5. [Changelog](#changelog)
 6. [Licence](#license)
 
@@ -247,6 +248,7 @@ _(updated on 2018-11-18 to support voice output from multiple alexa devices at a
 You can use this function within ioBroker.javascript to say a phrase using Alexa  ```say('Hello World')``` or ```say('Hello World', ['#YOUR ALEXA ID 1#', '#YOUR ALEXA ID 2#'])``` for voice output from multiple devices.
 
 Create a script in the "common" folder of ioBroker.javascript (or use the one you created above) and add the following listener to it:
+
 ```javascript
 var L = {
    'actionRingUnknown': 'Es hat geklingelt',
@@ -278,6 +280,125 @@ _(updated on 2019-01-02 to also reflect geo option with specific Alexa phrase)_
 
 Based on the action of the event, Alexa will inform you about the door being opened or the door bell being recognized.
 **IMPORTANT**: Replace #YOUR DOOR ID# (also replace #) with your nello door ID.
+
+### Let colored lamps inform you about door ring
+This functionality requires an adapter which can set colored / rgb lamps, e.g. ioBroker.hue (https://github.com/ioBroker/ioBroker.hue).
+
+In order to use the colored lamps, the functions ```color``` und ```colors``` have to be defined. Place the following functions in a script in the "global" folder of ioBroker.javascript (you may place it in the same one as above):
+
+```javascript
+/**
+ * Visualize a message using a color / hue.
+ * 
+ * @param       {string|array}  devices         Device(s) the color shall be set
+ * @param       {object}        hue             Color code to bet set
+ * @param       {integer}       hue.r           (optional) Red part of the color to be set
+ * @param       {integer}       hue.g           (optional) Green part of the color to be set
+ * @param       {integer}       hue.b           (optional) Blue part of the color to be set
+ * @param       {integer}       hue.w           (optional) White part of the color to be set
+ * @param       {integer}       hue.bri         (optional) Brightness part of the color to be set
+ * @param       {integer}       hue.rgb         (optional) All RGB parts of the color to be set
+ * @return      void
+ * 
+ */
+function color(devices, hue)
+{
+    devices = typeof devices === 'string' ? [devices] : devices;
+    devices.forEach(function(device)
+    {
+	    ['b', 'g', 'w', 'r', 'bri', 'rgb'].forEach(function(key)
+    	{
+    		if (hue[key] !== undefined)
+    			setState(device + '.' + key, hue[key]);
+    	});
+    });
+}
+
+/**
+ * Append multiple messages using a delay to create a light sequence.
+ * 
+ * @param       {string|array}  devices         Device(s) the color shall be set
+ * @param       {array}         hues            Color code to bet set
+ * @param       {number}        delay           (optional) Delay between steps
+ * @param       {number}        start           (optional) Delayed start
+ * @return      {number}                        Total delay used
+ * 
+ */
+function colors(devices, hues, delay = 3000, start = 0)
+{
+    var delayed = start;
+    devices = typeof devices === 'string' ? [devices] : devices;
+    devices.forEach(function(device)
+    {
+        setState(device + '.on', true);
+        hues.forEach(function(hue, i)
+    	{
+            delayed += delay;
+            setTimeout(function()
+            {
+                color(device, hue);
+            }, delayed);
+    	});
+        
+        delayed += delay;
+        setTimeout(function()
+        {
+            setState(device + '.on', false);
+        }, delayed);
+    });
+
+    return delayed;
+}
+```
+
+You can use these functions within ioBroker.javascript to color any lamp, e.g. by ```color('hue.0.Philips_hue.Lamp', {'r': 0, 'g': 255, 'b': 0})``` (color green) or ```color(['hue.0.Philips_hue.Lamp1', 'hue.0.Philips_hue.Lamp2'], {'r': 0, 'g': 255, 'b': 0})```, to color multiple devices.
+
+Create a script in the "common" folder of ioBroker.javascript (or use the one you created above) and add the following listener to it:
+
+```javascript
+var lamp = '#YOUR LAMP#'; // e.g. hue.0.Philips_hue.Lamp
+var rgb = {
+   'actionRingUnknown': {'r': 255, 'g': 0, 'b': 0, 'bri': 255},
+   'actionOpenName': {'r': 0, 'g': 255, 'b': 0, 'bri': 255},
+   'actionOpenGeo': {'r': 0, 'g': 255, 'b': 0, 'bri': 255},
+   'actionOpen': {'r': 0, 'g': 255, 'b': 0, 'bri': 255},
+   'reset': {'r': 255, 'g': 255, 'b': 255, 'bri': 255},
+};
+
+on({id: 'nello.0.#YOUR DOOR ID#.events.feed', change: 'any'}, function(obj)
+{
+    var events = JSON.parse(obj.state.val);
+    if (events.length === 0) return;
+    
+    var event = events[events.length-1];
+    if (event.action == 'deny')
+        colors(lamp, [
+            rgb.actionRingUnknown,
+            {'bri': 50}, {'bri': 255}, {'bri': 50}, {'bri': 255}, {'bri': 50}, {'bri': 255}
+        ], 500);
+    
+    else if (event.action == 'swipe')
+        colors(lamp, [
+            rgb.actionOpenName,
+            {'bri': 50}, {'bri': 255}, {'bri': 50}, {'bri': 255}, {'bri': 50}, {'bri': 255}
+        ], 500);
+    
+    else if (event.action == 'geo')
+        colors(lamp, [
+            rgb.actionOpenGeo,
+            {'bri': 50}, {'bri': 255}, {'bri': 50}, {'bri': 255}, {'bri': 50}, {'bri': 255}
+        ], 500);
+        
+    else
+        colors(lamp, [
+            rgb.actionOpen,
+            {'bri': 50}, {'bri': 255}, {'bri': 50}, {'bri': 255}, {'bri': 50}, {'bri': 255}
+        ], 500);
+});
+```
+
+Based on the action of the event, the lamps will be colored with the defined values.
+**IMPORTANT**: Replace **#YOUR LAMP#** (also replace #) with the state of the lamp you would like to color. Replace **#YOUR DOOR ID#** (also replace #) with your nello door ID.
 
 
 ## Changelog
