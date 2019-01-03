@@ -20,6 +20,7 @@ nello one verbindet die Gegensprechanlage mit dem Smartphone und dem hauseigenen
 4. [Smart Home / Alexa Integration mit ioBroker.javascript](#smart-home--alexa-integration-mit-iobrokerjavascript)
    1. [Tür mit Alexa öffnen](#t%C3%BCr-mit-alexa-%C3%B6ffnen)
    2. [Über das Türklingeln durch Alexa infomieren lassen](#%C3%BCber-das-t%C3%BCrklingeln-durch-alexa-infomieren-lassen)
+   3. [Über das Türklingeln durch RGB Lampen informieren lassen]()
 5. [Changelog (nur in englischer Readme)](https://github.com/Zefau/ioBroker.nello#changelog)
 6. [Lizenz](#lizenz)
 
@@ -241,6 +242,7 @@ function say(message, alexas = '#YOUR ALEXA ID#') // use alexas = ['#YOUR ALEXA 
 Die Funktion kann nun dazu genutzt werden, um mit ioBroker.javascript eine Sprachausgabe zu erzeugen, z.B. durch ```say('Hello World')``` oder ```say('Hello World', ['#YOUR ALEXA ID 1#', '#YOUR ALEXA ID 2#'])```, für eine Ausgabe mit mehreren Alexa Geräten.
 
 Nun ist ein Skript im "common" Ordner zu erstellen (es kann das zuvor verwendete genutzt werden) und der folgende Listener ist hinzuzufügen:
+
 ```javascript
 var L = {
    'actionRingUnknown': 'Es hat geklingelt',
@@ -249,7 +251,7 @@ var L = {
    'actionOpen': 'Die Haustür wurde geöffnet'
 };
 
-on({id: 'nello.0.ID.events.feed', change: 'any'}, function(obj)
+on({id: 'nello.0.#YOUR DOOR ID#.events.feed', change: 'any'}, function(obj)
 {
    var events = JSON.parse(obj.state.val);
    if (events.length === 0) return;
@@ -272,6 +274,129 @@ _(aktualisiert am 02.01.2019, um auch die "geo" Option mit einer Alexa Ansage zu
 
 Abhängig der Art des Events wird Alexa nun darüber informieren, dass die Tür geöffnet wurde bzw. das Klingeln abgelehnt wurde.
 Die Angabe **#YOUR DOOR ID#** (inklusive dem #) ist mit der ID der Tür zu ersetzen.
+
+### Über das Türklingeln durch RGB Lampen informieren lassen
+Diese Funktionalität benötigt einen Adapter, der die Lampen in ioBroker verfügbar macht, z. B.ioBroker.hue (https://github.com/ioBroker/ioBroker.hue).
+
+Um die RGB Lampen nutzen zu können, sind die Funktionen ```color``` und ```colors``` zu definieren. Hierzu sind die folgenden Funktionen als Skript im "global" Ordner von ioBroker.javascript zu hinterlegen (es kann dasselbe Skript sein, wie oben bereits genutzt).
+
+```javascript
+/**
+ * Visualize a message using a color / hue.
+ * 
+ * @param       {string|array}  devices         Device(s) the color shall be set
+ * @param       {object}        hue             Color code to bet set
+ * @param       {integer}       hue.r           (optional) Red part of the color to be set
+ * @param       {integer}       hue.g           (optional) Green part of the color to be set
+ * @param       {integer}       hue.b           (optional) Blue part of the color to be set
+ * @param       {integer}       hue.w           (optional) White part of the color to be set
+ * @param       {integer}       hue.bri         (optional) Brightness part of the color to be set
+ * @param       {integer}       hue.rgb         (optional) All RGB parts of the color to be set
+ * @return      void
+ * 
+ */
+function color(devices, hue)
+{
+    devices = typeof devices === 'string' ? [devices] : devices;
+    devices.forEach(function(device)
+    {
+	    ['b', 'g', 'w', 'r', 'bri', 'rgb'].forEach(function(key)
+    	{
+    		if (hue[key] !== undefined)
+    			setState(device + '.' + key, hue[key]);
+    	});
+    });
+}
+
+/**
+ * Append multiple messages using a delay to create a light sequence.
+ * 
+ * @param       {string|array}  devices         Device(s) the color shall be set
+ * @param       {array}         hues            Color code to bet set
+ * @param       {number}        delay           (optional) Delay between steps
+ * @param       {number}        start           (optional) Delayed start
+ * @return      {number}                        Total delay used
+ * 
+ */
+function colors(devices, hues, delay = 3000, start = 0)
+{
+    var delayed = start;
+    devices = typeof devices === 'string' ? [devices] : devices;
+    devices.forEach(function(device)
+    {
+        setState(device + '.on', true);
+        hues.forEach(function(hue, i)
+    	{
+            delayed += delay;
+            setTimeout(function()
+            {
+                color(device, hue);
+            }, delayed);
+    	});
+        
+        delayed += delay;
+        setTimeout(function()
+        {
+            setState(device + '.on', false);
+        }, delayed);
+    });
+
+    return delayed;
+}
+```
+
+Diese Funktionen können genutzt werden, um mit ioBroker.javascript beliebige Lampen zu beleuchten, z.B. durch ```color('hue.0.Philips_hue.Lamp', {'r': 0, 'g': 255, 'b': 0})``` (grün färben) oder ```color(['hue.0.Philips_hue.Lamp1', 'hue.0.Philips_hue.Lamp2'], {'r': 0, 'g': 255, 'b': 0})```, um mehrere Lampen zu beleuchten.
+
+Nun ist ein Skript im "common" Ordner zu erstellen (es kann das zuvor verwendete genutzt werden) und der folgende Listener ist hinzuzufügen:
+
+```javascript
+var lamp = '#YOUR LAMP#'; // e.g. hue.0.Philips_hue.Lamp
+var rgb = {
+   'actionRingUnknown': {'r': 255, 'g': 0, 'b': 0, 'bri': 255},
+   'actionOpenName': {'r': 0, 'g': 255, 'b': 0, 'bri': 255},
+   'actionOpenGeo': {'r': 0, 'g': 255, 'b': 0, 'bri': 255},
+   'actionOpen': {'r': 0, 'g': 255, 'b': 0, 'bri': 255},
+   'reset': {'r': 255, 'g': 255, 'b': 255, 'bri': 255},
+};
+
+on({id: 'nello.0.#YOUR DOOR ID#.events.feed', change: 'any'}, function(obj)
+{
+    var events = JSON.parse(obj.state.val);
+    if (events.length === 0) return;
+    
+    // reset previous color state
+    setState(lamp, rgb.reset);
+
+    // do the magic
+    var event = events[events.length-1];
+    if (event.action == 'deny')
+        colors(lamp, [
+            rgb.actionRingUnknown,
+            {'bri': 50}, {'bri': 255}, {'bri': 50}, {'bri': 255}, {'bri': 50}, {'bri': 255}
+        ], 500);
+    
+    else if (event.action == 'swipe')
+        colors(lamp, [
+            rgb.actionOpenName,
+            {'bri': 50}, {'bri': 255}, {'bri': 50}, {'bri': 255}, {'bri': 50}, {'bri': 255}
+        ], 500);
+    
+    else if (event.action == 'geo')
+        colors(lamp, [
+            rgb.actionOpenGeo,
+            {'bri': 50}, {'bri': 255}, {'bri': 50}, {'bri': 255}, {'bri': 50}, {'bri': 255}
+        ], 500);
+        
+    else
+        colors(lamp, [
+            rgb.actionOpen,
+            {'bri': 50}, {'bri': 255}, {'bri': 50}, {'bri': 255}, {'bri': 50}, {'bri': 255}
+        ], 500);
+});
+```
+
+Abhängig der Art des Events wird die Lampe nun in den definierten Farben entsprechend leuchten, dass die Tür geöffnet wurde bzw. das Klingeln abgelehnt wurde.
+Die Angabe **#YOUR LAMP#** (inklusive dem #) ist mit dem State der Lampe zu ersetzen. Die Angabe **#YOUR DOOR ID#** (inklusive dem #) ist mit der ID der Tür zu ersetzen.
 
 
 ## Lizenz
