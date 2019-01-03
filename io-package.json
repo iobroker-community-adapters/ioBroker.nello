@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "nello",
-        "version": "1.1.0",
+        "version": "1.2.0",
         "title": "nello.io adapter",
         "desc": {
             "en": "ioBroker nello.io Adapter",
@@ -9,6 +9,10 @@
             "ru": "ioBroker nello.io драйвер"
         },
         "news": {
+            "1.2.0": {
+                "en": "added states and support for adding / deleting time windows",
+                "de": "Möglichkeit zum Anlegen und Löschen von Zeitfenstern hinzugefügt"
+            },
             "1.1.0": {
                 "en": "added usage of ioBroker.iot / ioBroker.cloud to receive events (instead of custom DynDNS url)",
                 "de": "Möglichkeit zur Nutzung von ioBroker.iot / ioBroker.cloud hinzugefügt, um Events zu empfangen (statt eigener DynDNS Adresse)"

@@ -13,13 +13,18 @@ Developers may find the javascript implementation of the nello.io API via https:
 ## [German Readme / Deutsche Anleitung](https://github.com/Zefau/ioBroker.nello/blob/master/README.de.md)
 
 **Table of contents**
-1. [Setup instructions (Quick Setup)](https://github.com/Zefau/ioBroker.nello#quick-setup)
-2. [Setup instructions (Advanced Setup)](https://github.com/Zefau/ioBroker.nello#advanced-setup)
-3. [Smart Home / Alexa integration using ioBroker.javascript](https://github.com/Zefau/ioBroker.nello#smart-home--alexa-integration-using-iobrokerjavascript)
-   1. [Open door using Alexa](https://github.com/Zefau/ioBroker.nello#open-door-using-alexa)
-   2. [Let Alexa inform you about door ring](https://github.com/Zefau/ioBroker.nello#let-alexa-inform-you-about-door-ring)
-4. [Changelog](https://github.com/Zefau/ioBroker.nello#changelog)
-5. [Licence](https://github.com/Zefau/ioBroker.nello#license)
+1. [Setup instructions (Quick Setup)](#quick-setup)
+2. [Setup instructions (Advanced Setup)](#advanced-setup)
+3. [Usage / Actions](#usage--actions)
+   1. [Open Door](#open-door)
+   2. [Adding a Time Window](#adding-a-new-time-window)
+   3. [Deleting a Time Window](#deleting-a-time-window) 
+4. [Smart Home / Alexa integration using ioBroker.javascript](#smart-home--alexa-integration-using-iobrokerjavascript)
+   1. [Open door using Alexa](#open-door-using-alexa)
+   2. [Let Alexa inform you about door ring](#let-alexa-inform-you-about-door-ring)
+   3. [Let colored lamps inform you about door ring](#let-colored-lamps-inform-you-about-door-ring)
+5. [Changelog](#changelog)
+6. [Licence](#license)
 
 
 ## Setup instructions
@@ -59,7 +64,7 @@ If you successfully quick-setup ioBroker.nello, you will find yours doors as dev
 | address | zip | ZIP code of the location |
 | timeWindows | - | Time Windows of the location |
 | timeWindows | indexedTimeWindows | Index of all time windows |
-| timeWindows | createTimeWindow | JSON object for creating a new timewindow ([Documentation](#adding-a-new-timewindow-with-timewindowscreatetimewindow)) |
+| timeWindows | **createTimeWindow** | JSON object for creating a new timewindow ([Documentation](#adding-a-new-time-window)) |
 | timeWindows.0000000000000000000 | - | Time Window: Description of the time window |
 | timeWindows.0000000000000000000 | enabled | State whether time window is enabled |
 | timeWindows.0000000000000000000 | icalObj | JSON object of the calendar data |
@@ -68,13 +73,14 @@ If you successfully quick-setup ioBroker.nello, you will find yours doors as dev
 | timeWindows.0000000000000000000 | image | (not in used) |
 | timeWindows.0000000000000000000 | name | Name of the time window |
 | timeWindows.0000000000000000000 | state | State |
-| timeWindows.0000000000000000000 | deleteTimeWindow | Delete this timewindow |
-| - | &#95;openDoor | Open door of location XXXXX |
+| timeWindows.0000000000000000000 | **deleteTimeWindow** | Delete this timewindow |
+| - | **&#95;openDoor** | Open door of location XXXXX |
 | - | id | ID of location XXXXX |
 | - | refreshedDateTime | Last update (DateTime) of location XXXXX |
 | - | refreshedTimestamp | Last update (Timestamp) of location XXXXX |
 
 **Remark: You will _only_ see those states if you have successfully quick-setup ioBroker.nello!**
+_Highlighted states will trigger / perform an action when changed_
 
 
 ### Advanced Setup
@@ -82,11 +88,20 @@ If you successfully quick-setup ioBroker.nello, you will find yours doors as dev
 To receive events (door bell rings) it is recommended to use either ioBroker.cloud or ioBroker.iot adapter.
 The ioBroker.cloud / ioBroker.iot adpater will receive the event from nello and write it in a state, which is then readable by the ioBroker.nello adapter.
 
-1. Go to the adapter settings of ioBroker.cloud or ioBroker.iot and navigate to the _Services and IFTTT_ Tab.
-2. Add the term "_nello_" to the "_White list for services_" and copy the link for the custom services ("_Use following link for custom service_").
+##### ioBroker.iot
+1. Go to the adapter settings of ioBroker.iot and navigate to the _Services and IFTTT_ Tab.
+2. Add the term "_nello_" to the "_White list for services_" and copy the link for the custom services ("_Use following link for custom service_"), which looks like ```https://service.iobroker.in/v1/iotService?service=custom_<SERVICE_NAME>&key=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&user=email@domain.com&data=<SOME_TEXT>```.
 3. Replace ```custom_<SERVICE_NAME>``` with the service name ```custom_nello``` (make sure that the term appended to ```custom_``` matches the whitelisted word in step #2). Futhermore, remove ```&data=<SOME_TEXT>``` because it is not necessary.
 4. Go to the nello adapter configuration and paste the link into "_ioBroker.iot Service URL_" (in Option 1).
-5. Make sure the state listed in "_ioBroker.iot nello State_" is correct. You will find a state called ```custom_nello``` (based on the specific service name you have assigned in step #3) within the ioBroker objects either via ```cloud.0.services.custom_nello``` or ```iot.0.services.custom_nello```. Enter the correct state in "_ioBroker.iot nello State_".
+5. Make sure the state listed in "_ioBroker.iot nello State_" is correct. You will find the state called ```custom_nello``` within the ioBroker objects via ```iot.0.services```.
+
+##### ioBroker.cloud
+1. Go to the adapter settings of ioBroker.cloud and navigate to the _Services and IFTTT_ Tab.
+2. Add the term "_nello_" to the "_White list for services_" and copy the link for the custom services ("_Use following link for custom service_"), which looks like ```https://iobroker.net/service/```.
+3. Add ```custom_nello``` (make sure that the term appended to ```custom_``` matches the whitelisted word in step #2).
+4. Add your API key, so the URL eventually looks like ```https://iobroker.net/service/custom_nello/xxxxxx```.
+5. Go to the nello adapter configuration and paste the link into "_ioBroker.iot Service URL_" (in Option 1).
+6. Change the state listed in "_ioBroker.iot nello State_". You will find the correct state via ```cloud.0.services```. Enter the correct state in the field.
 
 #### Option 2: DynDNS URL
 To receive events (door bell rings) you may alternatively provide an external URL (with port) in the ioBroker.nello adapter settings.
@@ -143,6 +158,26 @@ The "feed" state will provide a JSON of all events registered by the webhook. Th
     - timestamp
     - user_id (only actions swipe, tw or geo)
     - name (only actions swipe, tw or geo)
+
+
+## Usage / Actions
+### Open Door
+To open the door of your nello, press the button of the state ```_openDoor```.
+### Adding a new Time Window
+For adding a new time window, paste the contents to the state ```timeWindows.createTimeWindow```. The following format is expected:
+
+```
+{"name":"<NAME>","ical":"<iCal-String>"}
+```
+The format of the iCal-String can be found in the Nello API documentation (https://nellopublicapi.docs.apiary.io/#reference/0/locations-collection/create-a-new-time-window). **It is important to separate the individual elements with ```\r\n```**.
+
+Example of a timewindow:
+```
+{"name":"Cleaner","ical":"BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nDTSTART:20190101T163000Z\r\nDTEND:20190101T170000Z\r\nSUMMARY:Cleaner\r\nEND:VEVENT\r\nEND:VCALENDAR"}
+```
+
+### Deleting a Time Window
+To delete a time window, press the button within the object tree of the respective time window.
 
 
 ## Smart Home / Alexa integration using ioBroker.javascript
@@ -213,11 +248,121 @@ _(updated on 2018-11-18 to support voice output from multiple alexa devices at a
 You can use this function within ioBroker.javascript to say a phrase using Alexa  ```say('Hello World')``` or ```say('Hello World', ['#YOUR ALEXA ID 1#', '#YOUR ALEXA ID 2#'])``` for voice output from multiple devices.
 
 Create a script in the "common" folder of ioBroker.javascript (or use the one you created above) and add the following listener to it:
+
 ```javascript
 var L = {
-    'actionRingUnknown': 'Es hat an der Tür geklingelt!',
-    'actionOpenName': '%name% hat die Tür geöffnet.',
-    'actionOpen': 'Die Haustür wurde geöffnet.'
+   'actionRingUnknown': 'Es hat geklingelt',
+   'actionOpenName': '%name% hat die Tür geöffnet',
+   'actionOpenGeo': '%name% hat das Haus betreten',
+   'actionOpen': 'Die Haustür wurde geöffnet'
+};
+
+on({id: 'nello.0.ID.events.feed', change: 'any'}, function(obj)
+{
+   var events = JSON.parse(obj.state.val);
+   if (events.length === 0) return;
+
+   var event = events[events.length-1];
+   if (event.action == 'deny')
+      say(L.actionRingUnknown);
+
+   else if (event.action == 'swipe')
+      say(L.actionOpenName.replace(/%name%/gi, event.data.name));
+
+   else if (event.action == 'geo')
+      say(L.actionOpenGeo.replace(/%name%/gi, event.data.name));
+
+   else
+      say(L.actionOpen);
+});
+```
+_(updated on 2019-01-02 to also reflect geo option with specific Alexa phrase)_
+
+Based on the action of the event, Alexa will inform you about the door being opened or the door bell being recognized.
+**IMPORTANT**: Replace #YOUR DOOR ID# (also replace #) with your nello door ID.
+
+### Let colored lamps inform you about door ring
+This functionality requires an adapter which can set colored / rgb lamps, e.g. ioBroker.hue (https://github.com/ioBroker/ioBroker.hue).
+
+In order to use the colored lamps, the functions ```color``` und ```colors``` have to be defined. Place the following functions in a script in the "global" folder of ioBroker.javascript (you may place it in the same one as above):
+
+```javascript
+/**
+ * Visualize a message using a color / hue.
+ * 
+ * @param       {string|array}  devices         Device(s) the color shall be set
+ * @param       {object}        hue             Color code to bet set
+ * @param       {integer}       hue.r           (optional) Red part of the color to be set
+ * @param       {integer}       hue.g           (optional) Green part of the color to be set
+ * @param       {integer}       hue.b           (optional) Blue part of the color to be set
+ * @param       {integer}       hue.w           (optional) White part of the color to be set
+ * @param       {integer}       hue.bri         (optional) Brightness part of the color to be set
+ * @param       {integer}       hue.rgb         (optional) All RGB parts of the color to be set
+ * @return      void
+ * 
+ */
+function color(devices, hue)
+{
+    devices = typeof devices === 'string' ? [devices] : devices;
+    devices.forEach(function(device)
+    {
+	    ['b', 'g', 'w', 'r', 'bri', 'rgb'].forEach(function(key)
+    	{
+    		if (hue[key] !== undefined)
+    			setState(device + '.' + key, hue[key]);
+    	});
+    });
+}
+
+/**
+ * Append multiple messages using a delay to create a light sequence.
+ * 
+ * @param       {string|array}  devices         Device(s) the color shall be set
+ * @param       {array}         hues            Color code to bet set
+ * @param       {number}        delay           (optional) Delay between steps
+ * @param       {number}        start           (optional) Delayed start
+ * @return      {number}                        Total delay used
+ * 
+ */
+function colors(devices, hues, delay = 3000, start = 0)
+{
+    var delayed = start;
+    devices = typeof devices === 'string' ? [devices] : devices;
+    devices.forEach(function(device)
+    {
+        setState(device + '.on', true);
+        hues.forEach(function(hue, i)
+    	{
+            delayed += delay;
+            setTimeout(function()
+            {
+                color(device, hue);
+            }, delayed);
+    	});
+        
+        delayed += delay;
+        setTimeout(function()
+        {
+            setState(device + '.on', false);
+        }, delayed);
+    });
+
+    return delayed;
+}
+```
+
+You can use these functions within ioBroker.javascript to color any lamp, e.g. by ```color('hue.0.Philips_hue.Lamp', {'r': 0, 'g': 255, 'b': 0})``` (color green) or ```color(['hue.0.Philips_hue.Lamp1', 'hue.0.Philips_hue.Lamp2'], {'r': 0, 'g': 255, 'b': 0})```, to color multiple devices.
+
+Create a script in the "common" folder of ioBroker.javascript (or use the one you created above) and add the following listener to it:
+
+```javascript
+var lamp = '#YOUR LAMP#'; // e.g. hue.0.Philips_hue.Lamp
+var rgb = {
+   'actionRingUnknown': {'r': 255, 'g': 0, 'b': 0, 'bri': 255},
+   'actionOpenName': {'r': 0, 'g': 255, 'b': 0, 'bri': 255},
+   'actionOpenGeo': {'r': 0, 'g': 255, 'b': 0, 'bri': 255},
+   'actionOpen': {'r': 0, 'g': 255, 'b': 0, 'bri': 255},
+   'reset': {'r': 255, 'g': 255, 'b': 255, 'bri': 255},
 };
 
 on({id: 'nello.0.#YOUR DOOR ID#.events.feed', change: 'any'}, function(obj)
@@ -227,34 +372,43 @@ on({id: 'nello.0.#YOUR DOOR ID#.events.feed', change: 'any'}, function(obj)
     
     var event = events[events.length-1];
     if (event.action == 'deny')
-        say(L.actionRingUnknown);
+        colors(lamp, [
+            rgb.actionRingUnknown,
+            {'bri': 50}, {'bri': 255}, {'bri': 50}, {'bri': 255}, {'bri': 50}, {'bri': 255}
+        ], 500);
     
-    else if (event.action == 'swipe' || event.action == 'geo')
-        say(L.actionOpenName.replace(/%name%/gi, event.data.name));
+    else if (event.action == 'swipe')
+        colors(lamp, [
+            rgb.actionOpenName,
+            {'bri': 50}, {'bri': 255}, {'bri': 50}, {'bri': 255}, {'bri': 50}, {'bri': 255}
+        ], 500);
+    
+    else if (event.action == 'geo')
+        colors(lamp, [
+            rgb.actionOpenGeo,
+            {'bri': 50}, {'bri': 255}, {'bri': 50}, {'bri': 255}, {'bri': 50}, {'bri': 255}
+        ], 500);
         
     else
-        say(L.actionOpen);
+        colors(lamp, [
+            rgb.actionOpen,
+            {'bri': 50}, {'bri': 255}, {'bri': 50}, {'bri': 255}, {'bri': 50}, {'bri': 255}
+        ], 500);
 });
 ```
-Based on the action of the event, Alexa will inform you about the door being opened or the door bell being recognized.
-**IMPORTANT**: Replace #YOUR DOOR ID# (also replace #) with your nello door ID.
 
-## Adding a new Timewindow with timeWindows.createTimeWindow
+Based on the action of the event, the lamps will be colored with the defined values.
+**IMPORTANT**: Replace **#YOUR LAMP#** (also replace #) with the state of the lamp you would like to color. Replace **#YOUR DOOR ID#** (also replace #) with your nello door ID.
 
-For adding a new timewindow the following format is expected:
-```
-{"name":"<NAME>","ical":"<iCal-String>"}
-```
-The format of the iCal-String can be found in the Nello API documentation (https://nellopublicapi.docs.apiary.io/#reference/0/locations-collection/create-a-new-time-window). It is important to separate the individual elements with '\r\n'.
-
-Example of a timewindow:
-```
-{"name":"Cleaner","ical":"BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nDTSTART:20190101T163000Z\r\nDTEND:20190101T170000Z\r\nSUMMARY:Cleaner\r\nEND:VEVENT\r\nEND:VCALENDAR"}
-```
 
 ## Changelog
 
-### CURRENT DEVELOPMENT / IN TEST
+### 1.2.0 (2019-01-02)
+- (@[CrEaK](https://github.com/CrEaK)) added states and support for adding / deleting time windows
+- (zefau) changed all states to readonly except for newly introduced time window states
+- (zefau) fixed bug showing incorrect error with SSL configuration when using ioBroker.cloud/iot
+
+### 1.1.0 (2019-01-01)
 - (zefau) added support for using ioBroker.cloud / ioBroker.iot for receiving events (instead of custom DynDNS address)
 - (zefau) fixed design issue with Google Chrome in admin backend
 
