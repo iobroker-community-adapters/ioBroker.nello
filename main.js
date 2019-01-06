@@ -204,6 +204,7 @@ adapter.on('ready', function()
 				adapter.subscribeStates(location.location_id + '._openDoor');
 			});
 			
+			adapter.log.debug('locationsMap: '  + JSON.stringify(locationsMap));			
 		});
 	});
 	
@@ -457,6 +458,8 @@ function getTimeWindows(locationId, location)
 		
 		// attach listener
 		adapter.subscribeStates( locationId + '.timeWindows.deleteAllTimeWindows');
+
+		adapter.log.debug('locationsMap: '  + JSON.stringify(locationsMap));
 	});
 }
 
