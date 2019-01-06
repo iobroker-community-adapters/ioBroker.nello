@@ -115,7 +115,7 @@ adapter.on('ready', function()
 			delete location.address.number;
 			
 			// add to locations
-			LOCATIONS[location.location_id] = {address: location.address};
+			LOCATIONS[location.location_id] = {address: location.address, timeWindows: {}};
 			
 			// create location as device in the ioBroker state tree
 			adapter.createDevice(location.location_id, {name: location.address.address}, {}, function()
@@ -277,7 +277,7 @@ adapter.on('stateChange', function(id, state)
 			}
 			finally
 			{
-				// clearing createTimewindow state
+				// clearing createTimeWindow state
 				adapter.setState(id, null);
 			}
 		});
@@ -461,7 +461,7 @@ function deleteTimeWindows(locationId)
 {
 	adapter.getStatesOf(locationId, 'timeWindows', function(err, states)
 	{
-		for(var d = 0; d < states.length; d++)
+		for (var d = 0; d < states.length; d++)
 			adapter.delObject(states[d]._id);
 	});
 	
