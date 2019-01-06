@@ -491,7 +491,7 @@ function setEvent(res)
 
 	adapter.getState(res.data.location_id + '.events.feed', function(err, state)
 	{
-		var feed = state !=x undefined && state !== null && state.val !== '' ? JSON.parse(state.val) : [];
+		var feed = state != undefined && state !== null && state.val !== '' ? JSON.parse(state.val) : [];
 		library.set({node: res.data.location_id + '.events.feed', description: 'Activity feed / Event history', role: 'json'}, JSON.stringify(feed.concat([res])));
 	});
 }
