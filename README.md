@@ -404,6 +404,9 @@ Based on the action of the event, the lamps will be colored with the defined val
 
 ## Changelog
 
+### 1.2.1 (2019-01-06)
+- (@[CrEaK](https://github.com/CrEaK)) added state / function to deleteAllTimeWindows
+
 ### 1.2.0 (2019-01-02)
 - (@[CrEaK](https://github.com/CrEaK)) added states and support for adding / deleting time windows
 - (zefau) changed all states to readonly except for newly introduced time window states
