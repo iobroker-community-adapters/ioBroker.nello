@@ -13,6 +13,7 @@ const Nello = require('nello');
  */
 var library = new Library(adapter);
 var nello;
+var locationsMap = {};
 var nodes = {
 	
 	// address
@@ -112,6 +113,10 @@ adapter.on('ready', function()
 			location.address.address = location.address.streetName + " " + location.address.streetNumber + ", " + location.address.zip + " " + location.address.city;
 			delete location.address.number;
 			
+			// fill the locationMap initial
+			locationsMap[location.location_id] = {};
+			locationsMap[location.location_id].address = location.address;
+			
 			// create location as device in the ioBroker state tree
 			adapter.createDevice(location.location_id, {name: location.address.address}, {}, function()
 			{
@@ -123,19 +128,19 @@ adapter.on('ready', function()
 				});
 				
 				// CHANNEL: time windows
-				deleteTimeWindows(location);
+				deleteTimeWindows(location.location_id);
 				
 				adapter.createChannel(location.location_id, 'timeWindows', {name: 'Time Windows of the location'}, {}, function()
 				{
-					getTimeWindows(location);
+					getTimeWindows(location.location_id, location);
 				
 					if (adapter.config.refresh !== undefined && adapter.config.refresh > 10)
 					{
 						setInterval(
 							function()
 							{
-								deleteTimeWindows(location);
-								getTimeWindows(location);
+								deleteTimeWindows(location.location_id);
+								getTimeWindows(location.location_id, location);
 							},
 							Math.round(parseInt(adapter.config.refresh)*1000)
 						);
@@ -198,6 +203,8 @@ adapter.on('ready', function()
 				// attach listener
 				adapter.subscribeStates(location.location_id + '._openDoor');
 			});
+			
+			adapter.log.debug('locationsMap: '  + JSON.stringify(locationsMap));			
 		});
 	});
 	
@@ -216,60 +223,54 @@ adapter.on('stateChange', function(id, state)
 	if (id === adapter.config.iot && state.val)
 		setEvent(JSON.parse(state.val));
 	
+	
+	
 	// door opened
 	if (id.indexOf('_openDoor') > -1 && state.ack !== true)
-	{
-		var location = {};
-		location.address = {};
+	{;
 		adapter.getObject(id, function(err, obj)
 		{
-			location.location_id = obj.common.locationId;
-			adapter.getState(location.location_id + '.address.address', function(err, state)
-			{
-				location.address.address = state.val;
-				adapter.log.info('Triggered to open door of location ' + location.address.address + ' (' + location.location_id + ').');
-				nello.openDoor(location.location_id);
-			});
+			var locationId = obj.common.locationId;
+			var currentLocation = locationsMap[locationId];
+			
+			adapter.log.info('Triggered to open door of location ' + currentLocation.address.address + ' (' + locationId + ').');
+			nello.openDoor(locationId);
 		});
 	}
 	
 	// add time window (when value is not null for example after clearing)
 	if (id.indexOf('timeWindows.createTimeWindow') > -1 && state.ack !== true && state.val !== null)
 	{
-		var location = {};
-		location.address = {};
 		adapter.getObject(id, function(err, obj)
 		{			
-			location.location_id = obj.common.locationId;	
+			var locationId = obj.common.locationId;
+			var currentLocation = locationsMap[locationId];
 			try
 			{
-				location.timewindowData = JSON.parse(state.val);
-				adapter.getState(location.location_id + '.address.address', function(err, state)
-				{
-					location.address.address = state.val;
+				// parsing data for new time window 
+				var timewindowData = JSON.parse(state.val);
 					
-					// Validation if name is present
-					if (location.timewindowData.name === false || typeof location.timewindowData.name !== 'string')
-						adapter.log.error('No name for the time window has been provided!');
+				// Validation if name is present
+				if (timewindowData.name === false || typeof timewindowData.name !== 'string')
+					adapter.log.error('No name for the time window has been provided!');
+				
+				// Simple validation of ical (used from https://github.com/Zefau/nello.io)
+				if (timewindowData.ical === false || typeof timewindowData.ical !== 'string' || (timewindowData.ical.indexOf('BEGIN:VCALENDAR') === -1 || timewindowData.ical.indexOf('END:VCALENDAR') === -1 || timewindowData.ical.indexOf('BEGIN:VEVENT') === -1 || timewindowData.ical.indexOf('END:VEVENT') === -1))
+					adapter.log.error('Wrong ical data for timewindow provided! Missing BEGIN:VCALENDAR, END:VCALENDAR, BEGIN:VEVENT or END:VEVENT.');
+				
+				adapter.log.info('Triggered to create timewindow of location ' + currentLocation.address.address + ' (' + locationId + ').');	
+				nello.createTimeWindow(locationId, timewindowData, function(res)
+				{ 
+					if (res.result === false)
+						adapter.log.error('Creation for time window failed: ' + res.error);
 					
-					// Simple validation of ical (used from https://github.com/Zefau/nello.io)
-					if (location.timewindowData.ical === false || typeof location.timewindowData.ical !== 'string' || (location.timewindowData.ical.indexOf('BEGIN:VCALENDAR') === -1 || location.timewindowData.ical.indexOf('END:VCALENDAR') === -1 || location.timewindowData.ical.indexOf('BEGIN:VEVENT') === -1 || location.timewindowData.ical.indexOf('END:VEVENT') === -1))
-						adapter.log.error('Wrong ical data for timewindow provided! Missing BEGIN:VCALENDAR, END:VCALENDAR, BEGIN:VEVENT or END:VEVENT.');
-					
-					adapter.log.info('Triggered to create timewindow of location ' + location.address.address + ' (' + location.location_id + ').');	
-					nello.createTimeWindow(obj.common.locationId, location.timewindowData, function(res)
-					{ 
-						if (res.result === false)
-							adapter.log.error('Creation for time window failed: ' + res.error);
-						
-						else
-						{
-							adapter.log.info('Time window with id ' + res.timeWindow.id +' was created.');
-							// refresh timewindows for new timewindow							
-							getTimeWindows(location);							
-						}						
+					else
+					{
+						adapter.log.info('Time window with id ' + res.timeWindow.id +' was created.');
+						// refresh timewindows for new timewindow							
+						getTimeWindows(locationId, currentLocation);							
+					}						
 					});
-				});
 			}
 			catch(err)
 			{
@@ -287,28 +288,63 @@ adapter.on('stateChange', function(id, state)
 	// delete time window
 	if (id.indexOf('deleteTimeWindow') > -1 && state.ack !== true)
 	{
-		var location = {};
-		location.address = {};
 		adapter.getObject(id, function(err, obj)
 		{			
-			location.location_id = obj.common.locationId;	
-			location.timewindowId = obj.common.timewindowId;
-			adapter.getState(location.location_id + '.address.address', function(err, state)
+			var locationId = obj.common.locationId;
+			var timeWindowId = obj.common.timeWindowId;
+			var currentLocation = locationsMap[locationId];
+			
+			adapter.log.info('Triggered to delete time window (' + timeWindowId + ') of location ' + currentLocation.address.address + ' (' + locationId + ').');
+			nello.deleteTimeWindow(locationId, timeWindowId, function(res)
 			{
-				location.address.address = state.val;
-				adapter.log.info('Triggered to delete time window (' + location.timewindowId + ') of location ' + location.address.address + ' (' + location.location_id + ').');
-				nello.deleteTimeWindow(obj.common.locationId, obj.common.timewindowId, function(res)
+				if (res.result === false)
+					adapter.log.error('Deleting time window failed: ' + res.error);				
+				else
 				{
+					adapter.log.info('Time window with id ' + timeWindowId +' was deleted.');
+					// delete old timewindow object
+					adapter.delObject(locationId + '.timeWindows.' + timeWindowId);		
+					// delete old timewindow object from locationsMap
+					delete locationsMap[locationId].timeWindows[timeWindowId];
+					// refresh timewindows for indexedTimeWindows
+					getTimeWindows(locationId, currentLocation);			
+				}						
+			});
+		});
+	}
+	
+	// delete all time windows
+	if (id.indexOf('deleteAllTimeWindows') > -1 && state.ack !== true)
+	{
+		adapter.getObject(id, function(err, obj)
+		{			
+			var locationId = obj.common.locationId;
+			var currentLocation = locationsMap[locationId];
+			var timeWindowKeys = Object.keys(currentLocation.timeWindows);
+			
+			adapter.log.info('Triggered to delete all time windows of location ' + currentLocation.address.address + ' (' + locationId + ').');
+			
+			var timeWindowCount = timeWindowKeys.length;
+			// Using currentLocation.timeWindows-Keys here and not api function `deleteAllTimeWindows` to know which callback is the last to update the objects		
+			timeWindowKeys.forEach(function(timeWindowId) 
+			{
+				nello.deleteTimeWindow(locationId, timeWindowId, function(res)
+				{
+					timeWindowCount--;
 					if (res.result === false)
-						adapter.log.error('Deleting time window failed: ' + res.error);
-					
+						adapter.log.error('Deleting time window failed: ' + res.error);							
 					else
 					{
-						adapter.log.info('Time window with id ' + location.timewindowId +' was deleted.');
-						// delete old timewindow object
-						adapter.delObject(location.location_id + '.timeWindows.' + location.timewindowId);		
-						// refresh timewindows for indexedTimeWindows
-						getTimeWindows(location);			
+						adapter.log.info('Time window with id ' + timeWindowId +' was deleted.');
+						// Last timewindow was deleted -> update objects
+						if(timeWindowCount === 0)
+						{
+							adapter.log.info('All time windows have been deleted.');
+							// delete all old timewindows
+							deleteTimeWindows(locationId);	
+							// refresh timewindows for indexedTimeWindows
+							getTimeWindows(locationId, currentLocation);
+						}
 					}						
 				});
 			});
@@ -351,9 +387,9 @@ adapter.on('message', function(msg)
  * Get time windows.
  *
  */
-function getTimeWindows(location)
+function getTimeWindows(locationId, location)
 {
-	nello.getTimeWindows(location.location_id, function(res)
+	nello.getTimeWindows(locationId, function(res)
 	{
 		// catch error
 		if (res.result === false)
@@ -365,14 +401,13 @@ function getTimeWindows(location)
 		// loop through time windows
 		adapter.log.info('Updating time windows of location ' + location.address.address + '.');
 		
-		var index = "";
 		res.timeWindows.forEach(function(window)
 		{
 			// create states
-			library.set({node: location.location_id + '.timeWindows.' + window.id, description: 'Time Window: ' + window.name}, '');
+			library.set({node: locationId + '.timeWindows.' + window.id, description: 'Time Window: ' + window.name}, '');
 			
-			// add to index
-			index = index + window.id + ',';
+			// add to locationsMap		
+			locationsMap[locationId].timeWindows[window.id] = window;
 			
 			// add data
 			window.icalRaw = window.ical._raw;
@@ -382,34 +417,49 @@ function getTimeWindows(location)
 			delete window.ical;
 			
 			for (var key in window)
-				library.set(Object.assign({node: location.location_id + '.timeWindows.' + window.id + '.' + key}, nodes['timeWindows.' + key] || {}), window[key]);
+				library.set(Object.assign({node: locationId + '.timeWindows.' + window.id + '.' + key}, nodes['timeWindows.' + key] || {}), window[key]);
 			
 			// create button to delete the timewindow
 			library.set({
-					node: location.location_id + '.timeWindows.' + window.id + '.deleteTimeWindow',
-					description: 'Delete the Timewindow ' + window.id + ' of location ' + location.address.address,
-					common: {locationId: location.location_id, timewindowId: window.id, role: 'button.delete', type: 'boolean', 'write': true}
+					node: locationId + '.timeWindows.' + window.id + '.deleteTimeWindow',
+					description: 'Delete the time window ' + window.id + ' of location ' + location.address.address,
+					common: {locationId: locationId, timeWindowId: window.id, role: 'button.delete', type: 'boolean', 'write': true}
 				},
 				false
 			);
 			
 			// attach listener
-			adapter.subscribeStates(location.location_id + '.timeWindows.' + window.id + '.deleteTimeWindow');
+			adapter.subscribeStates(locationId + '.timeWindows.' + window.id + '.deleteTimeWindow');
 		});
 		
 		// create index with time window IDs
-		library.set({node: location.location_id + '.timeWindows.indexedTimeWindows', description: 'Index of all time windows', role: 'text'}, index);
+		library.set({node: locationId + '.timeWindows.indexedTimeWindows', description: 'Index of all time windows', role: 'text'}, Object.keys(locationsMap[locationId].timeWindows).join(','));
 		
 		// create object for creating a timewindow
 		library.set({
-				node: location.location_id + '.timeWindows.createTimeWindow',
-				description: 'Creating a timewindow for location ' + location.address.streetName,
-				common: {locationId: location.location_id, role: 'json', type: 'string', 'write': true}
+				node: locationId + '.timeWindows.createTimeWindow',
+				description: 'Creating a time window for location ' + location.address.streetName,
+				common: {locationId: locationId, role: 'json', type: 'string', 'write': true}
 			}
 		);
 		
 		// attach listener
-		adapter.subscribeStates( location.location_id + '.timeWindows.createTimeWindow');
+		adapter.subscribeStates( locationId + '.timeWindows.createTimeWindow');
+		
+			
+		// create button to delete all timewindows
+		library.set({
+				node: location.location_id + '.timeWindows.deleteAllTimeWindows',
+				description: 'Delete all time windows of location ' + location.address.address,
+				common: {locationId: locationId, role: 'button.delete', type: 'boolean', 'write': true}
+			},
+			false
+		);
+		
+		// attach listener
+		adapter.subscribeStates( locationId + '.timeWindows.deleteAllTimeWindows');
+
+		adapter.log.debug('locationsMap: '  + JSON.stringify(locationsMap));
 	});
 }
 
@@ -417,13 +467,15 @@ function getTimeWindows(location)
  * Delete states of old time windows.
  *
  */
-function deleteTimeWindows(location)
+function deleteTimeWindows(locationId)
 {
-	adapter.getStatesOf(location.location_id, 'timeWindows', function(err, states)
+	adapter.getStatesOf(locationId, 'timeWindows', function(err, states)
 	{
 		for(var d = 0; d < states.length; d++)
 			adapter.delObject(states[d]._id);
 	});
+	// clearing the time windows
+	locationsMap[locationId].timeWindows = {};
 }
 
 /**
@@ -434,15 +486,15 @@ function setEvent(res)
 {
 	if (res === undefined || res.action === undefined || res.action === null || res.data === undefined || res.data === null) return false;
 	adapter.log.debug('LISTENER: ' + JSON.stringify(res) + '...');
-	adapter.log.info('Received data from the webhook listener (action -' + res.action + '-).');
-	
-	res.data.timestamp = res.data.timestamp !== null ? res.data.timestamp : Math.round(Date.now()/1000);
+	adapter.log.info('Received data from the webhook listener (action -' + res.action + '-).');	
+
+	res.data.timestamp = res.data.timestamp != null ? res.data.timestamp : Math.round(Date.now()/1000);
 	library.set({node: res.data.location_id + '.events.refreshedTimestamp', description: 'Timestamp of the last event', role: 'value'}, res.data.timestamp);
 	library.set({node: res.data.location_id + '.events.refreshedDateTime', description: 'DateTime of the last event', role: 'text'}, library.getDateTime(res.data.timestamp*1000));
 
 	adapter.getState(res.data.location_id + '.events.feed', function(err, state)
 	{
-		var feed = state !== undefined && state !== null && state.val !== '' ? JSON.parse(state.val) : [];
+		var feed = state != undefined && state !== null && state.val !== '' ? JSON.parse(state.val) : [];
 		library.set({node: res.data.location_id + '.events.feed', description: 'Activity feed / Event history', role: 'json'}, JSON.stringify(feed.concat([res])));
 	});
 }
