@@ -98,6 +98,14 @@ systemDictionary = {
 		"en": "Listening to events allows you to receive a door ring or a door opening action. Possible events are swipe, geo, tw and deny (documented here <a href='https://nellopublicapi.docs.apiary.io/#reference'>https://nellopublicapi.docs.apiary.io/#reference</a>).",
 		"de": "Events abonnieren ermöglichen es, ein Türklingeln oder Türöffnen zu empfangen. Mögliche Events sind swipe, geo, tw und deny (im Detail unter <a href='https://nellopublicapi.docs.apiary.io/#reference'>https://nellopublicapi.docs.apiary.io/#reference</a> dokumentiert)."
 	},
+	"events_max_count": {
+		"en": "Maximum number of historicized events",
+		"de": "Anzahl an maximal historisierte Events"
+	},
+	"events_max_count_info": {
+		"en": "Maximum number of historicized events",
+		"de": "Anzahl an maximal historisierten Events"
+	},
 	"webhook_iobroker": {
 		"en": "Option 1: ioBroker.cloud/iot (recommended)",
 		"de": "Option 1: ioBroker.cloud/iot (empfohlen)"
