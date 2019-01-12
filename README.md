@@ -65,7 +65,7 @@ If you successfully quick-setup ioBroker.nello, you will find yours doors as dev
 | timeWindows | - | Time Windows of the location |
 | timeWindows | indexedTimeWindows | Index of all time windows |
 | timeWindows | deleteAllTimeWindows | Deletion of all time windows |
-| timeWindows | **createTimeWindow** | JSON object for creating a new timewindow ([Documentation](#adding-a-new-time-window)) |
+| timeWindows | **createTimeWindow**\* | JSON object for creating a new timewindow ([Documentation](#adding-a-new-time-window)) |
 | timeWindows.0000000000000000000 | - | Time Window: Description of the time window |
 | timeWindows.0000000000000000000 | enabled | State whether time window is enabled |
 | timeWindows.0000000000000000000 | icalObj | JSON object of the calendar data |
@@ -74,14 +74,15 @@ If you successfully quick-setup ioBroker.nello, you will find yours doors as dev
 | timeWindows.0000000000000000000 | image | (not in used) |
 | timeWindows.0000000000000000000 | name | Name of the time window |
 | timeWindows.0000000000000000000 | state | State |
-| timeWindows.0000000000000000000 | **deleteTimeWindow** | Delete this timewindow |
-| - | **&#95;openDoor** | Open door of location XXXXX |
+| timeWindows.0000000000000000000 | **deleteTimeWindow**\* | Delete this timewindow |
+| - | **&#95;openDoor**\* | Open door of location XXXXX |
 | - | id | ID of location XXXXX |
 | - | refreshedDateTime | Last update (DateTime) of location XXXXX |
 | - | refreshedTimestamp | Last update (Timestamp) of location XXXXX |
 
+\* _highlighted states will trigger / perform an action when changed_
+
 **Remark: You will _only_ see those states if you have successfully quick-setup ioBroker.nello!**
-_Highlighted states will trigger / perform an action when changed_
 
 
 ### Advanced Setup
