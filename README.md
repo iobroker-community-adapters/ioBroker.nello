@@ -23,8 +23,9 @@ Developers may find the javascript implementation of the nello.io API via https:
    1. [Open door using Alexa](#open-door-using-alexa)
    2. [Let Alexa inform you about door ring](#let-alexa-inform-you-about-door-ring)
    3. [Let colored lamps inform you about door ring](#let-colored-lamps-inform-you-about-door-ring)
-5. [Changelog](#changelog)
-6. [Licence](#license)
+5. [Credits](#credits)
+6. [Changelog](#changelog)
+7. [Licence](#license)
 
 
 ## Setup instructions
@@ -401,6 +402,10 @@ on({id: 'nello.0.#YOUR DOOR ID#.events.feed', change: 'any'}, function(obj)
 
 Based on the action of the event, the lamps will be colored with the defined values.
 **IMPORTANT**: Replace **#YOUR LAMP#** (also replace #) with the state of the lamp you would like to color. Replace **#YOUR DOOR ID#** (also replace #) with your nello door ID.
+
+
+## Credits
+Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
 
 
 ## Changelog
