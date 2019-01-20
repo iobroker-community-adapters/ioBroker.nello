@@ -316,7 +316,9 @@ function color(devices, hue)
     	});
     });
 }
+```
 
+```javascript
 /**
  * Append multiple messages using a delay to create a light sequence.
  * 
@@ -333,7 +335,18 @@ function colors(devices, hues, delay = 3000, start = 0)
     devices = typeof devices === 'string' ? [devices] : devices;
     devices.forEach(function(device)
     {
-        setState(device + '.on', true);
+        // get initial state and colors
+        var defaults = {};
+        ['on', 'xy', 'bri'].forEach(function(initial) {defaults[initial] = getState(device + '.' + initial).val});
+
+        // turn lights on if currently off
+        if (defaults.on !== true)
+        {
+            setState(device + '.on', true);
+            delayed += 800;
+        }
+
+        // loop through colors
         hues.forEach(function(hue, i)
     	{
             delayed += delay;
@@ -343,16 +356,28 @@ function colors(devices, hues, delay = 3000, start = 0)
             }, delayed);
     	});
         
-        delayed += delay;
+        // restore initial states
+        delayed += 1000;
         setTimeout(function()
         {
-            setState(device + '.on', false);
+            setState(device + '.xy', defaults['xy']);
+            if (defaults['on'] === true)
+                setState(device + '.bri', defaults['bri']);
         }, delayed);
+
+        // turn off again (if it was off)
+        if (defaults['on'] === false)
+        {
+            delayed += 2000;
+            setTimeout(function() {setState(device + '.on', false)}, delayed); // delayed so colors is set before turned off
+        }
     });
 
     return delayed;
 }
 ```
+_(updated on 2019-01-20 to fix issue [#11](https://github.com/Zefau/ioBroker.nello/issues/11))_
+
 
 You can use these functions within ioBroker.javascript to color any lamp, e.g. by ```color('hue.0.Philips_hue.Lamp', {'r': 0, 'g': 255, 'b': 0})``` (color green) or ```color(['hue.0.Philips_hue.Lamp1', 'hue.0.Philips_hue.Lamp2'], {'r': 0, 'g': 255, 'b': 0})```, to color multiple devices.
 
