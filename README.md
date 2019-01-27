@@ -1,4 +1,4 @@
-![Logo](https://raw.githubusercontent.com/Zefau/ioBroker.nello/master/admin/nello.png)
+![Logo](admin/nello.png)
 # ioBroker.nello
 nello one connects your intercom with your smartphone and Wi-Fi. This adapter connects your nello one to ioBroker using the official API (https://nellopublicapi.docs.apiary.io/).
 
@@ -435,67 +435,11 @@ Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smash
 
 ## Changelog
 
-### 1.2.1 (2019-01-06)
-- (@[CrEaK](https://github.com/CrEaK)) added state / function to deleteAllTimeWindows
+### 2.0.0 (2019-01-XX)
+- (zefau) added visual timeline of nello events
 
-### 1.2.0 (2019-01-02)
-- (@[CrEaK](https://github.com/CrEaK)) added states and support for adding / deleting time windows
-- (zefau) changed all states to readonly except for newly introduced time window states
-- (zefau) fixed bug showing incorrect error with SSL configuration when using ioBroker.cloud/iot
-
-### 1.1.0 (2019-01-01)
-- (zefau) added support for using ioBroker.cloud / ioBroker.iot for receiving events (instead of custom DynDNS address)
-- (zefau) fixed design issue with Google Chrome in admin backend
-
-### 1.0.1 (2018-12-09)
-- (zefau) fixed log function causing error, which prevented token generation
-
-### 1.0.0 (2018-12-08)
-- (zefau) added option to refresh time windows after a specific time
-
-### 0.4.5 / 0.4.6 (2018-11-23)
-- (zefau) Improved error log in the admin panel
-
-### 0.4.4 (2018-11-22)
-- (zefau) Updated admin panel and added instructions for alexa integration (loading from Github README.md)
-- (zefau) Bug fixes: Fixed an issue regarding certificates when using HTTPs
-
-### 0.4.3 (2018-11-21)
-- (zefau) Bug fixes: Fixed incorrect interpretation of https, when only http was configured
-
-### 0.4.2 (2018-11-18)
-- (zefau) Bug fixes
-
-### 0.4.1 (2018-11-18)
-- (zefau) replaced Promises (async/await) with callback to be backward compatibility with Node.js v6 (and v4)
-
-### 0.4.0 (2018-11-17)
-- (zefau) support for HTTPs is now working
-- (zefau) Redesign of the admin interface
-
-### 0.3.5 (2018-11-05)
-- (zefau) added description and roles for states
-
-### 0.3.4 (2018-11-04)
-- (zefau) Code improvements
-
-### 0.3.3 (2018-11-04)
-- (zefau) added HTTPs support for webhooks (which however does not seem to be supported by the Nello API)
-
-### 0.3.2 (2018-11-03)
-- (zefau) created dedicated Github / npm repository for the javascript implementation of the nello.io API (https://github.com/Zefau/nello.io) and thus changed dependency packages
-
-### 0.3.1 (2018-11-02)
-- (zefau) fixed https://github.com/Zefau/ioBroker.nello/issues/2
-
-### 0.3.0 (2018-10-31)
-* (zefau) added support for webhooks (receiving events / notifications)
-
-### 0.2.0 (2018-10-30)
-* (zefau) added support for time windows (only retrieving)
-
-### 0.1.0 (2018-10-28)
-* (zefau) initial release (list all your doors and open them)
+### 1.X.X
+For earlier release, [please see Github branch for v1](https://github.com/Zefau/ioBroker.nello/tree/v1#changelog).
 
 
 ## License
