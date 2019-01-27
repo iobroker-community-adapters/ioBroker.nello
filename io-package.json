@@ -1,90 +1,16 @@
 {
     "common": {
         "name": "nello",
-        "version": "1.2.2",
+        "version": "2.0.0",
         "title": "nello.io adapter",
         "desc": {
-            "en": "ioBroker nello.io Adapter",
-            "de": "ioBroker nello.io Adapter",
-            "ru": "ioBroker nello.io драйвер"
+            "en": "Conects your intercom with your ioBroker",
+            "de": "Verbindet deine Gegensprechanlage mit deinem ioBroker"
         },
         "news": {
-            "1.2.0": {
-                "en": "added states and support for adding / deleting time windows",
-                "de": "Möglichkeit zum Anlegen und Löschen von Zeitfenstern hinzugefügt"
-            },
-            "1.1.0": {
-                "en": "added usage of ioBroker.iot / ioBroker.cloud to receive events (instead of custom DynDNS url)",
-                "de": "Möglichkeit zur Nutzung von ioBroker.iot / ioBroker.cloud hinzugefügt, um Events zu empfangen (statt eigener DynDNS Adresse)"
-            },
-            "1.0.1": {
-                "en": "fixed log function causing error, which prevented token generation",
-                "de": "Fehler bei der Log Funktion bereinigt, wodurch keine Tokens generiert wurden"
-            },
-            "1.0.0": {
-                "en": "added option to refresh time windows after a specific time",
-                "de": "Option zur Aktualisierung der Zeitfenster hinzugefügt"
-            },
-            "0.4.6": {
-                "en": "Translated log message in Admin Panel to German",
-                "de": "Übersetzung der Protokoll-Benachrichtungen ins Deutsche"
-            },
-            "0.4.5": {
-                "en": "Improved error log in the admin panel",
-                "de": "Fehlerbehandlung in den Adapter Einstellungen verbessert"
-            },
-            "0.4.4": {
-                "en": "Updated admin panel and added instructions for alexa integration (loading from Github README.md)",
-                "de": "Admin-Panel aktualisiert und um die Alexa Integration erweitert"
-            },
-            "0.4.3": {
-                "en": "Bug fixes: Fixed incorrect interpretation of https, when only http was configured",
-                "de": "Problembeseitigung: Fehler in der Interpretation der HTTPs Konfiguration behoben, wenn nur HTTP eingestellt wurde"
-            },
-            "0.4.2": {
-                "en": "Bug fixes",
-                "de": "Problembeseitigung"
-            },
-            "0.4.1": {
-                "en": "replaced Promises (async/await) with callback to be backward compatibility with Node.js v6 (and v4)",
-                "de": "Funktionalität der Promises (async/await) zur Kompatibilität mit Node.js v6 (and v4) ersetzt"
-            },
-            "0.4.0": {
-                "en": "support for HTTPs is now working; Redesign of the admin interface",
-                "de": "Unterstützung für HTTPs funktioniert nun; Re-Design des Admin-Panels"
-            },
-            "0.3.5": {
-                "en": "added description and roles for states",
-                "de": "Beschreibung und Rollen der states hinzugefügt"
-            },
-            "0.3.4": {
-                "en": "Code improvements",
-                "de": "Quellcode Verbesserungen"
-            },
-            "0.3.3": {
-                "en": "added HTTPs support for webhooks (which however does not seem to be supported by the Nello API)",
-                "de": "Unterstützung für HTTPs für Webhooks hinzugefügt (wird allerdings durch die nello API nicht unterstützt)"
-            },
-            "0.3.2": {
-                "en": "created dedicated Github / npm repository for the javascript implementation of the nello.io API (https://github.com/Zefau/nello.io)",
-                "de": "eigenständiges Github / npm repository für die Javascript Implementierung der nello.io API erstellt (https://github.com/Zefau/nello.io)"
-            },
-            "0.3.1": {
-                "en": "fixed https://github.com/Zefau/ioBroker.nello/issues/2",
-                "de": "fixed https://github.com/Zefau/ioBroker.nello/issues/2"
-            },
-            "0.3.0": {
-                "en": "added support for webhooks (receiving events / notifications)",
-                "de": "added support for webhooks (receiving events / notifications)"
-            },
-            "0.2.0": {
-                "en": "added support for time windows (only retrieving)",
-                "de": "added support for time windows (only retrieving)"
-            },
-            "0.1.0": {
-                "en": "initial checkin",
-                "de": "Erste version",
-                "ru": "первая версия"
+            "2.0.0": {
+                "en": "added visual timeline of nello events",
+                "de": "Visualierung der Timeline / Events hinzugefügt"
             }
         },
         "platform": "Javascript/Node.js",
@@ -97,11 +23,13 @@
         ],
         "readme": "https://github.com/Zefau/ioBroker.nello/blob/master/README.md",
         "loglevel": "info",
+        "type": "hardware",
 		"materialize": true,
+		"compact": true,
 		"enabled": true,
+		"localLink": "%web_protocol%://%ip%:%web_port%/nello/index.html",
         "messagebox": true,
 		"subscribe": "messagebox",
-        "type": "hardware",
         "authors": [
             {
                 "name": "Zefau",

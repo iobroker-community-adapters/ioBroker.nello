@@ -1,4 +1,4 @@
-![Logo](admin/nello.png)
+![Logo](https://raw.githubusercontent.com/Zefau/ioBroker.nello/master/admin/nello.png)
 # ioBroker.nello
 nello one verbindet die Gegensprechanlage mit dem Smartphone und dem hauseigenen Netzwerk. Dieser Adapter verbindet nello one mit dem ioBroker über die offizielle API (https://nellopublicapi.docs.apiary.io/).
 
@@ -308,9 +308,7 @@ function color(devices, hue)
     	});
     });
 }
-```
 
-```javascript
 /**
  * Append multiple messages using a delay to create a light sequence.
  * 
@@ -327,18 +325,7 @@ function colors(devices, hues, delay = 3000, start = 0)
     devices = typeof devices === 'string' ? [devices] : devices;
     devices.forEach(function(device)
     {
-        // get initial state and colors
-        var defaults = {};
-        ['on', 'xy', 'bri'].forEach(function(initial) {defaults[initial] = getState(device + '.' + initial).val});
-
-        // turn lights on if currently off
-        if (defaults.on !== true)
-        {
-            setState(device + '.on', true);
-            delayed += 800;
-        }
-
-        // loop through colors
+        setState(device + '.on', true);
         hues.forEach(function(hue, i)
     	{
             delayed += delay;
@@ -348,27 +335,16 @@ function colors(devices, hues, delay = 3000, start = 0)
             }, delayed);
     	});
         
-        // restore initial states
-        delayed += 1000;
+        delayed += delay;
         setTimeout(function()
         {
-            setState(device + '.xy', defaults['xy']);
-            if (defaults['on'] === true)
-                setState(device + '.bri', defaults['bri']);
+            setState(device + '.on', false);
         }, delayed);
-
-        // turn off again (if it was off)
-        if (defaults['on'] === false)
-        {
-            delayed += 2000;
-            setTimeout(function() {setState(device + '.on', false)}, delayed); // delayed so colors is set before turned off
-        }
     });
 
     return delayed;
 }
 ```
-_(aktualisiert am 20.01.2019, siehe Issue [#11](https://github.com/Zefau/ioBroker.nello/issues/11))_
 
 Diese Funktionen können genutzt werden, um mit ioBroker.javascript beliebige Lampen zu beleuchten, z.B. durch ```color('hue.0.Philips_hue.Lamp', {'r': 0, 'g': 255, 'b': 0})``` (grün färben) oder ```color(['hue.0.Philips_hue.Lamp1', 'hue.0.Philips_hue.Lamp2'], {'r': 0, 'g': 255, 'b': 0})```, um mehrere Lampen zu beleuchten.
 

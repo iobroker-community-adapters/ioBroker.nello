@@ -1,42 +1,64 @@
 {
-  "name": "iobroker.nello",
-  "version": "2.0.0",
-  "description": "Conects your intercom with your smartphone and Wi-Fi",
+  "_from": "https://github.com/Zefau/ioBroker.nello/tarball/master",
+  "_id": "iobroker.nello@1.2.2",
+  "_inBundle": false,
+  "_integrity": "sha512-Gof2ldNCJ0zKVXwjQJ+kB/BHkGkSktl1MZdkH8aZAd0xfFoA1c5mWtLQT2Zny98u8vHQqEjEsUZFEk6cBr45Qg==",
+  "_location": "/iobroker.nello",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "remote",
+    "raw": "https://github.com/Zefau/ioBroker.nello/tarball/master",
+    "rawSpec": "https://github.com/Zefau/ioBroker.nello/tarball/master",
+    "saveSpec": "https://github.com/Zefau/ioBroker.nello/tarball/master",
+    "fetchSpec": "https://github.com/Zefau/ioBroker.nello/tarball/master"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://github.com/Zefau/ioBroker.nello/tarball/master",
+  "_shasum": "96c2d3b05a093142ffd05a1db45f2e4ecbbf768a",
+  "_spec": "https://github.com/Zefau/ioBroker.nello/tarball/master",
+  "_where": "/root",
   "author": {
     "name": "zefau",
     "email": "zefau@mailbox.org"
   },
+  "bugs": {
+    "url": "https://github.com/Zefau/ioBroker.nello/issues"
+  },
+  "bundleDependencies": false,
   "contributors": [
     {
       "name": "zefau",
       "email": "zefau@mailbox.org"
     }
   ],
+  "dependencies": {
+    "nello": "^2.0.0"
+  },
+  "deprecated": false,
+  "description": "ioBroker nello.io Adapter",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "gulp": "^3.9.1",
+    "mocha": "^4.1.0"
+  },
   "homepage": "https://github.com/Zefau/ioBroker.nello",
-  "license": "MIT",
   "keywords": [
     "ioBroker",
     "nello",
     "door"
   ],
+  "license": "MIT",
+  "main": "main.js",
+  "name": "iobroker.nello",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Zefau/ioBroker.nello"
+    "url": "git+https://github.com/Zefau/ioBroker.nello.git"
   },
-  "dependencies": {
-    "nello": "^2.0.0"
-  },
-  "devDependencies": {
-    "gulp": "^3.9.1",
-    "mocha": "^4.1.0",
-    "chai": "^4.1.2"
-  },
-  "main": "main.js",
   "scripts": {
     "test": "node node_modules/mocha/bin/mocha --exit"
   },
-  "bugs": {
-    "url": "https://github.com/Zefau/ioBroker.nello/issues"
-  },
-  "readmeFilename": "README.md"
+  "version": "1.2.2"
 }

@@ -50,13 +50,9 @@ systemDictionary = {
 		"en": "Client Secret",
 		"de": "Client Secret"
 	},
-    "token_type": {
-		"en": "Token Type",
-		"de": "Token Typ"
-	},
     "access_token": {
-		"en": "Access Token",
-		"de": "Access Token"
+		"en": "Token",
+		"de": "Token"
 	},
 	"token_fillin": {
 		"en": "Fill in an existing token that has been generated elsewhere or select button &quot;Get new token&quot;.",

@@ -76,8 +76,7 @@
 
 					if (res !== false && res.result !== false)
 					{
-						$('#token_type, #token_type-existing').val(res.type).focus();
-						$('#access_token, #access_token-existing').val(res.access).focus();
+						$('#access_token, #access_token-existing').val(res.token.access_token).focus();
 
 						$('#access_token').trigger('change');
 						$('#modal').modal('close');
@@ -146,7 +145,7 @@
 			</div>
 			<div class="row">
 				<div class="col s12 m12">
-					<strong style="font-weight: bold">StTESTatus:</strong>
+					<strong style="font-weight: bold">Status:</strong>
 					<div id="log"></div>
 				</div>
 			</div>
@@ -183,11 +182,7 @@
 					<div class="row box">
 						<p class="subtitle translate">token_fillin</p>
 
-						<div class="input-field col s5 m5">
-							<input class="value" id="token_type" type="text" />
-							<label for="token_type" class="translate">token_type</label>
-						</div>
-						<div class="input-field col s5 m5">
+						<div class="input-field col s10 m10">
 							<input class="value" id="access_token" type="text" />
 							<label for="access_token" class="translate">access_token</label>
 						</div>
@@ -211,7 +206,7 @@
 						<p class="subtitle translate">timewindows_info</p>
 
 						<div class="input-field col s4 m4">
-							<input class="value" id="refresh" type="text" placeholder="0" />
+							<input class="value" id="refresh" type="number" placeholder="0" />
 							<label for="refresh" class="translate">refresh</label>
 						</div>
 
@@ -302,7 +297,7 @@
 
 							<div class="row box">
 								<div class="input-field col s4 m4">
-									<input class="value" id="events_max_count" type="text" placeholder="30" />
+									<input class="value" id="events_max_count" type="number" placeholder="100" />
 									<label for="events_max_count" class="translate">events_max_count</label>
 								</div>
 							</div>
