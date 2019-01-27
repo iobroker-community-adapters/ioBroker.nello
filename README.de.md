@@ -1,4 +1,4 @@
-![Logo](https://raw.githubusercontent.com/Zefau/ioBroker.nello/master/admin/nello.png)
+![Logo](admin/nello.png)
 # ioBroker.nello
 nello one verbindet die Gegensprechanlage mit dem Smartphone und dem hauseigenen Netzwerk. Dieser Adapter verbindet nello one mit dem ioBroker über die offizielle API (https://nellopublicapi.docs.apiary.io/).
 
