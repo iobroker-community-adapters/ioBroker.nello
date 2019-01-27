@@ -4,7 +4,7 @@
         "version": "2.0.0",
         "title": "nello.io adapter",
         "desc": {
-            "en": "Conects your intercom with your ioBroker",
+            "en": "Connects your intercom with your ioBroker",
             "de": "Verbindet deine Gegensprechanlage mit deinem ioBroker"
         },
         "news": {
