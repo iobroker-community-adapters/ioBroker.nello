@@ -1,7 +1,7 @@
 {
   "name": "iobroker.nello",
   "version": "2.0.0",
-  "description": "Conects your intercom with your ioBroker",
+  "description": "Connects your intercom with your ioBroker",
   "author": {
     "name": "zefau",
     "email": "zefau@mailbox.org"
