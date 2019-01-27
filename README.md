@@ -435,8 +435,10 @@ Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smash
 
 ## Changelog
 
-### 2.0.0 (2019-01-XX)
+### 2.0.0 (2019-01-27)
 - (zefau) added visual timeline of nello events
+- (zefau) support for [ioBroker compact mode](https://forum.iobroker.net/viewtopic.php?f=24&t=20387#p213466)
+- (zefau) updated API dependency
 
 ### 1.X.X
 For earlier release, [please see Github branch for v1](https://github.com/Zefau/ioBroker.nello/tree/v1#changelog).
