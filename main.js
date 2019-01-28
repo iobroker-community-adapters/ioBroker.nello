@@ -164,7 +164,7 @@ function startAdapter(options)
 									}
 								}
 							})
-							.catch(function(e) {adapter.log.warn(e.message)});
+							.catch(function(e) {adapter.log.warn(e.message);adapter.log.debug(e.stack)});
 						});
 					}
 
@@ -191,7 +191,7 @@ function startAdapter(options)
 
 			adapter.log.debug('Retrieved locations: '  + JSON.stringify(LOCATIONS));
 		})
-		.catch(function(e) {adapter.log.warn(e.message)});
+		.catch(function(e) {adapter.log.warn(e.message);adapter.log.debug(e.stack)});
 
 	});
 
@@ -245,7 +245,7 @@ function startAdapter(options)
 						adapter.log.info('Time window with id ' + tw.id +' was created.');
 						getTimeWindows(LOCATIONS[locationId]); // refresh timewindows
 					})
-					.catch(function(e) {adapter.log.warn(e.message)});
+					.catch(function(e) {adapter.log.warn(e.message);adapter.log.debug(e.stack)});
 				}
 				catch(err)
 				{
@@ -274,7 +274,7 @@ function startAdapter(options)
 					adapter.log.info('Time window with id ' + timeWindowId +' deleted.');
 					deleteTimeWindow(locationId, timeWindowId);
 				})
-				.catch(function(e) {adapter.log.warn(e.message)});
+				.catch(function(e) {adapter.log.warn(e.message);adapter.log.debug(e.stack)});
 			});
 		}
 
@@ -291,7 +291,7 @@ function startAdapter(options)
 					adapter.log.info('All time windows have been deleted.');
 					deleteTimeWindow(locationId);
 				})
-				.catch(function(e) {adapter.log.warn(e.message)});
+				.catch(function(e) {adapter.log.warn(e.message);adapter.log.debug(e.stack)});
 			});
 		}
 	});
@@ -417,7 +417,7 @@ function getTimeWindows(location)
 		// attach listener
 		adapter.subscribeStates( locationId + '.timeWindows.deleteAllTimeWindows');
 	})
-	.catch(function(e) {adapter.log.warn(e.message)});
+	.catch(function(e) {adapter.log.warn(e.message);adapter.log.debug(e.stack)});
 }
 
 /**
