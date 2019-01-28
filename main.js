@@ -156,7 +156,7 @@ function startAdapter(options)
 									// attach listener to DynDNS URL
 									else if (adapter.config.uri)
 									{
-										location.action.addListener(url, ['PUT'], {'cert': adapter.config.certPublicVal, 'key': adapter.config.certPrivateVal, 'ca': adapter.config.certChainedVal});
+										location.action.addListener(url, ['PUT'], adapter.config.secure === true ? {'cert': adapter.config.certPublicVal, 'key': adapter.config.certPrivateVal, 'ca': adapter.config.certChainedVal} : undefined);
 										location.action.on('webhook', function(payload) // or nello.on('webhook', .. )
 										{
 											setEvent(payload);
@@ -430,7 +430,7 @@ function deleteTimeWindow(locationId, twId)
 	adapter.getStatesOf(locationId, 'timeWindows', function(err, states)
 	{
 		for (let d = 0; d < states.length; d++)
-			if (twId === undefined || states[d]._id.indexOf(twId) > -1) adapter.delObject(states[d]._id);
+			if (twId === undefined || (states[d] !== undefined && states[d]._id !== undefined && states[d]._id.indexOf(twId) > -1)) adapter.delObject(states[d]._id);
 	});
 	
 	// remove time windows from index
