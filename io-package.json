@@ -3,14 +3,42 @@
         "name": "nello",
         "version": "2.0.0",
         "title": "nello.io adapter",
+        "titleLang": {
+            "en": "nello.io adapter",
+            "de": "nello.io-adapter",
+            "ru": "Нелло.адаптер ввода-вывода ",
+            "pt": "nello.io adaptador",
+            "nl": "nello.io-adapter",
+            "fr": "nello.io adaptateur",
+            "it": "nello.io adattatore",
+            "es": "nello.io adaptador",
+            "pl": "Нелло.karta wejścia-wyjścia ",
+            "zh-cn": "尼洛的。io适配器"
+        },
         "desc": {
             "en": "Connects your intercom with your ioBroker",
-            "de": "Verbindet deine Gegensprechanlage mit deinem ioBroker"
+            "de": "Verbindet deine Gegensprechanlage mit deinem ioBroker",
+            "ru": "Соединяет ваш домофон с ioBroker",
+            "pt": "Conecta-se a sua intercomunicação com o seu ioBroker",
+            "nl": "Verbindt uw intercom met uw ioBroker",
+            "fr": "Se connecte à votre intercom avec votre ioBroker",
+            "it": "Collega il tuo interfono con il ioBroker",
+            "es": "Conecta tu intercomunicador con su ioBroker",
+            "pl": "Łączy twój domofon z ioBroker",
+            "zh-cn": "连接你的对讲机与你的ioBroker"
         },
         "news": {
             "2.0.0": {
                 "en": "added visual timeline of nello events",
-                "de": "Visualierung der Timeline / Events hinzugefügt"
+                "de": "Visualierung der Timeline / Events hinzugefügt",
+                "ru": "добавлен визуальный график Нелло событий",
+                "pt": "adicionado visual cronograma de nello eventos",
+                "nl": "toegevoegd visuele tijdlijn van nello evenementen",
+                "fr": "ajouté montage visuel de nello événements",
+                "it": "aggiunto visual timeline di nello eventi",
+                "es": "añadido línea de tiempo visual de nello eventos",
+                "pl": "dodano wizualne wykres Нелло zdarzeń",
+                "zh-cn": "添加视觉的时间表尼洛事件"
             }
         },
         "platform": "Javascript/Node.js",
@@ -24,12 +52,12 @@
         "readme": "https://github.com/Zefau/ioBroker.nello/blob/master/README.md",
         "loglevel": "info",
         "type": "hardware",
-		"materialize": true,
-		"compact": true,
-		"enabled": true,
-		"localLink": "%web_protocol%://%ip%:%web_port%/nello/index.html",
+        "materialize": true,
+        "compact": true,
+        "enabled": true,
+        "localLink": "%web_protocol%://%ip%:%web_port%/nello/index.html",
         "messagebox": true,
-		"subscribe": "messagebox",
+        "subscribe": "messagebox",
         "authors": [
             {
                 "name": "Zefau",
@@ -37,9 +65,7 @@
             }
         ]
     },
-    "native": {
-    },
+    "native": {},
     "objects": [],
-    "instanceObjects": [
-    ]
+    "instanceObjects": []
 }
