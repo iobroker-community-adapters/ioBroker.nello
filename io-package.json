@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "nello",
-        "version": "2.0.0",
+        "version": "2.0.1",
         "title": "nello one",
         "titleLang": {
             "en": "nello.io adapter",
