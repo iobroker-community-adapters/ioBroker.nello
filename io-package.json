@@ -13,6 +13,7 @@
                 "de": "Visualierung der Timeline / Events hinzugefügt"
             }
         },
+	"license": "MIT",
         "platform": "Javascript/Node.js",
         "mode": "daemon",
         "icon": "nello.png",
