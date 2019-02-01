@@ -435,8 +435,9 @@ Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smash
 
 ## Changelog
 
-### 2.0.1 (2019-01-xx) [CURRENT DEVELOPMENT]
+### 2.0.1 (2019-02-01)
 - (zefau) added error stack trace in log debug output
+- ([@ldittmar81](https://github.com/ldittmar81)) added support for gulp
 
 ### 2.0.0 (2019-01-27)
 - (zefau) added visual timeline of nello events
