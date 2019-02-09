@@ -61,7 +61,7 @@ function startAdapter(options)
 	adapter.on('ready', function()
 	{
 		// check if settings are set
-		if (!adapter.config.token_type || !adapter.config.access_token)
+		if (!adapter.config.access_token)
 		{
 			adapter.log.error('Token is missing! Please go to settings and generate a token first!');
 			return;
