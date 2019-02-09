@@ -435,6 +435,9 @@ Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smash
 
 ## Changelog
 
+### 2.0.2 (2019-02-09)
+- (zefau) fixed error incorrectly stating a missing token
+
 ### 2.0.1 (2019-02-01)
 - (zefau) added error stack trace in log debug output
 - ([@ldittmar81](https://github.com/ldittmar81)) added support for gulp
