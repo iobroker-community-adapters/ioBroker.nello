@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "nello",
-        "version": "2.0.1",
+        "version": "2.0.2",
         "title": "nello one",
         "titleLang": {
             "en": "nello.io adapter",
@@ -28,6 +28,12 @@
             "zh-cn": "连接你的对讲机与你的ioBroker"
         },
         "news": {
+            "2.0.2": {
+                "en": "fixed error incorrectly stating a missing token"
+            },
+            "2.0.1": {
+                "en": "added error stack trace in log debug output"
+            },
             "2.0.0": {
                 "en": "added visual timeline of nello events",
                 "de": "Visualierung der Timeline / Events hinzugefügt",
