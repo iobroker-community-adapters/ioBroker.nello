@@ -7,6 +7,7 @@ node_js:
   - '6'
   - '8'
   - '10'
+  - '11'
 env:
   - IOBROKER=master
   - IOBROKER=1.5.x
@@ -15,7 +16,7 @@ before_script:
   - 'if [[ $NPMVERSION == 5 ]]; then npm install -g npm@5; fi'
   - npm -v
   - npm install winston@2.3.1
-  - 'if [[ $IOBROKER == 'master' ]]; then 'npm install https://github.com/ioBroker/ioBroker.js-controller/tarball/master --production'; else 'npm install https://github.com/ioBroker/ioBroker.js-controller/tree/${IOBROKER} --production'; fi'
+  - 'if [[ $IOBROKER == 'master' ]]; then npm install https://github.com/ioBroker/ioBroker.js-controller/tarball/master --production; else npm install https://github.com/ioBroker/ioBroker.js-controller/tree/${IOBROKER} --production; fi'
 addons:
   apt:
     sources:
