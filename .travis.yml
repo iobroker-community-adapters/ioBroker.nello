@@ -17,6 +17,7 @@ before_script:
   - npm -v
   - npm install winston@2.3.1
   - if [ "$IOBROKER" == "master" ]; then npm install https://github.com/ioBroker/ioBroker.js-controller/tarball/master --production; fi
+  - if [ "$IOBROKER" == "1.5.x" ]; then npm install https://github.com/ioBroker/ioBroker.js-controller/tree/${IOBROKER} --production; fi
 addons:
   apt:
     sources:
