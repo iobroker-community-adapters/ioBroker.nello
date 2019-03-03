@@ -435,6 +435,9 @@ Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smash
 
 ## Changelog
 
+### 2.0.3 (2019-03-03)
+- (zefau) added folder `.events.latest` with states `action`, `twName`, `userId` and `userName` reflecting the information of the latest event
+
 ### 2.0.2 (2019-02-09)
 - (zefau) fixed error incorrectly stating a missing token
 
