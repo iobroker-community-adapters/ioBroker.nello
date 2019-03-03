@@ -205,9 +205,17 @@ function startAdapter(options)
 		if (state === null) state = {ack: true, val: null};
 
 		// event received
-		if (id === adapter.config.iot && state.val)
-			setEvent(JSON.parse(state.val));
-
+		if (id === adapter.config.iot && state.val && state.val !== undefined && state.val !== 'undefined')
+		{
+			var data;
+			try
+			{
+				data = JSON.parse(state.val);
+				setEvent(data);
+			}
+			catch(err) {adapter.log.error(err.message)}
+		}
+		
 		// door opened
 		if (id.indexOf('_openDoor') > -1 && state.ack !== true)
 		{
@@ -455,10 +463,19 @@ function setEvent(res)
 	adapter.log.debug('LISTENER: ' + JSON.stringify(res) + '...');
 	adapter.log.info('Received data from the webhook listener (action -' + res.action + '-).');
 
+	// update timestamp
 	res.data.timestamp = res.data.timestamp != null ? res.data.timestamp : Math.round(Date.now()/1000);
 	library.set({node: res.data.location_id + '.events.refreshedTimestamp', description: 'Timestamp of the last event', role: 'value'}, res.data.timestamp);
 	library.set({node: res.data.location_id + '.events.refreshedDateTime', description: 'DateTime of the last event', role: 'text'}, library.getDateTime(res.data.timestamp*1000));
 
+	// update latest
+	library.set({node: res.data.location_id + '.events.latest', description: 'Data of the latest event', role: 'text'}, '');
+	library.set({node: res.data.location_id + '.events.latest.action', description: 'Action of the latest event', role: 'text'}, res.action);
+	library.set({node: res.data.location_id + '.events.latest.twName', description: 'Time Window of the latest event', role: 'text'}, (res.action == 'tw' ? res.data.name : ''));
+	library.set({node: res.data.location_id + '.events.latest.userName', description: 'User Name of the latest event', role: 'text'}, ((res.action == 'swipe' || res.action == 'geo') ? res.data.name : ''));
+	library.set({node: res.data.location_id + '.events.latest.userId', description: 'User ID of the latest event', role: 'text'}, ((res.action == 'swipe' || res.action == 'geo') ? res.data.user_id : ''));
+	
+	// update feed
 	adapter.getState(res.data.location_id + '.events.feed', function(err, state)
 	{
 		let feed = state != undefined && state !== null && state.val !== '' ? JSON.parse(state.val) : [];
