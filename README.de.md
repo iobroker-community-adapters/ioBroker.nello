@@ -86,17 +86,23 @@ Der ioBroker.cloud / ioBroker.iot Adpater empfängt die Events von nello und sch
 ##### ioBroker.iot
 1. In den Einstellungen des ioBroker.iot Adapters in die Registerkarte _Services and IFTTT_ gehen.
 2. Den Begriff "_nello_" in die "_White list für Services_" aufnehmen und den Link für eigene Services ("_Benutze folgende Link für einen eigenen Service_") kopieren. Dieser hat das Format ```https://service.iobroker.in/v1/iotService?service=custom_<SERVICE_NAME>&key=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&user=email@domain.com&data=<SOME_TEXT>```.
+   ![Step 2](screenshots/step-2.jpg)
 3. Im Link den Begriff ```custom_<SERVICE_NAME>``` mit dem Service Namen ```custom_nello``` ersetzen (sicherstellen, dass der Begriff hinter ```custom_``` den Begriff der Whitelist aus Schritt #2 entspricht). Weiterhin den Abschnitt ```&data=<SOME_TEXT>``` entfernen, da dieser nicht notwendig ist.
 4. In die **Einstellungen des nello Adapters wechseln** und dort den Link unter "_ioBroker.iot Service URL_" (in Option 1) einfügen.
+   ![Step 4](screenshots/step-4.jpg)
 5. In den **Einstellungen des nello Adapters** sicherstellen, dass der Datenpunkt in "_ioBroker.iot nello Objekt_" korrekt ist. Der Datenpunkt ist in den ioBroker Objekten unter ```iot.0.services``` zu finden.
-
+6. Die nello Adapter-Einstellungen speichern und warten, bis der Adapter (neu)gestartet hat. Dann an der Tür klingeln und prüfen, ob ioBroker.iot den State erstellt hat. Der State ```custom_nello``` ist unter den ioBroker Objekten via ```iot.0.services``` zu finden.
+   ![Step 6](screenshots/step-6.jpg)
+   
 ##### ioBroker.cloud
 1. In den Einstellungen des ioBroker.cloud Adapters in die Registerkarte _Services and IFTTT_ gehen.
 2. Den Begriff "_nello_" in die "_White list für Services_" aufnehmen und den Link für eigene Services ("_Benutze folgende Link für einen eigenen Service_") kopieren. Dieser hat das Format ```https://iobroker.net/service/```.
 3. Im Link den Begriff ```custom_nello``` anfügen (sicherstellen, dass der Begriff hinter ```custom_``` dem Begriff der Whitelist aus Schritt #2 entspricht).
 4. Den eigenen API Schlüssel der URL anfügen. Diese sollte wie folgt aussehen: ```https://iobroker.net/service/custom_nello/xxxxxx```.
 5. In die **Einstellungen des nello Adapters wechseln** und dort den Link unter "_ioBroker.iot Service URL_" (in Option 1) einfügen.
-6. Den Datenpunkt unter "_ioBroker.iot nello Objekt_" ändern. Der korrekte Datenpunkt mit der Bezeichnung ```custom_nello``` ist in den ioBroker Objekten unter ```cloud.0.services``` zu finden. Diesen Datenpunkt in den **Einstellungen des nello Adapters** im Feld "_ioBroker.iot nello Objekt_" (unten rechts) eintragen.
+6. Die nello Adapter-Einstellungen speichern und warten, bis der Adapter (neu)gestartet hat. Dann an der Tür klingeln und prüfen, ob ioBroker.cloud den State erstellt hat. Der State ```custom_nello``` ist unter den ioBroker Objekten via ```cloud.0.services``` zu finden.
+   ![Step 6](screenshots/step-6.jpg)
+7. Diesen Datenpunkt unter "_ioBroker.iot nello Objekt_" (unten rechts in den nello Adapter-Einstellungen) einfügen (NICHT den Inhalt, sondern ```cloud.0.services.custom_nello```).
 
 #### Option 2: DynDNS URL
 Um Events (z.B. Türklingeln) zu empfangen, kann alternativ eine externe DynDNS URL / Adresse (inklusive Port) in den ioBroker.nello Adapter Einstellungen hinterlegt werden. Hierfür ist eine DynDNS URL und eine Portöffnung im Router notwendig. Eine DynDNS URL / Adresse ist eine Internetadresse, die auf die lokale IP weiterleitet (siehe auch https://de.wikipedia.org/wiki/Dynamisches_DNS). Diese DynDNS URL / Adresse (inklusive Port) wird dann durch den Adapter an die nello API geschickt und dort registriert (dies nennt sich Webhook, siehe auch https://de.wikipedia.org/wiki/WebHooks). Wenn es klingelt oder die Tür geöffnet wird, schickt die nello API eine Push-Nachricht an die angegebene URL. 
