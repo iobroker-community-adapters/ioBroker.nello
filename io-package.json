@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "nello",
-        "version": "2.0.3",
+        "version": "2.0.4",
         "title": "nello one",
         "titleLang": {
             "en": "nello.io",
@@ -28,6 +28,9 @@
             "zh-cn": "连接你的对讲机与你的ioBroker"
         },
         "news": {
+            "2.0.4": {
+                "en": "(@Apollon77) Core Files/Testing Update and introduce adapter-core (#17) and Update CI testing (#19)"
+            },
             "2.0.3": {
                 "en": "added folder .events.latest with states action, twName, userId and userName reflecting the information of the latest event"
             },
