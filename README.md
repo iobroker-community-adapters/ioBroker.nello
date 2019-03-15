@@ -438,6 +438,9 @@ Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smash
 
 ## Changelog
 
+### 2.0.4 (2019-03-15)
+- ([@Apollon77](https://github.com/Apollon77)) Core Files/Testing Update and introduce adapter-core ([#17](https://github.com/Zefau/ioBroker.nello/pull/17)) and Update CI testing ([#19](https://github.com/Zefau/ioBroker.nello/pull/19))
+
 ### 2.0.3 (2019-03-03)
 - (zefau) added folder `.events.latest` with states `action`, `twName`, `userId` and `userName` reflecting the information of the latest event
 
