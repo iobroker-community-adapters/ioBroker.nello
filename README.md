@@ -100,6 +100,7 @@ The ioBroker.cloud / ioBroker.iot adpater will receive the event from nello and 
    ![Step 4](screenshots/step-4.jpg)
 5. Save the nello Adapter settings and wait until the Adapter has (re)started. Then, ring at your door and verify the state has been created by ioBroker.iot. You will find the state called ```custom_nello``` within the ioBroker objects via ```iot.0.services```.
    ![Step 6](screenshots/step-6.jpg)
+6. Once the state has been created successfully, restart the nello Adapter once more to be sure that the nello Adapter subscribes this newly created iot state
 
 ##### ioBroker.cloud
 1. Go to the adapter settings of ioBroker.cloud and navigate to the _Services and IFTTT_ Tab.
@@ -108,6 +109,7 @@ The ioBroker.cloud / ioBroker.iot adpater will receive the event from nello and 
 4. Add your API key, so the URL eventually looks like ```https://iobroker.net/service/custom_nello/xxxxxx```.
 5. Go to the **nello adapter configuration** and paste the link into "_ioBroker.iot Service URL_" (in Option 1).
 6. Save the nello Adapter settings and wait until the Adapter has (re)started. Then, ring at your door and verify the state has been created by ioBroker.cloud. You will find the state called ```custom_nello``` within the ioBroker objects via ```cloud.0.services```.
+7. Once the state has been created successfully, restart the nello Adapter once more to be sure that the nello Adapter subscribes this newly created cloud state
 
 #### Option 2: DynDNS URL
 To receive events (door bell rings) you may alternatively provide an external URL (with port) in the ioBroker.nello adapter settings.
