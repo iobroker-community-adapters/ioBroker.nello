@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "nello",
-        "version": "2.0.4",
+        "version": "2.0.5",
         "title": "nello one",
         "titleLang": {
             "en": "nello.io",
@@ -28,6 +28,9 @@
             "zh-cn": "连接你的对讲机与你的ioBroker"
         },
         "news": {
+            "2.0.5": {
+                "en": "(@Apollon77) updated testing for Node.js v12 (#25)\n(Zefau) updated dependencies"
+            },
             "2.0.4": {
                 "en": "(@Apollon77) Core Files/Testing Update and introduce adapter-core (#17) and Update CI testing (#19)"
             },
@@ -68,11 +71,6 @@
         "materialize": true,
         "compact": true,
         "enabled": true,
-        "dependencies": [
-            {
-                "web": ">=1.7.1"
-            }
-	],
         "localLink": "%web_protocol%://%ip%:%web_port%/nello/index.html",
         "messagebox": true,
         "subscribe": "messagebox",
