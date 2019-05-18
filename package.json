@@ -1,48 +1,70 @@
 {
-  "name": "iobroker.nello",
-  "version": "2.0.5",
-  "description": "Connects your intercom with your ioBroker",
+  "_from": "https://github.com/Zefau/ioBroker.nello/tarball/master",
+  "_id": "iobroker.nello@2.0.5",
+  "_inBundle": false,
+  "_integrity": "sha512-MAJnF65H2n6ScttXfWWkzeDia4FEFseGoC3lTPVLTVQND+kslmhxw3/7M1uPa/wJxkVeetOpt9Avxm2JTvm0QA==",
+  "_location": "/iobroker.nello",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "remote",
+    "raw": "https://github.com/Zefau/ioBroker.nello/tarball/master",
+    "rawSpec": "https://github.com/Zefau/ioBroker.nello/tarball/master",
+    "saveSpec": "https://github.com/Zefau/ioBroker.nello/tarball/master",
+    "fetchSpec": "https://github.com/Zefau/ioBroker.nello/tarball/master"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://github.com/Zefau/ioBroker.nello/tarball/master",
+  "_shasum": "4f468c028e103e94c9b737e2e7f72d9c6ee8bf82",
+  "_spec": "https://github.com/Zefau/ioBroker.nello/tarball/master",
+  "_where": "/opt/iobroker/node_modules/iobroker.nello",
   "author": {
     "name": "zefau",
     "email": "zefau@mailbox.org"
   },
+  "bugs": {
+    "url": "https://github.com/Zefau/ioBroker.nello/issues"
+  },
+  "bundleDependencies": false,
   "contributors": [
     {
       "name": "zefau",
       "email": "zefau@mailbox.org"
     }
   ],
+  "dependencies": {
+    "@iobroker/adapter-core": "^1.0.3",
+    "nello": "^2.0.1"
+  },
+  "deprecated": false,
+  "description": "Connects your intercom with your ioBroker",
+  "devDependencies": {
+    "@iobroker/testing": "^1.2.5",
+    "axios": "^0.18.0",
+    "chai": "^4.2.0",
+    "gulp": "^4.0.2",
+    "mocha": "^6.1.4"
+  },
   "homepage": "https://github.com/Zefau/ioBroker.nello",
-  "license": "MIT",
   "keywords": [
     "ioBroker",
     "nello",
     "door"
   ],
+  "license": "MIT",
+  "main": "main.js",
+  "name": "iobroker.nello",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Zefau/ioBroker.nello"
+    "url": "git+https://github.com/Zefau/ioBroker.nello.git"
   },
-  "dependencies": {
-    "nello": "^2.0.1",
-    "@iobroker/adapter-core": "^1.0.3"
-  },
-  "devDependencies": {
-    "gulp": "^4.0.2",
-    "mocha": "^6.1.4",
-    "chai": "^4.2.0",
-    "axios": "^0.18.0",
-    "@iobroker/testing": "^1.2.0"
-  },
-  "main": "main.js",
   "scripts": {
     "test": "npm run test:package && npm run test:unit",
+    "test:integration": "mocha test/integration --exit",
     "test:package": "mocha test/package --exit",
-    "test:unit": "mocha test/unit --exit",
-    "test:integration": "mocha test/integration --exit"
+    "test:unit": "mocha test/unit --exit"
   },
-  "bugs": {
-    "url": "https://github.com/Zefau/ioBroker.nello/issues"
-  },
-  "readmeFilename": "README.md"
+  "version": "2.0.5"
 }
