@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "nello",
-        "version": "2.0.5",
+        "version": "2.0.6",
         "title": "nello one",
         "titleLang": {
             "en": "nello.io",
@@ -28,6 +28,9 @@
             "zh-cn": "连接你的对讲机与你的ioBroker"
         },
         "news": {
+            "2.0.6": {
+                "en": "Updated dependencies to fix security vulnerabilities in depending packages"
+            },
             "2.0.5": {
                 "en": "(@Apollon77) updated testing for Node.js v12 (#25)\n(Zefau) updated dependencies"
             },
