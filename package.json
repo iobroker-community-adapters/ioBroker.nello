@@ -54,7 +54,7 @@
     "door"
   ],
   "license": "MIT",
-  "main": "main.js",
+  "main": "nello.js",
   "name": "iobroker.nello",
   "repository": {
     "type": "git",
@@ -66,5 +66,5 @@
     "test:package": "mocha test/package --exit",
     "test:unit": "mocha test/unit --exit"
   },
-  "version": "2.0.6"
+  "version": "2.0.8"
 }
