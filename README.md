@@ -37,6 +37,10 @@ The following features come with this adapter:
 - Retrieve __all locations__ from your nello including `address` and `time windows` ([see States](#states) for full list)
 - Add and delete time windows via ioBroker
 - Receive all kind of `events` from nello when your door bell rings:
+  - __deny__: When nello detects a bell ring, but neither a Time Window nor a Homezone Event caused the door to be opened.
+  - __swipe__: When the door opens by an authorized user.
+  - __geo__: When the door is opened because of the Homezone Unlock feature (with a bell ring).
+  - __tw__: When the door is opened because of a Time indow (with a bell ring).
 - Let Alexa inform you about door ring ([see below](#let-alexa-inform-you-about-door-ring))
 - Trigger to __open the door__ from ioBroker
 - __Web Interface__ that shows the recent events from nello: 
