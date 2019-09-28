@@ -289,8 +289,8 @@ var L = {
 
 on({id: 'nello.0.ID.events.feed', change: 'any'}, function(obj)
 {
-   var events = JSON.parse(obj.state.val);
-   if (events.length === 0) return;
+   var events = obj && obj.state && JSON.parse(obj.state.val);
+   if (!events || events.length == 0) return;
 
    var event = events[events.length-1];
    if (event.action == 'deny')
@@ -329,12 +329,7 @@ function msg(content, user = '')
 {
     const CONFIG = {
         text: content,
-        parse_mode: 'HTML',
-        reply_markup: {
-            keyboard: ACTIONS,
-            resize_keyboard: true,
-            one_time_keyboard: false
-        }
+        parse_mode: 'HTML'
     };
     
     sendTo('telegram', user ? Object.assign({user: user}, CONFIG) : CONFIG);
@@ -355,8 +350,8 @@ var L = {
 
 on({id: 'nello.0.ID.events.feed', change: 'any'}, function(obj)
 {
-   var events = JSON.parse(obj.state.val);
-   if (events.length === 0) return;
+   var events = obj && obj.state && JSON.parse(obj.state.val);
+   if (!events || events.length == 0) return;
 
    var event = events[events.length-1];
    if (event.action == 'deny')
@@ -486,8 +481,8 @@ var rgb = {
 
 on({id: 'nello.0.#YOUR DOOR ID#.events.feed', change: 'any'}, function(obj)
 {
-    var events = JSON.parse(obj.state.val);
-    if (events.length === 0) return;
+   var events = obj && obj.state && JSON.parse(obj.state.val);
+   if (!events || events.length == 0) return;
     
     var event = events[events.length-1];
     if (event.action == 'deny')
