@@ -47,8 +47,10 @@ function startAdapter(options)
 	adapter.on('ready', function()
 	{
 		// check if settings are set
-		if (!adapter.config.access_token)
-			return library.terminate('Token is missing! Please go to settings and generate a token first!');
+		if (!adapter.config.access_token) {
+			adapter.log.error('Token is missing! Please go to settings and generate a token first!');
+			return false;
+		}
 
 		// check iot state
 		if (!adapter.config.iot) adapter.config.iot = 'iot.0.services.custom_nello';
