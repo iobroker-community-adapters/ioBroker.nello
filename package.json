@@ -41,11 +41,11 @@
   "deprecated": false,
   "description": "Connects your intercom with your ioBroker",
   "devDependencies": {
-    "@iobroker/testing": "^1.2.5",
+    "@iobroker/testing": "^4.1.0",
     "axios": "^0.19.0",
     "chai": "^4.2.0",
     "gulp": "^4.0.2",
-    "mocha": "^6.2.0"
+    "mocha": "^10.2.0"
   },
   "homepage": "https://github.com/Zefau/ioBroker.nello",
   "keywords": [
